@@ -12,8 +12,9 @@ function registerUser(email, password) {
       //...
     })
     .catch((error) => {
-      const errorCode = error.code;
+      const errorCode = error.code;   //could be ignored
       const errorMessage = error.message;
+      return error
     });
 }
 
@@ -25,8 +26,9 @@ function signInUser(email, password) {
       return user;
     })
     .catch((error) => {
-      const errorCode = error.code;
+      const errorCode = error.code;  //could be ignored
       const errorMessage = error.message;
+      return error
     });
 }
 
