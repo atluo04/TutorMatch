@@ -5,7 +5,7 @@ import {
 } from "firebase/auth";
 import { auth } from "../firebase/firebaseConfig";
 import { db } from "../firebase/firebaseConfig";
-import { collection, addDoc } from 'firebase/firestore';
+import { collection, addDoc, getDocs } from 'firebase/firestore';
 
 function registerUser(email, password) {
   return createUserWithEmailAndPassword(auth, email, password)

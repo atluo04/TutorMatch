@@ -1,5 +1,7 @@
 import { useId, useState } from "react";
 import { registerUser, signInUser, create_profile } from "../user/auth";
+import { db } from "../firebase/firebaseConfig";
+
 
 function HomePage() {
   // State for registration form
@@ -33,7 +35,7 @@ function HomePage() {
           console.log("Error Message:", user.message);
           // need toasting message
         } else {
-          console.log("Signed In", getdata());
+          console.log("Signed In", user);
           // need toasting message
         }
       });
