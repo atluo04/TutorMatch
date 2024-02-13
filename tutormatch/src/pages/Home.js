@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { registerUser, signInUser } from "../user/auth";
+import { useNavigate } from "react-router-dom"
 
 function HomePage() {
+  let navigate = useNavigate()
   // State for registration form
   const [regEmail, setRegEmail] = useState("");
   const [regPassword, setRegPassword] = useState("");
@@ -24,6 +26,8 @@ function HomePage() {
     signInUser(signInEmail, signInPassword)
       .then((user) => {
         console.log("Signed In", user);
+        navigate('/Profile')
+
       })
       .catch((error) => {
         console.error("Sign In failed", error);
