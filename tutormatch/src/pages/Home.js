@@ -1,7 +1,5 @@
 import { useId, useState } from "react";
-import { registerUser, signInUser } from "../user/auth";
-import { db } from "../firebase/firebaseConfig";
-import { collection, getDocs } from "firebase/firestore"; 
+import { registerUser, signInUser, create_profile } from "../user/auth";
 
 function HomePage() {
   // State for registration form
@@ -20,6 +18,7 @@ function HomePage() {
         // need toasting message
       } else {
         console.log("New account created", user);
+        create_profile();
         // need toasting message
       }
     });
@@ -40,14 +39,7 @@ function HomePage() {
       });
   };
 
-  //simple getdata from firebase
-  async function getdata(){
-    const querySnapshot = await getDocs(collection(db, "users"));
-    querySnapshot.forEach((doc) => {
-    console.log(`${doc.id}`);
-    });
-  };
-  
+
 
   return (
     <div>
