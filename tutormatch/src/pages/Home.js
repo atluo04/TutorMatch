@@ -1,9 +1,11 @@
 import { useId, useState } from "react";
 import { registerUser, signInUser, create_profile } from "../user/auth";
+import { useNavigate } from "react-router-dom"
 import { db } from "../firebase/firebaseConfig";
 
 
 function HomePage() {
+  let navigate = useNavigate()
   // State for registration form
   const [regEmail, setRegEmail] = useState("");
   const [regPassword, setRegPassword] = useState("");
@@ -36,6 +38,7 @@ function HomePage() {
           // need toasting message
         } else {
           console.log("Signed In", user);
+          navigate('/Profile')
           // need toasting message
         }
       });
