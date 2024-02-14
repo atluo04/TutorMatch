@@ -1,5 +1,7 @@
-import { useState } from "react";
-import { registerUser, signInUser } from "../user/auth";
+import { useId, useState } from "react";
+import { registerUser, signInUser, create_profile } from "../user/auth";
+import { db } from "../firebase/firebaseConfig";
+
 
 function HomePage() {
   // State for registration form
@@ -12,23 +14,34 @@ function HomePage() {
 
   const handleRegistration = () => {
     registerUser(regEmail, regPassword)
-      .then((user) => {
-        console.log("Registered", user);
-      })
-      .catch((error) => {
-        console.error("Registration failed", error);
-      });
+    .then((user) => {
+      if (user instanceof Error) {
+        console.log("Error Message:", user.message);
+        // need toasting message
+      } else {
+        console.log("New account created", user);
+        create_profile();
+        // need toasting message
+      }
+    });
   };
 
   const handleSignIn = () => {
     signInUser(signInEmail, signInPassword)
       .then((user) => {
-        console.log("Signed In", user);
-      })
-      .catch((error) => {
-        console.error("Sign In failed", error);
+        // If it's an error object, handle the error
+        if (user instanceof Error) {
+          //console.error("Sign In failed", user.code, user.message);
+          console.log("Error Message:", user.message);
+          // need toasting message
+        } else {
+          console.log("Signed In", user);
+          // need toasting message
+        }
       });
   };
+
+
 
   return (
     <div>
