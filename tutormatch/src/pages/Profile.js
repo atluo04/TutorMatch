@@ -1,5 +1,6 @@
 import { collection, getDocs } from "firebase/firestore"; 
 import { app, db, auth } from "../firebase/firebaseConfig"
+import { Link } from "react-router-dom";
 
 function ProfilePage () {
     const user = auth.currentUser
@@ -12,6 +13,7 @@ function ProfilePage () {
           <form>
             <label>Email: {user.email}</label>
           </form>
+          <Link to="/settings/main">Go to Profile Settings</Link>
         </div>
       );
     }
