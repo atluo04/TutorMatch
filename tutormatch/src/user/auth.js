@@ -28,9 +28,9 @@ function registerUser(email, password) {
       return setDoc(doc(db, "users", user.uid), data);
     })
     .catch((error) => {
-      const errorCode = error.code;   //could be ignored
+      const errorCode = error.code; //could be ignored
       const errorMessage = error.message;
-      return error
+      return error;
     });
 }
 
@@ -42,9 +42,9 @@ function signInUser(email, password) {
       return user;
     })
     .catch((error) => {
-      const errorCode = error.code;  //could be ignored
+      const errorCode = error.code; //could be ignored
       const errorMessage = error.message;
-      return error
+      return error;
     });
 }
 
