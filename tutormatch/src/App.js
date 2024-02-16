@@ -1,4 +1,3 @@
-
 import { AppRouter } from './routes/AppRouter';
 import { auth, db } from "./firebase/firebaseConfig.js";
 import { getFirestore, collection, getDocs } from "firebase/firestore";
