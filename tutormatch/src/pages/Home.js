@@ -1,5 +1,5 @@
 import { useId, useState } from "react";
-import { registerUser, signInUser, create_profile } from "../user/auth";
+import { registerUser, signInUser, getdata} from "../user/auth";
 import { useNavigate } from "react-router-dom"
 import { db } from "../firebase/firebaseConfig";
 
@@ -22,7 +22,7 @@ function HomePage() {
         // need toasting message
       } else {
         console.log("New account created", user);
-        create_profile();
+        getdata();
         // need toasting message
       }
     });
