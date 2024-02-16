@@ -5,7 +5,7 @@ import {
 } from "firebase/auth";
 import { auth } from "../firebase/firebaseConfig";
 import { db } from "../firebase/firebaseConfig";
-import { collection, addDoc, getDocs } from 'firebase/firestore';
+import { collection, addDoc, getDocs } from "firebase/firestore";
 
 function registerUser(email, password) {
   return createUserWithEmailAndPassword(auth, email, password)
@@ -14,9 +14,9 @@ function registerUser(email, password) {
       //...
     })
     .catch((error) => {
-      const errorCode = error.code;   //could be ignored
+      const errorCode = error.code; //could be ignored
       const errorMessage = error.message;
-      return error
+      return error;
     });
 }
 
@@ -28,9 +28,9 @@ function signInUser(email, password) {
       return user;
     })
     .catch((error) => {
-      const errorCode = error.code;  //could be ignored
+      const errorCode = error.code; //could be ignored
       const errorMessage = error.message;
-      return error
+      return error;
     });
 }
 
@@ -45,14 +45,14 @@ function signOutUser() {
 }
 
 // simple create profile
-async function create_profile(){
+async function create_profile() {
   const uid = auth.currentUser.uid;
-  const usersCollectionRef = collection(db, 'users');
+  const usersCollectionRef = collection(db, "users");
   try {
     await addDoc(usersCollectionRef, {
       uid: uid,
-      name: 'bb',
-      year: '2024'
+      name: "bb",
+      year: "2024",
       // Add more fields as needed
     });
 
@@ -62,13 +62,12 @@ async function create_profile(){
   }
 }
 
-  //simple getdata from firebase, not finish
-  async function getdata(){
-    const querySnapshot = await getDocs(collection(db, "users"));
-    querySnapshot.forEach((doc) => {
+//simple getdata from firebase, not finish
+async function getdata() {
+  const querySnapshot = await getDocs(collection(db, "users"));
+  querySnapshot.forEach((doc) => {
     console.log(`${doc.id}`);
-    });
-  };
-
+  });
+}
 
 export { registerUser, signInUser, signOutUser, create_profile };
