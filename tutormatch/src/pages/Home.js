@@ -1,6 +1,7 @@
 import { useId, useState } from "react";
 import { registerUser, signInUser, create_profile } from "../user/auth";
 import { useNavigate } from "react-router-dom";
+import { PasswordEmailInput } from "../components/PasswordEmailInput";
 
 function HomePage() {
   let navigate = useNavigate();
@@ -27,17 +28,14 @@ function HomePage() {
     <div>
       <h2>Sign In</h2>
       <form>
-        <label>Email:</label>
-        <input
-          type="email"
-          value={signInEmail}
-          onChange={(e) => setSignInEmail(e.target.value)}
+        <PasswordEmailInput
+          inputLabel={"Please Enter Your Email"}
+          handleInput={setSignInEmail}
         />
-        <label>Password:</label>
-        <input
-          type="password"
-          value={signInPassword}
-          onChange={(e) => setSignInPassword(e.target.value)}
+        <PasswordEmailInput
+          inputLabel={"Please Enter Your Password"}
+          handleInput={setSignInPassword}
+          isPassword={true}
         />
         <button type="button" onClick={handleSignIn}>
           Sign In

@@ -1,28 +1,35 @@
 import { useState } from "react";
 import { registerUser } from "../user/auth";
+import { PasswordEmailInput } from "../components/PasswordEmailInput";
 
 function RegistrationPage() {
   // State for registration form
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [error, setError] = useState(null);
 
   const handleRegistration = () => {
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailPattern.test(email)) {
+      setError("Invalid Email");
       console.log("Invalid Email!");
+      return;
       //Enter some code to display invalid email
     }
     const passwordMessage = validatePassword();
-    if (passwordMessage != null) {
+    if (passwordMessage !== null) {
+      setError(passwordMessage);
       console.log(passwordMessage);
       return;
     }
     registerUser(email, password).then((user) => {
       if (user instanceof Error) {
+        setError(user.message);
         console.log("Error Message:", user.message);
         // need toasting message
       } else {
+        setError(null);
         console.log("New account created", user);
         // need toasting message
       }
@@ -60,24 +67,23 @@ function RegistrationPage() {
     <div>
       <h2>Registration</h2>
       <form>
-        <label>Email:</label>
-        <input
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+        <PasswordEmailInput
+          inputLabel={"Please Enter Your Email"}
+          handleInput={setEmail}
         />
-        <label>Password:</label>
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
+        <PasswordEmailInput
+          inputLabel={"Please Enter Your Password"}
+          handleInput={setPassword}
+          isPassword={true}
         />
-        <label>Confirm Password:</label>
-        <input
-          type="password"
-          value={confirmPassword}
-          onChange={(e) => setConfirmPassword(e.target.value)}
+        <PasswordEmailInput
+          inputLabel={"Confirm Password"}
+          handleInput={setConfirmPassword}
+          isPassword={true}
         />
+        <div>
+          <span className="error">{error}</span>
+        </div>
         <button type="button" onClick={handleRegistration}>
           Register
         </button>
