@@ -10,18 +10,19 @@ function RegistrationPage() {
   const [error, setError] = useState(null);
 
   const handleRegistration = () => {
-    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailPattern.test(email)) {
-      setError("Invalid Email");
-      console.log("Invalid Email!");
-      return;
-      //Enter some code to display invalid email
-    }
-    const passwordMessage = validatePassword();
-    if (passwordMessage !== null) {
-      setError(passwordMessage);
-      console.log(passwordMessage);
-      return;
+    if (process.env.NODE_ENV !== "development") {
+      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailPattern.test(email)) {
+        setError("Invalid Email");
+        console.log("Invalid Email");
+        return;
+      }
+      const passwordMessage = validatePassword();
+      if (passwordMessage !== null) {
+        setError(passwordMessage);
+        console.log(passwordMessage);
+        return;
+      }
     }
     registerUser(email, password).then((user) => {
       if (user instanceof Error) {
