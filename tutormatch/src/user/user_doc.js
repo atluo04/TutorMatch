@@ -7,27 +7,27 @@ import { collection, updateDoc, setDoc, getDoc, doc } from 'firebase/firestore';
 const data = {
     Fullname: "++",
     Username:"",
-    Birthday:"",
-    Sex:"",
-    Major: "",
+    Birthday:"Jan 1, 1111",
+    Sex:"None",
+    Major: "Computer Science",
     profile_pic:"https://www.uclastore.com/site/product-images/606852_blue-01.jpg",
-    Phone:"",
-    Personal_mail:"",
-    Bio:"",
+    Phone:"+0 (123) 456 7891",
+    Personal_mail:"example@ucla.edu",
+    Bio:"Hello, World!",
     created_date:""
   }
 
 // updata profile
 async function updata_profile(field, new_content){
     const uid = auth.currentUser.uid;
-    const usersCollection_updata = collection(db, 'users', uid);
+    const usersCollection_updata = doc(db, 'users', uid);
     try {
       await updateDoc(usersCollection_updata, {
-        field: new_content
+        [field]: new_content
       });
       //console.log("User information added to collection successfully!");
     } catch (error) {
-      console.error("Error updating " + field + " :", error);
+      console.error("Error updating -" + field + "- :", error);
     }
   }
   
@@ -70,4 +70,4 @@ async function updata_profile(field, new_content){
     }
   }
 
-  export {updata_profile, getdata, reset_user_data, deletel_user_database };
+  export {updata_profile, getdata, reset_user_data, deletel_user_database, data };

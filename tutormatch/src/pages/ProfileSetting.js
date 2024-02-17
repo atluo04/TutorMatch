@@ -3,8 +3,70 @@ import React, { useState, useEffect } from "react";
 import { NavLink, Outlet } from "react-router-dom";
 import { motion } from 'framer-motion'
 import { auth } from "../firebase/firebaseConfig";
+import { db } from "../firebase/firebaseConfig";
+import { collection, updateDoc, setDoc, getDoc, doc } from 'firebase/firestore';
 import {updata_profile, getdata, reset_user_data, deletel_user_database } from "../user/user_doc"
 
+
+// export default function User_profile() {
+//   const [userData, setUserData] = useState(null);
+//   const [isLoading, setIsLoading] = useState(true);
+//   console.log("asd")
+//   useEffect(() => {
+//     const unsubscribe = auth.onAuthStateChanged(async (user) => {
+//       if (user) {
+//         try {
+//           const uid = auth.currentUser.uid;
+//           const docRef = doc(db, "users", uid);
+//           const docSnap = await getDoc(docRef);
+//           if (docSnap.exists()) {
+//             setUserData(docSnap.data());
+//             setIsLoading(false);
+//           } else {
+//             console.log("No such info");
+//           }
+//         } catch (error) {
+//           console.error("Error fetching data:", error);
+//         }
+//       }
+//     });
+
+//     return () => {
+//       unsubscribe();
+//     };
+//   }, []);
+
+//   if (isLoading) {
+//     return <div>Loading...</div>;
+//   }
+
+//   return (
+//     <>
+//       <Main data={userData} />
+//       <ChangePassword />
+//     </>
+//   );
+// }
+
+// async function Getdata(field){
+//   const [user_Data, setUesr_data] = useState(null);
+//   const [isLoading, setIsLoading] = useState(true); // Add loading state
+//   const uid = auth.currentUser.uid;
+//   const docRef = doc(db, "users", uid);
+//   const docSnap = await getDoc(docRef);
+//   console.log("yaa");
+//   if (docSnap.exists()) {
+//     console.log("ya");
+//       console.log(docSnap.data()[field]);
+//       console.log(user_Data.data()[field]);
+//       setUesr_data(docSnap.data());
+//       Main(docSnap.data());
+//       return user_Data[field];
+//   } else {
+//       console.log("No such Info");
+//       return "rr";
+//   }
+// };
 
 function ChangePassword() {
     return (
@@ -35,6 +97,30 @@ function ChangePassword() {
 }
 
 function Info() {
+  const bio = Get_user_data("Bio");
+  const [newbio, setNewbio] = useState(null);
+  const birth = Get_user_data("Birthday");
+  const [newbirth, setNewbirth] = useState(null);
+  const gender = Get_user_data("Sex");
+  const [newgender, setNewgender] = useState(null);
+  const phone = Get_user_data("Phone");
+  const [newphone, setNewphone] = useState(null);
+  const email = Get_user_data("Personal_mail");
+  const [newemail, setNewemail] = useState(null);
+
+  
+  const handleSave = async (field, new_data) => {
+    try {
+      await updata_profile(field, new_data);
+      //setNewname(null); // Clear the newname state after saving
+    } catch (error) {
+      console.error("Error updating data:", error);
+    }
+  };
+
+  function handleCancel(){
+    //setNewname(null);
+  };
     return (
       <motion.div className="tab-pane active show" id="account-info"
         initial={{ opacity: 0 }}
@@ -44,13 +130,17 @@ function Info() {
         <div className="card-body pb-2">
           <div className="form-group">
             <label className="form-label">Bio</label>
-              <textarea className="form-control" rows={5} style={{ resize: "none" }} defaultValue={"Hello, World!"}/>
+              <textarea className="form-control" rows={5} style={{ resize: "none" }} defaultValue={bio}  
+                onChange={(e) => setNewbio(e.target.value)}
+                onBlur={() => handleSave("Bio", newbio)}/>
           </div>
             <div className="form-group">
               <label className="form-label">Birthday</label>
                 <input type="text"
                     className="form-control"
-                    defaultValue="Jan 1, 1111"
+                    defaultValue={birth}
+                    onChange={(e) => setNewbirth(e.target.value)}
+                    onBlur={() => handleSave("Birthday", newbirth)}
                   />
             </div>
               <div className="form-group">
@@ -58,7 +148,9 @@ function Info() {
                   <input
                     type="text"
                     className="form-control"
-                    defaultValue="None"
+                    defaultValue={gender}
+                    onChange={(e) => setNewgender(e.target.value)}
+                    onBlur={() => handleSave("Sex", newgender)}
                   />
               </div>
             </div>
@@ -70,7 +162,9 @@ function Info() {
             <input
               type="text"
               className="form-control"
-              defaultValue="+0 (123) 456 7891"
+              defaultValue={phone}
+              onChange={(e) => setNewphone(e.target.value)}
+              onBlur={() => handleSave("Phone", newphone)}
                 />
         </div>
           <div className="form-group">
@@ -78,7 +172,9 @@ function Info() {
             <input
               type="text"
               className="form-control"
-              defaultValue="example@ucla.edu"
+              defaultValue={email}
+              onChange={(e) => setNewemail(e.target.value)}
+              onBlur={() => handleSave("Personal_mail", newemail)}
             />
           </div>
         </div>
@@ -86,87 +182,31 @@ function Info() {
 }
 
 function Main() {
-  //const [fullname, set_fullname] = useState("ii");
-  const [major, set_major] = useState("Computer cience");
-  const [fullname, setFullname] = useState(null);
-  const [isLoading, setIsLoading] = useState(true); // Add loading state
+  const fullname = Get_user_data("Fullname");
+  const [newname, setNewname] = useState(null);
+  const major = Get_user_data("Major");
+  const [newmajor, setNewmajor] = useState(null);
 
-  useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged(async (user) => {
-      if (user) {
-        try {
-          const fullnameData = await getdata("Fullname");
-          setFullname(fullnameData);
-          setIsLoading(false);
-        } catch (error) {
-          console.error("Error fetching data:", error);
-          setIsLoading(false);
-        }
-      } else {
-        console.log("No user is currently signed in.");
-        setIsLoading(false);
-      }
-    });
+  const handleSave = async (field, new_data) => {
+    try {
+      await updata_profile(field, new_data);
+      setNewname(null); // Clear the newname state after saving
+    } catch (error) {
+      console.error("Error updating data:", error);
+    }
+  };
 
-    return unsubscribe;
-  }, []);
+  function handleCancel(){
+    setNewname(null);
+  };
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const user = auth.currentUser;
-  //       if (user) {
-  //         const data = await getdata("Fullname");
-  //         setFullname(data);
-  //       } else {
-  //         console.log("No user is currently signed in.");
-  //       }
-  //       setIsLoading(false); // Update loading state
-  //     } catch (error) {
-  //       console.error("Error fetching Fullname:", error);
-  //       setIsLoading(false); // Update loading state even in case of error
-  //     }
-  //   };
-
-  //   fetchData();
-  // }, []);
-
-  // useEffect(() => {
-  //   fetchData("Fullname", setFullname);
-  // }, []);
-
-  // async function fetchData(field, setter) {
-  //   try {
-  //     const data = await getdata(field);
-  //     setter(data);
-      
-  //   } catch (error) {
-  //     console.error("Error getting " + field , error);
-  //   }
-  // }
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const data = await getdata("Fullname");
-  //       setFullname(data);
-  //     } catch (error) {
-  //       console.error("Error fetching Fullname:", error);
-  //     }
-  //   };
-
-  //   fetchData();
-  // }, []);
-
+  
     return(
         <motion.div className="tab-pane active show" id="account-main-page"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0, transition: { duration: 0.1 } }} 
           transition={{ duration: 0.5 }}>
-            {isLoading ? (
-        <p>Loading...</p>
-      ) : (
             <div className="card-body media align-items-center">
               <img
                 src="https://mblogthumb-phinf.pstatic.net/20140512_191/thinkingbug_1399901578557l2bvg_PNG/%B0%CB%C1%A4.png?type=w420"
@@ -186,17 +226,17 @@ function Main() {
                         </div>
                       </div>
                     </div>
-      )}
                     <hr className="border-light m-0" />
                     <div className="card-body">
-                    {!isLoading && (
-          <>
                       <div className="form-group">
                         <label className="form-label">Full Name</label>
                         <input
                           type="text"
                           className="form-control mb-1"
                           defaultValue={fullname}
+                          onChange={(e) => setNewname(e.target.value)}
+                          onBlur={() => handleSave("Fullname", newname)} // Save changes on blur
+                          //onBlur={() => handleCancel}
                         />
                       </div>
                       <div className="form-group">
@@ -205,10 +245,10 @@ function Main() {
                           type="text"
                           className="form-control"
                           defaultValue={major}
+                          onChange={(e) => setNewmajor(e.target.value)}
+                          onBlur={() => handleSave("Major", newmajor)}
                         />
                       </div>
-                      </>
-                    )}
                     </div>
                   </motion.div>
     );
@@ -377,6 +417,9 @@ function Notification() {
 
 function ProfileSettingPage () {
 
+  const HandleSaveChanges = () => {
+
+  }
     return(
         <>
         <meta charSet="UTF-8" />
@@ -431,7 +474,7 @@ function ProfileSettingPage () {
             </div>
           </div>
           <div className="text-right mt-3">
-            <button type="button" className="btn btn-primary">
+            <button type="button" className="btn btn-primary" onClick={HandleSaveChanges}>
               Save changes
             </button>
             &nbsp;
@@ -442,5 +485,33 @@ function ProfileSettingPage () {
         </div>
       </>);
     }
+
+
+    function Get_user_data(field){
+      //const [isLoading, setIsLoading] = useState(true); 
+      // Add loading state
+      const [userData, setUserData] = useState(null);
+
+      useEffect(() => {
+        const unsubscribe = auth.onAuthStateChanged(async (user) => {
+          if (user) {
+            try {
+              const userData = await getdata(field);
+              setUserData(userData);
+              //setIsLoading(false);
+            } catch (error) {
+              console.error("Error fetching data:", error);
+              //setIsLoading(false);
+            }
+          } else {
+            console.log("No user is currently signed in.");
+            //setIsLoading(false);
+          }
+        });
+    
+        return unsubscribe;
+      }, []);
+      return userData;
+    }
       
-export { ProfileSettingPage, Main, Schedule, ChangePassword, Notification, Info };
+export { ProfileSettingPage, Main, Schedule, ChangePassword, Notification, Info, Get_user_data };

@@ -6,19 +6,9 @@ import {
 import { auth } from "../firebase/firebaseConfig";
 import { db } from "../firebase/firebaseConfig";
 import { setDoc, doc } from 'firebase/firestore';
+import { data } from "./user_doc"
 
-const data = {
-  Fullname: "++",
-  Username:"",
-  Birthday:"",
-  Sex:"",
-  Major: "",
-  profile_pic:"https://www.uclastore.com/site/product-images/606852_blue-01.jpg",
-  Phone:"",
-  Personal_mail:"",
-  Bio:"",
-  created_date:""
-}
+
 
 function registerUser(email, password) {
   return createUserWithEmailAndPassword(auth, email, password)
