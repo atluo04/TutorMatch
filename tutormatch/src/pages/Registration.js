@@ -68,17 +68,14 @@ function RegistrationPage() {
     <div>
       <h2>Registration</h2>
       <form>
+        <PasswordEmailInput placeHolder={" Email"} handleInput={setEmail} />
         <PasswordEmailInput
-          inputLabel={"Please Enter Your Email"}
-          handleInput={setEmail}
-        />
-        <PasswordEmailInput
-          inputLabel={"Please Enter Your Password"}
+          placeHolder={" Password"}
           handleInput={setPassword}
           isPassword={true}
         />
         <PasswordEmailInput
-          inputLabel={"Confirm Password"}
+          placeHolder={" Confirm Password"}
           handleInput={setConfirmPassword}
           isPassword={true}
         />

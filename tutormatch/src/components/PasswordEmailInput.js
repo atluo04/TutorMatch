@@ -1,15 +1,14 @@
 import "./PasswordEmailInput.css";
 
-function PasswordEmailInput({ inputLabel, handleInput, isPassword }) {
+function PasswordEmailInput({ handleInput, isPassword, placeHolder }) {
   return (
     <div className="container">
       <div className="input-field">
         <input
           type={isPassword ? "password" : "text"}
           onChange={(e) => handleInput(e.target.value)}
+          placeholder={placeHolder}
         />
-        <label>{inputLabel}</label>
-        <span></span>
       </div>
     </div>
   );
