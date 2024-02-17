@@ -8,65 +8,6 @@ import { collection, updateDoc, setDoc, getDoc, doc } from 'firebase/firestore';
 import {updata_profile, getdata, reset_user_data, deletel_user_database } from "../user/user_doc"
 
 
-// export default function User_profile() {
-//   const [userData, setUserData] = useState(null);
-//   const [isLoading, setIsLoading] = useState(true);
-//   console.log("asd")
-//   useEffect(() => {
-//     const unsubscribe = auth.onAuthStateChanged(async (user) => {
-//       if (user) {
-//         try {
-//           const uid = auth.currentUser.uid;
-//           const docRef = doc(db, "users", uid);
-//           const docSnap = await getDoc(docRef);
-//           if (docSnap.exists()) {
-//             setUserData(docSnap.data());
-//             setIsLoading(false);
-//           } else {
-//             console.log("No such info");
-//           }
-//         } catch (error) {
-//           console.error("Error fetching data:", error);
-//         }
-//       }
-//     });
-
-//     return () => {
-//       unsubscribe();
-//     };
-//   }, []);
-
-//   if (isLoading) {
-//     return <div>Loading...</div>;
-//   }
-
-//   return (
-//     <>
-//       <Main data={userData} />
-//       <ChangePassword />
-//     </>
-//   );
-// }
-
-// async function Getdata(field){
-//   const [user_Data, setUesr_data] = useState(null);
-//   const [isLoading, setIsLoading] = useState(true); // Add loading state
-//   const uid = auth.currentUser.uid;
-//   const docRef = doc(db, "users", uid);
-//   const docSnap = await getDoc(docRef);
-//   console.log("yaa");
-//   if (docSnap.exists()) {
-//     console.log("ya");
-//       console.log(docSnap.data()[field]);
-//       console.log(user_Data.data()[field]);
-//       setUesr_data(docSnap.data());
-//       Main(docSnap.data());
-//       return user_Data[field];
-//   } else {
-//       console.log("No such Info");
-//       return "rr";
-//   }
-// };
 
 function ChangePassword() {
     return (
