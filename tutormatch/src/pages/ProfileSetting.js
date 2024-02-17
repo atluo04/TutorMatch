@@ -1,7 +1,9 @@
 import '../html/style1.css'
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { NavLink, Outlet } from "react-router-dom";
 import { motion } from 'framer-motion'
+import { auth } from "../firebase/firebaseConfig";
+import {updata_profile, getdata, reset_user_data, deletel_user_database } from "../user/user_doc"
 
 
 function ChangePassword() {
@@ -84,12 +86,87 @@ function Info() {
 }
 
 function Main() {
+  //const [fullname, set_fullname] = useState("ii");
+  const [major, set_major] = useState("Computer cience");
+  const [fullname, setFullname] = useState(null);
+  const [isLoading, setIsLoading] = useState(true); // Add loading state
+
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged(async (user) => {
+      if (user) {
+        try {
+          const fullnameData = await getdata("Fullname");
+          setFullname(fullnameData);
+          setIsLoading(false);
+        } catch (error) {
+          console.error("Error fetching data:", error);
+          setIsLoading(false);
+        }
+      } else {
+        console.log("No user is currently signed in.");
+        setIsLoading(false);
+      }
+    });
+
+    return unsubscribe;
+  }, []);
+
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const user = auth.currentUser;
+  //       if (user) {
+  //         const data = await getdata("Fullname");
+  //         setFullname(data);
+  //       } else {
+  //         console.log("No user is currently signed in.");
+  //       }
+  //       setIsLoading(false); // Update loading state
+  //     } catch (error) {
+  //       console.error("Error fetching Fullname:", error);
+  //       setIsLoading(false); // Update loading state even in case of error
+  //     }
+  //   };
+
+  //   fetchData();
+  // }, []);
+
+  // useEffect(() => {
+  //   fetchData("Fullname", setFullname);
+  // }, []);
+
+  // async function fetchData(field, setter) {
+  //   try {
+  //     const data = await getdata(field);
+  //     setter(data);
+      
+  //   } catch (error) {
+  //     console.error("Error getting " + field , error);
+  //   }
+  // }
+
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const data = await getdata("Fullname");
+  //       setFullname(data);
+  //     } catch (error) {
+  //       console.error("Error fetching Fullname:", error);
+  //     }
+  //   };
+
+  //   fetchData();
+  // }, []);
+
     return(
         <motion.div className="tab-pane active show" id="account-main-page"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0, transition: { duration: 0.1 } }} 
           transition={{ duration: 0.5 }}>
+            {isLoading ? (
+        <p>Loading...</p>
+      ) : (
             <div className="card-body media align-items-center">
               <img
                 src="https://mblogthumb-phinf.pstatic.net/20140512_191/thinkingbug_1399901578557l2bvg_PNG/%B0%CB%C1%A4.png?type=w420"
@@ -109,14 +186,17 @@ function Main() {
                         </div>
                       </div>
                     </div>
+      )}
                     <hr className="border-light m-0" />
                     <div className="card-body">
+                    {!isLoading && (
+          <>
                       <div className="form-group">
                         <label className="form-label">Full Name</label>
                         <input
                           type="text"
                           className="form-control mb-1"
-                          defaultValue="Joe Bruin"
+                          defaultValue={fullname}
                         />
                       </div>
                       <div className="form-group">
@@ -124,9 +204,11 @@ function Main() {
                         <input
                           type="text"
                           className="form-control"
-                          defaultValue="Computer Science"
+                          defaultValue={major}
                         />
                       </div>
+                      </>
+                    )}
                     </div>
                   </motion.div>
     );

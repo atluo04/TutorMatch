@@ -1,6 +1,7 @@
 import { useId, useState } from "react";
 import { db } from "../firebase/firebaseConfig";
-import { registerUser, signInUser, create_profile, getdata } from "../user/auth";
+import { registerUser, signInUser} from "../user/auth";
+import { getdata } from "../user/user_doc"
 import { useNavigate } from "react-router-dom";
 import { PasswordEmailInput } from "../components/PasswordEmailInput";
 
