@@ -1,6 +1,6 @@
 import React, { Suspense, Lazy } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import { HomePage } from "../pages/Home.js";
+import { Home } from "../homepage/src/components/Home.js";
 import { ProfilePage } from "../pages/Profile.js";
 import { LoginSignup } from "../pages/Login.js";
 import { AnimatePresence } from "framer-motion";

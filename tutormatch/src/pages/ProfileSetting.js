@@ -128,17 +128,29 @@ function Main() {
   const major = Get_user_data("Major");
   const [newmajor, setNewmajor] = useState(null);
 
-  const handleSave = async (field, new_data) => {
-    try {
-      await updata_profile(field, new_data);
-      setNewname(null); // Clear the newname state after saving
-    } catch (error) {
-      console.error("Error updating data:", error);
+  const handleSave = async () => {
+    if(newname !== fullname){
+      try {
+        await updata_profile("Fullname", newname);
+        setNewname(null); // Clear the newname state after saving
+      } catch (error) {
+        console.error("Error updating data:", error);
+      }
     }
+    if(newmajor !== major){
+      try {
+        await updata_profile("Major", newmajor);
+        setNewmajor(null); // Clear the newname state after saving
+      } catch (error) {
+        console.error("Error updating data:", error);
+      }
+    }
+    
   };
 
   function handleCancel(){
     setNewname(null);
+    setNewmajor(null);
   };
 
   
@@ -176,7 +188,7 @@ function Main() {
                           className="form-control mb-1"
                           defaultValue={fullname}
                           onChange={(e) => setNewname(e.target.value)}
-                          onBlur={() => handleSave("Fullname", newname)} // Save changes on blur
+                          //onBlur={() => handleSave("Fullname", newname)} // Save changes on blur
                           //onBlur={() => handleCancel}
                         />
                       </div>
@@ -187,11 +199,20 @@ function Main() {
                           className="form-control"
                           defaultValue={major}
                           onChange={(e) => setNewmajor(e.target.value)}
-                          onBlur={() => handleSave("Major", newmajor)}
+                          //onBlur={() => handleSave("Major", newmajor)}
                         />
                       </div>
                     </div>
-                  </motion.div>
+                    <div className="text-right mt-3">
+                      <button type="button" className="btn btn-primary">
+                      Save changes
+                      </button>
+                      &nbsp;
+                      <button type="button" className="btn btn-default">
+                      Cancel
+                      </button>
+                    </div>
+        </motion.div>
     );
 
 }
