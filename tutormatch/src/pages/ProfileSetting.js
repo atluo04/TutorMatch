@@ -1,8 +1,16 @@
 import '../html/style1.css'
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { NavLink, Outlet } from "react-router-dom";
 import { motion } from 'framer-motion'
+import { auth } from "../firebase/firebaseConfig";
+import { db } from "../firebase/firebaseConfig";
+import { collection, updateDoc, setDoc, getDoc, doc } from 'firebase/firestore';
+import {updata_profile, getdata, reset_user_data, deletel_user_database } from "../user/user_doc"
 
+
+const HandleSaveChanges = () => {
+
+}
 
 function ChangePassword() {
     return (
@@ -28,11 +36,44 @@ function ChangePassword() {
                     {/*dealwith the password change here*/}
                 </div>
           </div>
+          <div className="text-right mt-3">
+            <button type="button" className="btn btn-primary">
+              Save changes
+            </button>
+            &nbsp;
+            <button type="button" className="btn btn-default">
+              Cancel
+            </button>
+          </div>
         </motion.div>
       );
 }
 
 function Info() {
+  const bio = Get_user_data("Bio");
+  const [newbio, setNewbio] = useState(null);
+  const birth = Get_user_data("Birthday");
+  const [newbirth, setNewbirth] = useState(null);
+  const gender = Get_user_data("Sex");
+  const [newgender, setNewgender] = useState(null);
+  const phone = Get_user_data("Phone");
+  const [newphone, setNewphone] = useState(null);
+  const email = Get_user_data("Personal_mail");
+  const [newemail, setNewemail] = useState(null);
+
+  
+  const handleSave = async (field, new_data) => {
+    try {
+      await updata_profile(field, new_data);
+      //setNewname(null); // Clear the newname state after saving
+    } catch (error) {
+      console.error("Error updating data:", error);
+    }
+  };
+
+  function handleCancel(){
+    //setNewname(null);
+  };
     return (
       <motion.div className="tab-pane active show" id="account-info"
         initial={{ opacity: 0 }}
@@ -42,13 +83,17 @@ function Info() {
         <div className="card-body pb-2">
           <div className="form-group">
             <label className="form-label">Bio</label>
-              <textarea className="form-control" rows={5} style={{ resize: "none" }} defaultValue={"Hello, World!"}/>
+              <textarea className="form-control" rows={5} style={{ resize: "none" }} defaultValue={bio}  
+                onChange={(e) => setNewbio(e.target.value)}
+                onBlur={() => handleSave("Bio", newbio)}/>
           </div>
             <div className="form-group">
               <label className="form-label">Birthday</label>
                 <input type="text"
                     className="form-control"
-                    defaultValue="Jan 1, 1111"
+                    defaultValue={birth}
+                    onChange={(e) => setNewbirth(e.target.value)}
+                    onBlur={() => handleSave("Birthday", newbirth)}
                   />
             </div>
               <div className="form-group">
@@ -56,7 +101,9 @@ function Info() {
                   <input
                     type="text"
                     className="form-control"
-                    defaultValue="None"
+                    defaultValue={gender}
+                    onChange={(e) => setNewgender(e.target.value)}
+                    onBlur={() => handleSave("Sex", newgender)}
                   />
               </div>
             </div>
@@ -68,7 +115,9 @@ function Info() {
             <input
               type="text"
               className="form-control"
-              defaultValue="+0 (123) 456 7891"
+              defaultValue={phone}
+              onChange={(e) => setNewphone(e.target.value)}
+              onBlur={() => handleSave("Phone", newphone)}
                 />
         </div>
           <div className="form-group">
@@ -76,14 +125,44 @@ function Info() {
             <input
               type="text"
               className="form-control"
-              defaultValue="example@ucla.edu"
+              defaultValue={email}
+              onChange={(e) => setNewemail(e.target.value)}
+              onBlur={() => handleSave("Personal_mail", newemail)}
             />
           </div>
         </div>
+        <div className="text-right mt-3">
+            <button type="button" className="btn btn-primary">
+              Save changes
+            </button>
+            &nbsp;
+            <button type="button" className="btn btn-default">
+              Cancel
+            </button>
+          </div>
       </motion.div>);
 }
 
 function Main() {
+  const fullname = Get_user_data("Fullname");
+  const [newname, setNewname] = useState(null);
+  const major = Get_user_data("Major");
+  const [newmajor, setNewmajor] = useState(null);
+
+  const handleSave = async (field, new_data) => {
+    try {
+      await updata_profile(field, new_data);
+      setNewname(null); // Clear the newname state after saving
+    } catch (error) {
+      console.error("Error updating data:", error);
+    }
+  };
+
+  function handleCancel(){
+    setNewname(null);
+  };
+
+  
     return(
         <motion.div className="tab-pane active show" id="account-main-page"
           initial={{ opacity: 0 }}
@@ -116,7 +195,10 @@ function Main() {
                         <input
                           type="text"
                           className="form-control mb-1"
-                          defaultValue="Joe Bruin"
+                          defaultValue={fullname}
+                          onChange={(e) => setNewname(e.target.value)}
+                          onBlur={() => handleSave("Fullname", newname)} // Save changes on blur
+                          //onBlur={() => handleCancel}
                         />
                       </div>
                       <div className="form-group">
@@ -124,11 +206,22 @@ function Main() {
                         <input
                           type="text"
                           className="form-control"
-                          defaultValue="Computer Science"
+                          defaultValue={major}
+                          onChange={(e) => setNewmajor(e.target.value)}
+                          onBlur={() => handleSave("Major", newmajor)}
                         />
                       </div>
                     </div>
-                  </motion.div>
+                    <div className="text-right mt-3">
+                      <button type="button" className="btn btn-primary">
+                      Save changes
+                      </button>
+                      &nbsp;
+                      <button type="button" className="btn btn-default">
+                      Cancel
+                      </button>
+                    </div>
+        </motion.div>
     );
 
 }
@@ -248,6 +341,15 @@ function Schedule() {
                   </tbody>
                 </table>
             </div>
+            <div className="text-right mt-3">
+            <button type="button" className="btn btn-primary">
+              Save changes
+            </button>
+            &nbsp;
+            <button type="button" className="btn btn-default">
+              Cancel
+            </button>
+          </div>
           </motion.div>);
 
 }
@@ -288,7 +390,17 @@ function Notification() {
             Email me when someone sends me a message
           </span>
         </label>
+        
       </div>
+    </div>
+    <div className="text-right mt-3">
+      <button type="button" className="btn btn-primary">
+        Save changes
+      </button>
+      &nbsp;
+        <button type="button" className="btn btn-default">
+          Cancel
+        </button>
     </div>
   </motion.div>);
 }
@@ -348,17 +460,37 @@ function ProfileSettingPage () {
               </div>
             </div>
           </div>
-          <div className="text-right mt-3">
-            <button type="button" className="btn btn-primary">
-              Save changes
-            </button>
-            &nbsp;
-            <button type="button" className="btn btn-default">
-              Cancel
-            </button>
-          </div>
+
         </div>
       </>);
     }
+
+
+    function Get_user_data(field){
+      //const [isLoading, setIsLoading] = useState(true); 
+      // Add loading state
+      const [userData, setUserData] = useState(null);
+
+      useEffect(() => {
+        const unsubscribe = auth.onAuthStateChanged(async (user) => {
+          if (user) {
+            try {
+              const userData = await getdata(field);
+              setUserData(userData);
+              //setIsLoading(false);
+            } catch (error) {
+              console.error("Error fetching data:", error);
+              //setIsLoading(false);
+            }
+          } else {
+            console.log("No user is currently signed in.");
+            //setIsLoading(false);
+          }
+        });
+    
+        return unsubscribe;
+      }, []);
+      return userData;
+    }
       
-export { ProfileSettingPage, Main, Schedule, ChangePassword, Notification, Info };
+export { ProfileSettingPage, Main, Schedule, ChangePassword, Notification, Info, Get_user_data };
