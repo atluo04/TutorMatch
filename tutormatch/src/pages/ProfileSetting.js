@@ -8,6 +8,9 @@ import { collection, updateDoc, setDoc, getDoc, doc } from 'firebase/firestore';
 import {updata_profile, getdata, reset_user_data, deletel_user_database } from "../user/user_doc"
 
 
+const HandleSaveChanges = () => {
+
+}
 
 function ChangePassword() {
     return (
@@ -33,34 +36,84 @@ function ChangePassword() {
                     {/*dealwith the password change here*/}
                 </div>
           </div>
+          <div className="text-right mt-3">
+            <button type="button" className="btn btn-primary">
+              Save changes
+            </button>
+            &nbsp;
+            <button type="button" className="btn btn-default">
+              Cancel
+            </button>
+          </div>
         </motion.div>
       );
 }
 
 function Info() {
   const bio = Get_user_data("Bio");
-  const [newbio, setNewbio] = useState(null);
+  const [newbio, setNewbio] = useState(bio);
   const birth = Get_user_data("Birthday");
-  const [newbirth, setNewbirth] = useState(null);
+  const [newbirth, setNewbirth] = useState(birth);
   const gender = Get_user_data("Sex");
-  const [newgender, setNewgender] = useState(null);
+  const [newgender, setNewgender] = useState(gender);
   const phone = Get_user_data("Phone");
-  const [newphone, setNewphone] = useState(null);
+  const [newphone, setNewphone] = useState(phone);
   const email = Get_user_data("Personal_mail");
-  const [newemail, setNewemail] = useState(null);
+  const [newemail, setNewemail] = useState(email);
 
+  useEffect(() => {
+    setNewbio(bio);
+    setNewbirth(birth);
+    setNewgender(gender);
+    setNewphone(phone);
+    setNewemail(email);
+  }, [bio, birth, gender, phone, email]);
   
-  const handleSave = async (field, new_data) => {
-    try {
-      await updata_profile(field, new_data);
-      //setNewname(null); // Clear the newname state after saving
-    } catch (error) {
-      console.error("Error updating data:", error);
+  const handleSave = async () => {
+    if(newbio !== bio){
+      try {
+        await updata_profile("Bio", newbio);
+      } catch (error) {
+        console.error("Error updating data:", error);
+      }
     }
+    if(newbirth !== birth){
+      try {
+        await updata_profile("Birthday", newbio);
+      } catch (error) {
+        console.error("Error updating data:", error);
+      }
+    }
+    if(newgender !== gender){
+      try {
+        await updata_profile("Sex", newgender);
+      } catch (error) {
+        console.error("Error updating data:", error);
+      }
+    }
+    if(newphone !== phone){
+      try {
+        await updata_profile("Phone", newphone);
+      } catch (error) {
+        console.error("Error updating data:", error);
+      }
+    }
+    if(newemail !== email){
+      try {
+        await updata_profile("Personal_mail", newemail);
+      } catch (error) {
+        console.error("Error updating data:", error);
+      }
+    }
+    
   };
 
-  function handleCancel(){
-    //setNewname(null);
+  const handleCancel = async () => {
+    setNewbio(bio);
+    setNewbirth(birth);
+    setNewgender(gender);
+    setNewphone(phone);
+    setNewemail(email);
   };
     return (
       <motion.div className="tab-pane active show" id="account-info"
@@ -72,8 +125,7 @@ function Info() {
           <div className="form-group">
             <label className="form-label">Bio</label>
               <textarea className="form-control" rows={5} style={{ resize: "none" }} defaultValue={bio}  
-                onChange={(e) => setNewbio(e.target.value)}
-                onBlur={() => handleSave("Bio", newbio)}/>
+                onChange={(e) => setNewbio(e.target.value)}/>
           </div>
             <div className="form-group">
               <label className="form-label">Birthday</label>
@@ -81,7 +133,6 @@ function Info() {
                     className="form-control"
                     defaultValue={birth}
                     onChange={(e) => setNewbirth(e.target.value)}
-                    onBlur={() => handleSave("Birthday", newbirth)}
                   />
             </div>
               <div className="form-group">
@@ -91,7 +142,6 @@ function Info() {
                     className="form-control"
                     defaultValue={gender}
                     onChange={(e) => setNewgender(e.target.value)}
-                    onBlur={() => handleSave("Sex", newgender)}
                   />
               </div>
             </div>
@@ -105,7 +155,6 @@ function Info() {
               className="form-control"
               defaultValue={phone}
               onChange={(e) => setNewphone(e.target.value)}
-              onBlur={() => handleSave("Phone", newphone)}
                 />
         </div>
           <div className="form-group">
@@ -115,24 +164,37 @@ function Info() {
               className="form-control"
               defaultValue={email}
               onChange={(e) => setNewemail(e.target.value)}
-              onBlur={() => handleSave("Personal_mail", newemail)}
             />
           </div>
         </div>
+        <div className="text-right mt-3">
+            <button type="button" className="btn btn-primary" onClick={handleSave}>
+              Save changes
+            </button>
+            &nbsp;
+            <button type="button" className="btn btn-default" onClick={handleCancel}>
+              Cancel
+            </button>
+          </div>
       </motion.div>);
 }
 
 function Main() {
   const fullname = Get_user_data("Fullname");
-  const [newname, setNewname] = useState(null);
+  const [newname, setNewname] = useState(fullname);
   const major = Get_user_data("Major");
-  const [newmajor, setNewmajor] = useState(null);
+  const [newmajor, setNewmajor] = useState(major);
+  const pic_url = Get_user_data("profile_pic")
+
+  useEffect(() => {
+    setNewname(fullname);
+    setNewmajor(major);
+  }, [fullname, major]);
 
   const handleSave = async () => {
     if(newname !== fullname){
       try {
         await updata_profile("Fullname", newname);
-        setNewname(null); // Clear the newname state after saving
       } catch (error) {
         console.error("Error updating data:", error);
       }
@@ -140,7 +202,6 @@ function Main() {
     if(newmajor !== major){
       try {
         await updata_profile("Major", newmajor);
-        setNewmajor(null); // Clear the newname state after saving
       } catch (error) {
         console.error("Error updating data:", error);
       }
@@ -148,9 +209,9 @@ function Main() {
     
   };
 
-  function handleCancel(){
-    setNewname(null);
-    setNewmajor(null);
+  const handleCancel = async () => {
+    setNewname(fullname);
+    setNewmajor(major);
   };
 
   
@@ -162,7 +223,7 @@ function Main() {
           transition={{ duration: 0.5 }}>
             <div className="card-body media align-items-center">
               <img
-                src="https://mblogthumb-phinf.pstatic.net/20140512_191/thinkingbug_1399901578557l2bvg_PNG/%B0%CB%C1%A4.png?type=w420"
+                src={pic_url}
                 alt=""
                 className="d-block ui-w-80"/>
                 <div className="media-body ml-4">
@@ -186,10 +247,8 @@ function Main() {
                         <input
                           type="text"
                           className="form-control mb-1"
-                          defaultValue={fullname}
+                          defaultValue={newname}
                           onChange={(e) => setNewname(e.target.value)}
-                          //onBlur={() => handleSave("Fullname", newname)} // Save changes on blur
-                          //onBlur={() => handleCancel}
                         />
                       </div>
                       <div className="form-group">
@@ -199,16 +258,15 @@ function Main() {
                           className="form-control"
                           defaultValue={major}
                           onChange={(e) => setNewmajor(e.target.value)}
-                          //onBlur={() => handleSave("Major", newmajor)}
                         />
                       </div>
                     </div>
                     <div className="text-right mt-3">
-                      <button type="button" className="btn btn-primary">
+                      <button type="button" className="btn btn-primary" onClick={handleSave}>
                       Save changes
                       </button>
                       &nbsp;
-                      <button type="button" className="btn btn-default">
+                      <button type="button" className="btn btn-default" onClick={handleCancel}>
                       Cancel
                       </button>
                     </div>
@@ -332,6 +390,15 @@ function Schedule() {
                   </tbody>
                 </table>
             </div>
+            <div className="text-right mt-3">
+            <button type="button" className="btn btn-primary">
+              Save changes
+            </button>
+            &nbsp;
+            <button type="button" className="btn btn-default">
+              Cancel
+            </button>
+          </div>
           </motion.div>);
 
 }
@@ -372,16 +439,23 @@ function Notification() {
             Email me when someone sends me a message
           </span>
         </label>
+        
       </div>
+    </div>
+    <div className="text-right mt-3">
+      <button type="button" className="btn btn-primary">
+        Save changes
+      </button>
+      &nbsp;
+        <button type="button" className="btn btn-default">
+          Cancel
+        </button>
     </div>
   </motion.div>);
 }
 
 function ProfileSettingPage () {
 
-  const HandleSaveChanges = () => {
-
-  }
     return(
         <>
         <meta charSet="UTF-8" />
@@ -435,15 +509,7 @@ function ProfileSettingPage () {
               </div>
             </div>
           </div>
-          <div className="text-right mt-3">
-            <button type="button" className="btn btn-primary" onClick={HandleSaveChanges}>
-              Save changes
-            </button>
-            &nbsp;
-            <button type="button" className="btn btn-default">
-              Cancel
-            </button>
-          </div>
+
         </div>
       </>);
     }

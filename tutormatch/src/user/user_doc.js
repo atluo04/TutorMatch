@@ -38,7 +38,7 @@ async function updata_profile(field, new_content){
       const docSnap = await getDoc(docRef);
       
       if (docSnap.exists()) {
-          console.log(docSnap.data()[field]);
+          //console.log(docSnap.data()[field]);
           return docSnap.data()[field];
       } else {
           console.log("No such Info");
