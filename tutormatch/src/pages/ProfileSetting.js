@@ -120,14 +120,14 @@ function Info() {
         <div className="card-body pb-2">
           <div className="form-group">
             <label className="form-label">Bio</label>
-              <textarea className="form-control" rows={5} style={{ resize: "none" }} defaultValue={bio}  
+              <textarea className="form-control" rows={5} style={{ resize: "none" }} value={newbio}  
                 onChange={(e) => setNewbio(e.target.value)}/>
           </div>
             <div className="form-group">
               <label className="form-label">Birthday</label>
                 <input type="text"
                     className="form-control"
-                    defaultValue={birth}
+                    value={newbirth}
                     onChange={(e) => setNewbirth(e.target.value)}
                   />
             </div>
@@ -136,7 +136,7 @@ function Info() {
                   <input
                     type="text"
                     className="form-control"
-                    defaultValue={gender}
+                    value={newgender}
                     onChange={(e) => setNewgender(e.target.value)}
                   />
               </div>
@@ -149,7 +149,7 @@ function Info() {
             <input
               type="text"
               className="form-control"
-              defaultValue={phone}
+              value={newphone}
               onChange={(e) => setNewphone(e.target.value)}
                 />
         </div>
@@ -158,7 +158,7 @@ function Info() {
             <input
               type="text"
               className="form-control"
-              defaultValue={email}
+              value={newemail}
               onChange={(e) => setNewemail(e.target.value)}
             />
           </div>
@@ -177,9 +177,9 @@ function Info() {
 
 function Main() {
   const fullname = Get_user_data("Fullname");
-  const [newname, setNewname] = useState(fullname);
+  const [newname, setNewname] = useState("");
   const major = Get_user_data("Major");
-  const [newmajor, setNewmajor] = useState(major);
+  const [newmajor, setNewmajor] = useState("");
   const pic_url = Get_user_data("profile_pic")
 
   useEffect(() => {
