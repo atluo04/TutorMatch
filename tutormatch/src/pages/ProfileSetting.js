@@ -8,10 +8,6 @@ import { collection, updateDoc, setDoc, getDoc, doc } from 'firebase/firestore';
 import {updata_profile, getdata, reset_user_data, deletel_user_database } from "../user/user_doc"
 
 
-const HandleSaveChanges = () => {
-
-}
-
 function ChangePassword() {
     return (
         <motion.div className="tab-pane active show" id="account-change-password"
@@ -247,7 +243,7 @@ function Main() {
                         <input
                           type="text"
                           className="form-control mb-1"
-                          defaultValue={newname}
+                          defaultValue={fullname}
                           onChange={(e) => setNewname(e.target.value)}
                         />
                       </div>
