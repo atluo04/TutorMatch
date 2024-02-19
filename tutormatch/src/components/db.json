@@ -1,0 +1,102 @@
+{
+    "notifications":[
+        {
+          "id": "1",
+          "author": {
+            "name": "Mark Webber",
+            "src": "/images/avatar-mark-webber.webp",
+            "href": "#"
+          },
+          "text": "reacted to your recent post",
+          "link": {
+            "text": "My recent post",
+            "href": "#"
+          },
+          "time": "2m ago",
+          "isUnread": true
+        },
+        {
+          "id": "2",
+          "author": {
+            "name": "Angela Gray",
+            "src": "/images/avatar-angela-gray.webp",
+            "href": "#"
+          },
+          "text": "followed you",
+          "time": "5m ago",
+          "isUnread": true
+        },
+        {
+          "id": "3",
+          "author": {
+            "name": "Jacob Thompson",
+            "src": "images/avatar-jacob-thompson.webp",
+            "href": "#"
+          },
+          "text": "has joined your group",        
+          "link": {
+            "text": "CS 35L",
+            "href": "#"
+          },
+          "time": "1 day ago",
+          "isUnread": true
+        },
+        {
+          "id": "4",
+          "author": {
+            "name": "Rizky Hasanuddin",
+            "src": "/images/avatar-rizky-hasanuddin.webp",
+            "href": "#"
+          },
+          "text": "sent you a privte message",        
+          "time": "5 day ago",
+          "privateMessage": "Hey, I'm interested in your project. Can we talk about it?",
+          "isUnread": false
+        },
+        {
+          "id": "5",
+          "author": {
+            "name": "Kimberly Smith",
+            "src": "/images/avatar-kimberly-smith.webp",
+            "href": "#"
+          },
+          "text": "commented on your picture",
+          "image": {
+            "src": "/images/image-chess.webp",
+            "alt": "Chess game"
+          }  ,      
+          "time": "1 week ago",
+          "isUnread": false
+        },
+        {
+          "id": "6",
+          "author": {
+            "name": "Natahn Peterson",
+            "src": "/images/avatar-nathan-peterson.webp",
+            "href": "#"
+          },
+          "text": "reacted to your recent post",
+          "link": {
+            "text": "CS35L project",
+            "href": "#"
+          },      
+          "time": "2 weeks ago",
+          "isUnread": false
+        },
+        {
+          "id": "7",
+          "author": {
+            "name": "Anna Kim",
+            "src": "/images/avatar-anna-kim.webp",
+            "href": "#"
+          },
+          "text": "left the group",
+          "link": {
+            "text": "CS35L project",
+            "href": "#"
+          },      
+          "time": "3 weeks ago",
+          "isUnread": false
+        }
+      ]
+    }
