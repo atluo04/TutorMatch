@@ -243,7 +243,7 @@ function Main() {
                         <input
                           type="text"
                           className="form-control mb-1"
-                          defaultValue={fullname}
+                          value={newname}
                           onChange={(e) => setNewname(e.target.value)}
                         />
                       </div>
@@ -252,7 +252,7 @@ function Main() {
                         <input
                           type="text"
                           className="form-control"
-                          defaultValue={major}
+                          value={newmajor}
                           onChange={(e) => setNewmajor(e.target.value)}
                         />
                       </div>

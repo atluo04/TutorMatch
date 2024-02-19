@@ -41,8 +41,9 @@ async function getdata(field){
         //console.log(docSnap.data()[field]);
         return docSnap.data()[field];
     } else {
+        const create_new = setDoc(doc(db, "users", uid), data)
         console.log("No such Info");
-        return "rr";
+        return "Null";
     }
 };
   
