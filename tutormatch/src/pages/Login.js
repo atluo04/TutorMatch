@@ -20,7 +20,7 @@ const LoginSignup = () => {
         // need toasting message
       } else {
         console.log("Signed In", user);
-        navigate("/Profile");
+        navigate("/home");
         // need toasting message
       }
     });
