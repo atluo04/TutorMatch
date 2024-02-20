@@ -1,6 +1,7 @@
 import "../html/HomeStyles.css";
 import { Navbar } from "../components/Navbar";
 
+
 function HomePage() {
   return (
     <>

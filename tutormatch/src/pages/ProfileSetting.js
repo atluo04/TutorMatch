@@ -1,7 +1,11 @@
 import '../html/style1.css'
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { NavLink, Outlet } from "react-router-dom";
 import { motion } from 'framer-motion'
+import { auth } from "../firebase/firebaseConfig";
+import { db } from "../firebase/firebaseConfig";
+import { collection, updateDoc, setDoc, getDoc, doc } from 'firebase/firestore';
+import {updata_profile, getdata, reset_user_data, deletel_user_database } from "../user/user_doc"
 
 
 function ChangePassword() {
@@ -28,11 +32,85 @@ function ChangePassword() {
                     {/*dealwith the password change here*/}
                 </div>
           </div>
+          <div className="text-right mt-3">
+            <button type="button" className="btn btn-primary">
+              Save changes
+            </button>
+            &nbsp;
+            <button type="button" className="btn btn-default">
+              Cancel
+            </button>
+          </div>
         </motion.div>
       );
 }
 
 function Info() {
+  const bio = Get_user_data("Bio");
+  const [newbio, setNewbio] = useState(bio);
+  const birth = Get_user_data("Birthday");
+  const [newbirth, setNewbirth] = useState(birth);
+  const gender = Get_user_data("Sex");
+  const [newgender, setNewgender] = useState(gender);
+  const phone = Get_user_data("Phone");
+  const [newphone, setNewphone] = useState(phone);
+  const email = Get_user_data("Personal_mail");
+  const [newemail, setNewemail] = useState(email);
+
+  useEffect(() => {
+    setNewbio(bio);
+    setNewbirth(birth);
+    setNewgender(gender);
+    setNewphone(phone);
+    setNewemail(email);
+  }, [bio, birth, gender, phone, email]);
+  
+  const handleSave = async () => {
+    if(newbio !== bio){
+      try {
+        await updata_profile("Bio", newbio);
+      } catch (error) {
+        console.error("Error updating data:", error);
+      }
+    }
+    if(newbirth !== birth){
+      try {
+        await updata_profile("Birthday", newbio);
+      } catch (error) {
+        console.error("Error updating data:", error);
+      }
+    }
+    if(newgender !== gender){
+      try {
+        await updata_profile("Sex", newgender);
+      } catch (error) {
+        console.error("Error updating data:", error);
+      }
+    }
+    if(newphone !== phone){
+      try {
+        await updata_profile("Phone", newphone);
+      } catch (error) {
+        console.error("Error updating data:", error);
+      }
+    }
+    if(newemail !== email){
+      try {
+        await updata_profile("Personal_mail", newemail);
+      } catch (error) {
+        console.error("Error updating data:", error);
+      }
+    }
+    
+  };
+
+  const handleCancel = async () => {
+    setNewbio(bio);
+    setNewbirth(birth);
+    setNewgender(gender);
+    setNewphone(phone);
+    setNewemail(email);
+  };
     return (
       <motion.div className="tab-pane active show" id="account-info"
         initial={{ opacity: 0 }}
@@ -42,13 +120,15 @@ function Info() {
         <div className="card-body pb-2">
           <div className="form-group">
             <label className="form-label">Bio</label>
-              <textarea className="form-control" rows={5} style={{ resize: "none" }} defaultValue={"Hello, World!"}/>
+              <textarea className="form-control" rows={5} style={{ resize: "none" }} value={newbio}  
+                onChange={(e) => setNewbio(e.target.value)}/>
           </div>
             <div className="form-group">
               <label className="form-label">Birthday</label>
                 <input type="text"
                     className="form-control"
-                    defaultValue="Jan 1, 1111"
+                    value={newbirth}
+                    onChange={(e) => setNewbirth(e.target.value)}
                   />
             </div>
               <div className="form-group">
@@ -56,7 +136,8 @@ function Info() {
                   <input
                     type="text"
                     className="form-control"
-                    defaultValue="None"
+                    value={newgender}
+                    onChange={(e) => setNewgender(e.target.value)}
                   />
               </div>
             </div>
@@ -68,7 +149,8 @@ function Info() {
             <input
               type="text"
               className="form-control"
-              defaultValue="+0 (123) 456 7891"
+              value={newphone}
+              onChange={(e) => setNewphone(e.target.value)}
                 />
         </div>
           <div className="form-group">
@@ -76,14 +158,59 @@ function Info() {
             <input
               type="text"
               className="form-control"
-              defaultValue="example@ucla.edu"
+              value={newemail}
+              onChange={(e) => setNewemail(e.target.value)}
             />
           </div>
         </div>
+        <div className="text-right mt-3">
+            <button type="button" className="btn btn-primary" onClick={handleSave}>
+              Save changes
+            </button>
+            &nbsp;
+            <button type="button" className="btn btn-default" onClick={handleCancel}>
+              Cancel
+            </button>
+          </div>
       </motion.div>);
 }
 
 function Main() {
+  const fullname = Get_user_data("Fullname");
+  const [newname, setNewname] = useState("");
+  const major = Get_user_data("Major");
+  const [newmajor, setNewmajor] = useState("");
+  const pic_url = Get_user_data("profile_pic")
+
+  useEffect(() => {
+    setNewname(fullname);
+    setNewmajor(major);
+  }, [fullname, major]);
+
+  const handleSave = async () => {
+    if(newname !== fullname){
+      try {
+        await updata_profile("Fullname", newname);
+      } catch (error) {
+        console.error("Error updating data:", error);
+      }
+    }
+    if(newmajor !== major){
+      try {
+        await updata_profile("Major", newmajor);
+      } catch (error) {
+        console.error("Error updating data:", error);
+      }
+    }
+    
+  };
+
+  const handleCancel = async () => {
+    setNewname(fullname);
+    setNewmajor(major);
+  };
+
+  
     return(
         <motion.div className="tab-pane active show" id="account-main-page"
           initial={{ opacity: 0 }}
@@ -92,7 +219,7 @@ function Main() {
           transition={{ duration: 0.5 }}>
             <div className="card-body media align-items-center">
               <img
-                src="https://mblogthumb-phinf.pstatic.net/20140512_191/thinkingbug_1399901578557l2bvg_PNG/%B0%CB%C1%A4.png?type=w420"
+                src={pic_url}
                 alt=""
                 className="d-block ui-w-80"/>
                 <div className="media-body ml-4">
@@ -116,7 +243,8 @@ function Main() {
                         <input
                           type="text"
                           className="form-control mb-1"
-                          defaultValue="Joe Bruin"
+                          value={newname}
+                          onChange={(e) => setNewname(e.target.value)}
                         />
                       </div>
                       <div className="form-group">
@@ -124,11 +252,21 @@ function Main() {
                         <input
                           type="text"
                           className="form-control"
-                          defaultValue="Computer Science"
+                          value={newmajor}
+                          onChange={(e) => setNewmajor(e.target.value)}
                         />
                       </div>
                     </div>
-                  </motion.div>
+                    <div className="text-right mt-3">
+                      <button type="button" className="btn btn-primary" onClick={handleSave}>
+                      Save changes
+                      </button>
+                      &nbsp;
+                      <button type="button" className="btn btn-default" onClick={handleCancel}>
+                      Cancel
+                      </button>
+                    </div>
+        </motion.div>
     );
 
 }
@@ -248,6 +386,15 @@ function Schedule() {
                   </tbody>
                 </table>
             </div>
+            <div className="text-right mt-3">
+            <button type="button" className="btn btn-primary">
+              Save changes
+            </button>
+            &nbsp;
+            <button type="button" className="btn btn-default">
+              Cancel
+            </button>
+          </div>
           </motion.div>);
 
 }
@@ -288,7 +435,17 @@ function Notification() {
             Email me when someone sends me a message
           </span>
         </label>
+        
       </div>
+    </div>
+    <div className="text-right mt-3">
+      <button type="button" className="btn btn-primary">
+        Save changes
+      </button>
+      &nbsp;
+        <button type="button" className="btn btn-default">
+          Cancel
+        </button>
     </div>
   </motion.div>);
 }
@@ -348,17 +505,37 @@ function ProfileSettingPage () {
               </div>
             </div>
           </div>
-          <div className="text-right mt-3">
-            <button type="button" className="btn btn-primary">
-              Save changes
-            </button>
-            &nbsp;
-            <button type="button" className="btn btn-default">
-              Cancel
-            </button>
-          </div>
+
         </div>
       </>);
     }
+
+
+    function Get_user_data(field){
+      //const [isLoading, setIsLoading] = useState(true); 
+      // Add loading state
+      const [userData, setUserData] = useState(null);
+
+      useEffect(() => {
+        const unsubscribe = auth.onAuthStateChanged(async (user) => {
+          if (user) {
+            try {
+              const userData = await getdata(field);
+              setUserData(userData);
+              //setIsLoading(false);
+            } catch (error) {
+              console.error("Error fetching data:", error);
+              //setIsLoading(false);
+            }
+          } else {
+            console.log("No user is currently signed in.");
+            //setIsLoading(false);
+          }
+        });
+    
+        return unsubscribe;
+      }, []);
+      return userData;
+    }
       
-export { ProfileSettingPage, Main, Schedule, ChangePassword, Notification, Info };
+export { ProfileSettingPage, Main, Schedule, ChangePassword, Notification, Info, Get_user_data };
