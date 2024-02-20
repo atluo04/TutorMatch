@@ -17,3 +17,14 @@
     letter-spacing: 2px;
     color: #fff;
 }
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: sans-serif;
+}
+
+.home-page {
+    text-align: center;
+}
