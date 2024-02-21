@@ -10,34 +10,41 @@ import {updata_profile, getdata, reset_user_data, deletel_user_database } from "
 
 
 
-// consloe log is where we should put pop notification 
 function ChangePassword() {
   const [currentPS, setCurrentPS] = useState('');
   const [newPS, setNewPS] = useState('');
   const [confirmPS, setconfirmPS] = useState('');
+  const [error, setError] = useState(null);  
+  //error stores the message of succeed or fail, it can be used as for the pop message
 
 
   async function handleSave() {
-    // Check if the new password matches the confirmation
-    if (!checknewPS()) {
-      console.log('Confirm password is incorrect');
-      await handleCancel();
-      return;
-    }
+
+    const passwordMessage = validatePassword(newPS, confirmPS);
+      if (passwordMessage !== null) {
+        setError(passwordMessage);
+        console.log(passwordMessage);
+        await handleCancel();
+        return;
+      }
+
     const user = auth.currentUser;
     const credential = EmailAuthProvider.credential(user.email, currentPS);
     try {
       await reauthenticateWithCredential(user, credential);
       await updatePassword(user, newPS);
+      setError('Password updated successfully')
       console.log('Password updated successfully');
       handleCancel();
     } catch (error) {
-      
-      if (error.code === 'auth/invalid-credential') 
-        {console.log('Failed to access the account');}
-      else
-        {console.log('Failed to update password:', error.message);}
-      
+      if (error.code === 'auth/invalid-credential') {
+          setError('Failed to access the account');
+          console.log('Failed to access the account');
+        }
+      else{
+          setError('Failed to update password:', error.message);
+          console.log('Failed to update password:', error.message);
+        }
       handleCancel();
     }  
 
@@ -48,13 +55,9 @@ function ChangePassword() {
     await Promise.all([
       setCurrentPS(''),
       setNewPS(''),
-      setconfirmPS('')
+      setconfirmPS(''),
+      setError(null)
     ]);
-  }
-
-
-  function checknewPS(){
-    return newPS === confirmPS;
   }
 
 
@@ -239,6 +242,8 @@ function Main() {
   const major = Get_user_data("Major");
   const [newmajor, setNewmajor] = useState("");
   const pic_url = Get_user_data("profile_pic")
+  const [error, setError] = useState(null);  
+  //error stores the message of succeed or fail, it can be used as for the pop message
 
   useEffect(() => {
     setNewname(fullname);
@@ -249,14 +254,18 @@ function Main() {
     if(newname !== fullname){
       try {
         await updata_profile("Fullname", newname);
+        setError('Updated full name')
       } catch (error) {
+        setError("Error updating full name")
         console.error("Error updating data:", error);
       }
     }
     if(newmajor !== major){
       try {
         await updata_profile("Major", newmajor);
+        setError('Updated major')
       } catch (error) {
+        setError("Error updating major")
         console.error("Error updating data:", error);
       }
     }
@@ -266,6 +275,7 @@ function Main() {
   const handleCancel = async () => {
     setNewname(fullname);
     setNewmajor(major);
+    setError(null);
   };
 
   
@@ -595,5 +605,33 @@ function ProfileSettingPage () {
       }, []);
       return userData;
     }
+
+    const validatePassword = (password, confirmPassword) => {
+// comment out below to enable password restriction
+      // const correctLength = /^.{8,16}$/;
+      // if (!correctLength.test(password)) {
+      //   return "Password must be between 8 and 16 characters long.";
+      // }
+      // const noWhiteSpace = /^S*$/;
+      // if (noWhiteSpace.test(password)) {
+      //   return "Password must not contain whitespace.";
+      // }
+      // const containsUppercase = /^(?=.*[A-Z]).*$/;
+      // if (!containsUppercase.test(password)) {
+      //   return "Password must contain at least 1 uppercase letter.";
+      // }
+      // const containsLowercase = /^(?=.*[a-z]).*$/;
+      // if (!containsLowercase.test(password)) {
+      //   return "Password must contain at least 1 lowercase letter.";
+      // }
+      // const containsSpecialChar = /^(?=.*[,.!@#$%^&*~:;'\"()-+=~`_\[\]\\/?|]).*$/;
+      // if (!containsSpecialChar.test(password)) {
+      //   return "Password must contain at least 1 special character.";
+      // }
+      if (password != confirmPassword) {
+        return "Passwords do not match.";
+      }
+      return null;
+    };
       
 export { ProfileSettingPage, Main, Schedule, ChangePassword, Notification, Info, Get_user_data };
