@@ -3,12 +3,61 @@ import React, { useState, useEffect } from "react";
 import { NavLink, Outlet } from "react-router-dom";
 import { motion } from 'framer-motion'
 import { auth } from "../firebase/firebaseConfig";
+import { EmailAuthProvider, reauthenticateWithCredential, updatePassword } from "firebase/auth";
 import { db } from "../firebase/firebaseConfig";
 import { collection, updateDoc, setDoc, getDoc, doc } from 'firebase/firestore';
 import {updata_profile, getdata, reset_user_data, deletel_user_database } from "../user/user_doc"
 
 
+
+// consloe log is where we should put pop notification 
 function ChangePassword() {
+  const [currentPS, setCurrentPS] = useState('');
+  const [newPS, setNewPS] = useState('');
+  const [confirmPS, setconfirmPS] = useState('');
+
+
+  async function handleSave() {
+    // Check if the new password matches the confirmation
+    if (!checknewPS()) {
+      console.log('Confirm password is incorrect');
+      await handleCancel();
+      return;
+    }
+    const user = auth.currentUser;
+    const credential = EmailAuthProvider.credential(user.email, currentPS);
+    try {
+      await reauthenticateWithCredential(user, credential);
+      await updatePassword(user, newPS);
+      console.log('Password updated successfully');
+      handleCancel();
+    } catch (error) {
+      
+      if (error.code === 'auth/invalid-credential') 
+        {console.log('Failed to access the account');}
+      else
+        {console.log('Failed to update password:', error.message);}
+      
+      handleCancel();
+    }  
+
+  }
+  
+
+  async function handleCancel() {
+    await Promise.all([
+      setCurrentPS(''),
+      setNewPS(''),
+      setconfirmPS('')
+    ]);
+  }
+
+
+  function checknewPS(){
+    return newPS === confirmPS;
+  }
+
+
     return (
         <motion.div className="tab-pane active show" id="account-change-password"
           initial={{ opacity: 0 }}
@@ -18,26 +67,35 @@ function ChangePassword() {
           <div className="card-body pb-2">
               <div className="form-group">
                 <label className="form-label">Current password</label>
-                <input type="password" className="form-control" />
+                <input type="password" 
+                       className="form-control" 
+                       value = {currentPS}
+                       onChange={e => setCurrentPS(e.target.value)}/>
                     {/*dealwith the password change here*/}
               </div>
                 <div className="form-group">
                   <label className="form-label">New password</label>
-                  <input type="password" className="form-control" />
+                  <input type="password" 
+                         className="form-control"
+                         value = {newPS} 
+                         onChange={e => setNewPS(e.target.value)}/>
                     {/*dealwith the password change here, might need to change later to take advantage of react*/}
                     </div>
                 <div className="form-group">
                   <label className="form-label">Confirm new password</label>
-                  <input type="password" className="form-control" />
+                  <input type="password" 
+                          className="form-control" 
+                          value = {confirmPS}
+                          onChange={e => setconfirmPS(e.target.value)}/>
                     {/*dealwith the password change here*/}
                 </div>
           </div>
           <div className="text-right mt-3">
-            <button type="button" className="btn btn-primary">
+            <button type="button" className="btn btn-primary" onClick={handleSave}>
               Save changes
             </button>
             &nbsp;
-            <button type="button" className="btn btn-default">
+            <button type="button" className="btn btn-default" onClick={() => handleCancel()}>
               Cancel
             </button>
           </div>
