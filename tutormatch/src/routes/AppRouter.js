@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { HomePage } from "../pages/Home.js";
 import { ProfilePage } from "../pages/Profile.js";
 import { LoginSignup } from "../pages/Login.js";
+import CreatePost from "../pages/CreatePost.js";
 import { AnimatePresence } from "framer-motion";
 import { useLocation } from "react-router-dom";
 import {
@@ -30,7 +31,8 @@ function AppRouter_animated() {
           <Route path="notification" element={<Notification />} />
           <Route path="info" element={<Info />} />
         </Route>
-        <Route path="/register" element={<RegistrationPage />}></Route>
+        <Route path="/register" element={<RegistrationPage />} />
+        <Route path="/post" element={<CreatePost />} />
       </Routes>
     </AnimatePresence>
   );
