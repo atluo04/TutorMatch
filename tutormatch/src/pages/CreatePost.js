@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import ReactQuill from "react-quill";
@@ -19,7 +19,11 @@ const CreatePost = () => {
 
   const handleFormSubmit = (event) => {
     event.preventDefault();
-    console.log(selectedImage);
+    const err = checkValidPost();
+    if (err !== null) {
+      setErrorMessage(err);
+      return;
+    }
     const postRef = addPost(
       title,
       JSON.stringify(content),
@@ -34,6 +38,15 @@ const CreatePost = () => {
       .catch((error) => {
         console.error(error); //should display this error to user
       });
+  };
+
+  const checkValidPost = () => {
+    if (title.trim() === "") {
+      return "Title must be filled out.";
+    } else if (content.trim() === "") {
+      return "Content must not be empty.";
+    }
+    return null;
   };
 
   const handlePrimaryCategoryChange = (event) => {
@@ -112,11 +125,11 @@ const CreatePost = () => {
           />
         </Form.Group>
 
+        {errorMessage && <div className="error-message">{errorMessage}</div>}
+
         <Button className="form-submit-button" variant="primary" type="submit">
           Create Post
         </Button>
-
-        {errorMessage && <div className="error-message">{errorMessage}</div>}
       </Form>
     </div>
   );
@@ -131,7 +144,7 @@ const quillModules = {
       [{ size: [] }],
       ["bold", "italic", "underline", "strike", "blockquote"],
       [{ list: "ordered" }, { list: "bullet" }],
-      ["link", "image", "video"],
+      //["link", "image", "video"],  //disabled for now, embedding an image doesn't really work, so will just use the image upload
       ["clean"],
       ["code-block"],
     ],
@@ -164,19 +177,13 @@ function imageHandler() {
   input.setAttribute("accept", "image/*");
   input.click();
 
-  input.onchange = async () => {
+  input.onchange = () => {
     const file = input.files[0];
     if (/^image\//.test(file.type)) {
       const formData = new FormData();
       formData.append("image", file);
 
-      // Replace 'YOUR_IMAGE_UPLOAD_ENDPOINT' with your actual image upload endpoint
-      const response = await fetch("YOUR_IMAGE_UPLOAD_ENDPOINT", {
-        method: "POST",
-        body: formData,
-      });
-
-      const imageUrl = await response.json();
+      const imageUrl = URL.createObjectURL(file);
       const range = this.quill.getSelection(true);
       this.quill.insertEmbed(range.index, "image", imageUrl);
     } else {
