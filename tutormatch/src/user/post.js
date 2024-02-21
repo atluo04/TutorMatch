@@ -1,5 +1,10 @@
 import { auth, db, storage } from "../firebase/firebaseConfig";
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import {
+  getDownloadURL,
+  ref,
+  uploadBytes,
+  getMetadata,
+} from "firebase/storage";
 import { doc, addDoc, collection, serverTimestamp } from "firebase/firestore";
 
 const postCollection = collection(db, "posts");
@@ -11,10 +16,9 @@ async function addPost(
   pCategory,
   sCategory
 ) {
-  console.log(postImage);
   let imageUrl = null;
   if (postImage !== null) {
-    const imageRef = ref(storage, "post_images/" + postImage.name); //might want to process the name so that unique names are not required
+    const imageRef = ref(storage, "post_images/" + Date.now() + postImage.name);
     try {
       await uploadBytes(imageRef, postImage);
       console.log("uploaded!");
@@ -33,6 +37,7 @@ async function addPost(
     secondaryCategory: sCategory,
     date: serverTimestamp(),
   });
+
   return docRef;
 }
 
