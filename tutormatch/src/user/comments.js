@@ -1,26 +1,27 @@
 import { db } from "../firebase/firebaseConfig";
 import { auth } from "../firebase/firebaseConfig";
-import { collection, addDoc, getDocs, Timestamp, updateDoc, increment, orderBy, doc, query, arrayUnion, getDoc } from "firebase/firestore";
+import { collection, addDoc, getDocs, Timestamp, updateDoc, increment, orderBy, doc, query, arrayUnion, getDoc, deleteDoc } from "firebase/firestore";
 
 
-const addNewComment= async (target, commentContent) => {
+const addNewComment= async (target, commentContent, fromUser, parentId=null) => {
     try {
-        const user = auth.currentUser
         const userRef = doc(db, 'users', target);
         const commentRef = await addDoc(collection(userRef, 'comments'), {
             content: commentContent,
-            from: user.email,
+            from: fromUser,
             timestamp: Timestamp.now(),
             likes: 0,
-            likedUsers: []
+            likedUsers: [],
+            parentId: parentId
     });
-    console.log('Success', commentRef.id)}
+    return true}
     catch(error) {
         console.error(error.message)
     }
 }
 
 const increaseLike = async (target, commentId, from) => {
+    try {
     const commentRef = doc(db, 'users', target, 'comments', commentId);
     const commentDocSnapshot = await getDoc(commentRef);
     const commentData = commentDocSnapshot.data();
@@ -33,6 +34,11 @@ const increaseLike = async (target, commentId, from) => {
         likedUsers: arrayUnion(from)
         });
     }
+        }
+    catch(error) {
+        console.log(error.message)
+    }
+
 }
 
 const getCommentsByLikes = async (target) => {
@@ -51,4 +57,24 @@ const getCommentsByLikes = async (target) => {
     }
 }
 
-export { addNewComment, increaseLike, getCommentsByLikes }
+const deleteComment = async (target, commentId, from) => {
+    try {
+        const commentRef = doc(db, 'users', target, 'comments', commentId);
+        const commentDocSnapshot = await getDoc(commentRef);
+        const commentData = commentDocSnapshot.data();
+        const isAuthor = (commentData && commentData.from === from) ;
+        if (isAuthor) {
+            await deleteDoc(commentRef);
+            return true
+        }
+        else {
+            return false
+        }
+    }
+    catch(error) {
+        console.error(error.message)
+    }
+
+}
+
+export { addNewComment, increaseLike, getCommentsByLikes, deleteComment }

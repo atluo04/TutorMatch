@@ -14,7 +14,7 @@ import {
   Info,
 } from "../pages/ProfileSetting.js";
 import { RegistrationPage } from "../pages/Registration.js";
-
+import Comments from "../comments/src/comments/Comments"
 function AppRouter_animated() {
   const location = useLocation();
   return (
@@ -23,6 +23,7 @@ function AppRouter_animated() {
         <Route exact path="/" element={<LoginSignup />} />
         <Route path="/home" element={<HomePage />} />
         <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/comments" element={<Comments />} />
         <Route path="/settings" element={<ProfileSettingPage />}>
           <Route path="schedule" element={<Schedule />} />
           <Route path="main" element={<Main />} />

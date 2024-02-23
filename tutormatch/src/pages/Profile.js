@@ -2,7 +2,7 @@ import { collection, getDocs } from "firebase/firestore";
 import { app, db, auth } from "../firebase/firebaseConfig"
 import { Link } from "react-router-dom";
 import React, { useState, useEffect } from 'react';
-import { addNewComment, increaseLike, getCommentsByLikes } from "../user/comments"
+import { addNewComment, increaseLike, getCommentsByLikes, deleteComments, deleteComment } from "../user/comments"
 
 
 function ProfilePage () {
@@ -15,7 +15,7 @@ function ProfilePage () {
     e.preventDefault();
     if (!newComment.trim()) return;
   try {
-    await addNewComment(user.uid, newComment);
+    await addNewComment(user.uid, newComment, user.uid);
     setNewComment("");
     const fetchedComments = await getCommentsByLikes(user.uid);
     setComments(fetchedComments);
@@ -23,6 +23,18 @@ function ProfilePage () {
   catch(error) {
     console.error(error.message);
     }
+  }
+
+  const handleDelete = async (commentId) => {
+    try {
+      console.log(await deleteComment(user.uid, commentId, user.uid));
+      const updatedComments = comments.filter(comment => comment.id !== commentId);
+      setComments(updatedComments)
+
+    }
+    catch(error) {
+      console.error(error.message);
+      }
   }
 
   const handleLikes = async (commentId) => {
@@ -69,6 +81,7 @@ function ProfilePage () {
               {comments.map(comment => (
                 <li key={comment.id}>{comment.content} - Likes: {comment.likes}
                 <button onClick={() => handleLikes(comment.id)}>Like</button>
+                <button onClick={() => handleDelete(comment.id)}>Delete</button>
                 </li> 
               ))}
             </ul>
