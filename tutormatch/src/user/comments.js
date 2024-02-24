@@ -14,7 +14,7 @@ const addNewComment= async (target, commentContent, fromUser, parentId=null) => 
             likedUsers: [],
             parentId: parentId
     });
-    return true}
+    return}
     catch(error) {
         console.error(error.message)
     }
