@@ -9,233 +9,6 @@ import { collection, updateDoc, setDoc, getDoc, doc } from 'firebase/firestore';
 import {updata_profile, getdata, reset_user_data, deletel_user_database } from "../user/user_doc"
 
 
-
-function ChangePassword() {
-  const [currentPS, setCurrentPS] = useState('');
-  const [newPS, setNewPS] = useState('');
-  const [confirmPS, setconfirmPS] = useState('');
-  const [error, setError] = useState(null);  
-  //error stores the message of succeed or fail, it can be used as for the pop message
-
-
-  async function handleSave() {
-
-    const passwordMessage = validatePassword(newPS, confirmPS);
-      if (passwordMessage !== null) {
-        setError(passwordMessage);
-        console.log(passwordMessage);
-        await handleCancel();
-        return;
-      }
-
-    const user = auth.currentUser;
-    const credential = EmailAuthProvider.credential(user.email, currentPS);
-    try {
-      await reauthenticateWithCredential(user, credential);
-      await updatePassword(user, newPS);
-      setError('Password updated successfully')
-      console.log('Password updated successfully');
-      handleCancel();
-    } catch (error) {
-      if (error.code === 'auth/invalid-credential') {
-          setError('Failed to access the account');
-          console.log('Failed to access the account');
-        }
-      else{
-          setError('Failed to update password:', error.message);
-          console.log('Failed to update password:', error.message);
-        }
-      handleCancel();
-    }  
-
-  }
-  
-
-  async function handleCancel() {
-    await Promise.all([
-      setCurrentPS(''),
-      setNewPS(''),
-      setconfirmPS(''),
-      setError(null)
-    ]);
-  }
-
-
-    return (
-        <motion.div className="tab-pane active show" id="account-change-password"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0, transition: { duration: 0.1 } }} 
-          transition={{ duration: 0.5 }}>
-          <div className="card-body pb-2">
-              <div className="form-group">
-                <label className="form-label">Current password</label>
-                <input type="password" 
-                       className="form-control" 
-                       value = {currentPS}
-                       onChange={e => setCurrentPS(e.target.value)}/>
-                    {/*dealwith the password change here*/}
-              </div>
-                <div className="form-group">
-                  <label className="form-label">New password</label>
-                  <input type="password" 
-                         className="form-control"
-                         value = {newPS} 
-                         onChange={e => setNewPS(e.target.value)}/>
-                    {/*dealwith the password change here, might need to change later to take advantage of react*/}
-                    </div>
-                <div className="form-group">
-                  <label className="form-label">Confirm new password</label>
-                  <input type="password" 
-                          className="form-control" 
-                          value = {confirmPS}
-                          onChange={e => setconfirmPS(e.target.value)}/>
-                    {/*dealwith the password change here*/}
-                </div>
-          </div>
-          <div className="text-right mt-3">
-            <button type="button" className="btn btn-primary" onClick={handleSave}>
-              Save changes
-            </button>
-            &nbsp;
-            <button type="button" className="btn btn-default" onClick={() => handleCancel()}>
-              Cancel
-            </button>
-          </div>
-        </motion.div>
-      );
-}
-
-function Info() {
-  const bio = Get_user_data("Bio");
-  const [newbio, setNewbio] = useState(bio);
-  const birth = Get_user_data("Birthday");
-  const [newbirth, setNewbirth] = useState(birth);
-  const gender = Get_user_data("Sex");
-  const [newgender, setNewgender] = useState(gender);
-  const phone = Get_user_data("Phone");
-  const [newphone, setNewphone] = useState(phone);
-  const email = Get_user_data("Personal_mail");
-  const [newemail, setNewemail] = useState(email);
-
-  useEffect(() => {
-    setNewbio(bio);
-    setNewbirth(birth);
-    setNewgender(gender);
-    setNewphone(phone);
-    setNewemail(email);
-  }, [bio, birth, gender, phone, email]);
-  
-  const handleSave = async () => {
-    if(newbio !== bio){
-      try {
-        await updata_profile("Bio", newbio);
-      } catch (error) {
-        console.error("Error updating data:", error);
-      }
-    }
-    if(newbirth !== birth){
-      try {
-        await updata_profile("Birthday", newbio);
-      } catch (error) {
-        console.error("Error updating data:", error);
-      }
-    }
-    if(newgender !== gender){
-      try {
-        await updata_profile("Sex", newgender);
-      } catch (error) {
-        console.error("Error updating data:", error);
-      }
-    }
-    if(newphone !== phone){
-      try {
-        await updata_profile("Phone", newphone);
-      } catch (error) {
-        console.error("Error updating data:", error);
-      }
-    }
-    if(newemail !== email){
-      try {
-        await updata_profile("Personal_mail", newemail);
-      } catch (error) {
-        console.error("Error updating data:", error);
-      }
-    }
-    
-  };
-
-  const handleCancel = async () => {
-    setNewbio(bio);
-    setNewbirth(birth);
-    setNewgender(gender);
-    setNewphone(phone);
-    setNewemail(email);
-  };
-    return (
-      <motion.div className="tab-pane active show" id="account-info"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0, transition: { duration: 0.1 } }} 
-        transition={{ duration: 0.5 }}>
-        <div className="card-body pb-2">
-          <div className="form-group">
-            <label className="form-label">Bio</label>
-              <textarea className="form-control" rows={5} style={{ resize: "none" }} value={newbio}  
-                onChange={(e) => setNewbio(e.target.value)}/>
-          </div>
-            <div className="form-group">
-              <label className="form-label">Birthday</label>
-                <input type="text"
-                    className="form-control"
-                    value={newbirth}
-                    onChange={(e) => setNewbirth(e.target.value)}
-                  />
-            </div>
-              <div className="form-group">
-                <label className="form-label">Gender</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    value={newgender}
-                    onChange={(e) => setNewgender(e.target.value)}
-                  />
-              </div>
-            </div>
-            <hr className="border-light m-0" />
-              <div className="card-body pb-2">
-                <h6 className="mb-4">Contacts</h6>
-                <div className="form-group">
-                  <label className="form-label">Phone</label>
-            <input
-              type="text"
-              className="form-control"
-              value={newphone}
-              onChange={(e) => setNewphone(e.target.value)}
-                />
-        </div>
-          <div className="form-group">
-            <label className="form-label">Personal E-mail</label>
-            <input
-              type="text"
-              className="form-control"
-              value={newemail}
-              onChange={(e) => setNewemail(e.target.value)}
-            />
-          </div>
-        </div>
-        <div className="text-right mt-3">
-            <button type="button" className="btn btn-primary" onClick={handleSave}>
-              Save changes
-            </button>
-            &nbsp;
-            <button type="button" className="btn btn-default" onClick={handleCancel}>
-              Cancel
-            </button>
-          </div>
-      </motion.div>);
-}
-
 function Main() {
   const fullname = Get_user_data("Fullname");
   const [newname, setNewname] = useState("");
@@ -338,6 +111,253 @@ function Main() {
     );
 
 }
+
+function ChangePassword() {
+  const [currentPS, setCurrentPS] = useState('');
+  const [newPS, setNewPS] = useState('');
+  const [confirmPS, setconfirmPS] = useState('');
+  const [error, setError] = useState(null);  
+  //error stores the message of succeed or fail, it can be used as for the pop message
+
+
+  async function handleSave() {
+
+    const passwordMessage = validatePassword(newPS, confirmPS);
+      if (passwordMessage !== null) {
+        setError(passwordMessage);
+        console.log(passwordMessage);
+        await handleCancel();
+        return;
+      }
+
+    const user = auth.currentUser;
+    const credential = EmailAuthProvider.credential(user.email, currentPS);
+    try {
+      await reauthenticateWithCredential(user, credential);
+      await updatePassword(user, newPS);
+      setError('Password updated successfully')
+      console.log('Password updated successfully');
+      handleCancel();
+    } catch (error) {
+      if (error.code === 'auth/invalid-credential') {
+          setError('Failed to access the account');
+          console.log('Failed to access the account');
+        }
+      else{
+          setError('Failed to update password:', error.message);
+          console.log('Failed to update password:', error.message);
+        }
+      handleCancel();
+    }  
+
+  }
+  
+
+  async function handleCancel() {
+    await Promise.all([
+      setCurrentPS(''),
+      setNewPS(''),
+      setconfirmPS(''),
+      setError(null)
+    ]);
+  }
+
+
+    return (
+        <motion.div className="tab-pane active show" id="account-change-password"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0, transition: { duration: 0.1 } }} 
+          transition={{ duration: 0.5 }}>
+          <div className="card-body pb-2">
+              <div className="form-group">
+                <label className="form-label">Current password</label>
+                <input type="password" 
+                       className="form-control" 
+                       value = {currentPS}
+                       onChange={e => setCurrentPS(e.target.value)}/>
+                    {/*dealwith the password change here*/}
+              </div>
+                <div className="form-group">
+                  <label className="form-label">New password</label>
+                  <input type="password" 
+                         className="form-control"
+                         value = {newPS} 
+                         onChange={e => setNewPS(e.target.value)}/>
+                    {/*dealwith the password change here, might need to change later to take advantage of react*/}
+                    </div>
+                <div className="form-group">
+                  <label className="form-label">Confirm new password</label>
+                  <input type="password" 
+                          className="form-control" 
+                          value = {confirmPS}
+                          onChange={e => setconfirmPS(e.target.value)}/>
+                    {/*dealwith the password change here*/}
+                </div>
+          </div>
+          <div className="text-right mt-3">
+            <button type="button" className="btn btn-primary" onClick={handleSave}>
+              Save changes
+            </button>
+            &nbsp;
+            <button type="button" className="btn btn-default" onClick={() => handleCancel()}>
+              Cancel
+            </button>
+          </div>
+        </motion.div>
+      );
+}
+
+function Info() {
+  const bio = Get_user_data("Bio");
+  const [newbio, setNewbio] = useState(bio);
+  const birth = get_time("Birthday");
+  const [newbirth, setNewbirth] = useState(birth);
+  const gender = Get_user_data("Sex");
+  const [newgender, setNewgender] = useState(gender);
+  const phone = Get_user_data("Phone");
+  const [newphone, setNewphone] = useState(phone);
+  const email = Get_user_data("Personal_mail");
+  const [newemail, setNewemail] = useState(email);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+      setNewbio(bio);
+      setNewbirth(birth);
+      setNewgender(gender);
+      setNewphone(phone);
+      setNewemail(email);
+  }, [bio, birth, gender, phone, email]);
+  
+  const handleSave = async () => {
+    if(newbio !== bio){
+      try {
+        await updata_profile("Bio", newbio);
+      } catch (error) {
+        console.error("Error updating data:", error);
+      }
+    }
+    if(newbirth !== birth){
+      try {
+        const dateParts = newbirth.split('-');
+        const selectedDate = new Date(dateParts[0], dateParts[1] - 1, dateParts[2]);
+        await updata_profile("Birthday", selectedDate);
+      } catch (error) {
+        console.error("Error updating data:", error);
+      }
+    }
+    if(newgender !== gender){
+      try {
+        await updata_profile("Sex", newgender);
+      } catch (error) {
+        console.error("Error updating data:", error);
+      }
+    }
+    if(newphone !== phone){
+      try {
+        await updata_profile("Phone", newphone);
+      } catch (error) {
+        console.error("Error updating data:", error);
+      }
+    }
+    if(newemail !== email){
+      try {
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailPattern.test(newemail)) {
+          setError("Invalid Email");
+          console.log("Invalid Email");
+          return;
+        }
+        await updata_profile("Personal_mail", newemail);
+      } catch (error) {
+        console.error("Error updating data:", error);
+      }
+    }
+    
+  };
+
+  async function handleCancel() {
+    await Promise.all([
+      setNewbio(bio),
+      setNewbirth(birth),
+      setNewgender(gender),
+      setNewphone(phone),
+      setNewemail(email),
+      
+    ]);
+  }
+  if (bio == null) {
+    return <div>Loading...</div>; // Render loading indicator
+  }
+    return (
+      <motion.div className="tab-pane active show" id="account-info"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0, transition: { duration: 0.1 } }} 
+        transition={{ duration: 0.5 }}>
+        <div className="card-body pb-2">
+          <div className="form-group">
+            <label className="form-label">Bio</label>
+              <textarea className="form-control" rows={5} style={{ resize: "none" }} value={newbio}  
+                onChange={(e) => setNewbio(e.target.value)}/>
+          </div>
+            <div className="form-group">
+              <label className="form-label">Birthday</label>
+                <input type="date"
+                    className="form-control"
+                    value={newbirth}
+                    onChange={(e) => setNewbirth(e.target.value)}
+                  />
+            </div>
+            <div className="form-group">
+              <label className="form-label">Gender</label>
+                <select
+                  className="form-control"
+                  value={newgender}
+                  onChange={(e) => setNewgender(e.target.value)}
+                >
+                  <option value="none" disabled hidden>Gender</option>
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+            </div>
+            <hr className="border-light m-0" />
+              <div className="card-body pb-2">
+                <h6 className="mb-4">Contacts</h6>
+                <div className="form-group">
+                  <label className="form-label">Phone</label>
+            <input
+              type="text"
+              className="form-control"
+              value={newphone}
+              onChange={(e) => setNewphone(e.target.value)}
+                />
+        </div>
+          <div className="form-group">
+            <label className="form-label">Personal E-mail</label>
+            <input
+              type="text"
+              className="form-control"
+              value={newemail}
+              onChange={(e) => setNewemail(e.target.value)}
+            />
+          </div>
+        </div>
+        <div className="text-right mt-3">
+            <button type="button" className="btn btn-primary" onClick={handleSave}>
+              Save changes
+            </button>
+            &nbsp;
+            <button type="button" className="btn btn-default" onClick={() => handleCancel()}>
+              Cancel
+            </button>
+          </div>
+      </motion.div>);
+}
+
+
 
 function Schedule() {
     return (
@@ -604,6 +624,22 @@ function ProfileSettingPage () {
         return unsubscribe;
       }, []);
       return userData;
+    }
+
+    function get_time(field) {
+      try {
+        const userData = Get_user_data(field);
+        if (userData !== null) {
+          const birth = userData.toDate();
+          const ConvertDate = new Intl.DateTimeFormat('en', { year: 'numeric', month: '2-digit', day: '2-digit' }).format(birth);
+          const parts = ConvertDate.split("/");
+          const formattedDate = `${parts[2]}-${parts[0].padStart(2, '0')}-${parts[1].padStart(2, '0')}`;
+          //console.log(formattedDate);
+          return formattedDate;
+      }} catch (error) {
+        console.error("Error retrieving data:", error);
+        return null;
+      }
     }
 
     const validatePassword = (password, confirmPassword) => {
