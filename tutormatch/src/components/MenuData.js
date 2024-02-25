@@ -13,7 +13,7 @@ export const MenuData = [
   },
   {
     title: "Post",
-    url: "#",
+    url: "/post",
     cName: "nav-links",
     icon: "fa-solid fa-pen",
   },
