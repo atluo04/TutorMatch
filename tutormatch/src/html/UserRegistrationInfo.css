@@ -1,0 +1,15 @@
+.phoneContainer {
+    position: relative;
+    margin-left: 24px;
+    width: 360px;
+}
+
+.genderContainer {
+    position: relative;
+    margin: 24px;
+}
+
+.courseContainer{
+    position: relative;
+    margin: 24px;
+}
