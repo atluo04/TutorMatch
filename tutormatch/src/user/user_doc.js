@@ -1,20 +1,20 @@
-import { auth } from "../firebase/firebaseConfig";
-import { db } from "../firebase/firebaseConfig";
-import { collection, updateDoc, setDoc, getDoc, doc } from 'firebase/firestore';
+import { uploadBytes, ref, getDownloadURL } from "firebase/storage";
+import { auth, db ,storage } from "../firebase/firebaseConfig";
+import { collection, updateDoc, setDoc, getDoc, doc, Timestamp } from 'firebase/firestore';
 
 
 //user database
 const data = {
-    Fullname: "++",
+    Fullname: "Bruin",
     Username:"",
-    Birthday:"Jan 1, 1111",
-    Sex:"None",
+    Birthday: Timestamp.fromDate(new Date(Date.UTC(1919, 4, 24))),
+    Sex:"-",
     Major: "Computer Science",
     profile_pic:"https://www.uclastore.com/site/product-images/606852_blue-01.jpg",
     Phone:"+0 (123) 456 7891",
     Personal_mail:"example@ucla.edu",
     Bio:"Hello, World!",
-    created_date:""
+    created_date: Timestamp.now()
 }
 
 // updata profile
@@ -39,13 +39,30 @@ async function getdata(field){
       
     if (docSnap.exists()) {
         //console.log(docSnap.data()[field]);
+        const user_data = docSnap.data()[field]
+        if(user_data == null){
+            //console.log("null data, creating new one")
+            await updateDoc(docRef, {
+                [field]: data[field]
+              });
+              return data[field];
+            }
         return docSnap.data()[field];
     } else {
-        const create_new = setDoc(doc(db, "users", uid), data)
+        await setDoc(docRef, data);
         console.log("No such Info");
         return "Null";
     }
 };
+
+async function upload_profile_pic(file){
+    const fileref = ref(storage, 'profile_pic/' + auth.currentUser.uid + '.png');
+
+    const snapshot = await uploadBytes(fileref, file);
+    const photoURL = await getDownloadURL(fileref);
+
+    updata_profile("profile_pic", photoURL)
+}
   
     //reset user data
 async function reset_user_data(){
@@ -71,4 +88,4 @@ async function deletel_user_database(){
     }
 }
 
-export {updata_profile, getdata, reset_user_data, deletel_user_database, data };
+export {updata_profile, getdata, reset_user_data, deletel_user_database, upload_profile_pic, data };
