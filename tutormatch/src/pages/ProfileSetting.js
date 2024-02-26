@@ -6,7 +6,7 @@ import { auth } from "../firebase/firebaseConfig";
 import { EmailAuthProvider, reauthenticateWithCredential, updatePassword } from "firebase/auth";
 import { db } from "../firebase/firebaseConfig";
 import { collection, updateDoc, setDoc, getDoc, doc } from 'firebase/firestore';
-import {updata_profile, getdata, reset_user_data, deletel_user_database } from "../user/user_doc"
+import {updata_profile, getdata, upload_profile_pic, reset_user_data, deletel_user_database } from "../user/user_doc"
 
 
 function Main() {
@@ -15,13 +15,17 @@ function Main() {
   const major = Get_user_data("Major");
   const [newmajor, setNewmajor] = useState("");
   const pic_url = Get_user_data("profile_pic")
+  const [picUrl, setPicUrl] = useState(""); // State to store the URL of the selected image
+  const [photo, setPhoto] = useState(null);
   const [error, setError] = useState(null);  
   //error stores the message of succeed or fail, it can be used as for the pop message
 
   useEffect(() => {
     setNewname(fullname);
     setNewmajor(major);
-  }, [fullname, major]);
+    setPhoto(pic_url);
+    setPicUrl("");
+  }, [fullname, major, pic_url]);
 
   const handleSave = async () => {
     if(newname !== fullname){
@@ -42,12 +46,32 @@ function Main() {
         console.error("Error updating data:", error);
       }
     }
+    if(photo !== pic_url){
+      try {
+        await upload_profile_pic(photo);
+        //await updata_profile("profile_pic", photo);
+        setError('Updated pic')
+      } catch (error) {
+        setError("Error updating pic")
+        console.error("Error updating data:", error);
+      }
+    }
     
   };
+
+  const handleSavepic = (e) => {
+    if (e.target.files[0]) {
+      setPhoto(e.target.files[0]);
+      setPicUrl(URL.createObjectURL(e.target.files[0]));
+    }
+  };
+
 
   const handleCancel = async () => {
     setNewname(fullname);
     setNewmajor(major);
+    setPhoto(null);
+    setPicUrl("")
     setError(null);
   };
 
@@ -60,18 +84,15 @@ function Main() {
           transition={{ duration: 0.5 }}>
             <div className="card-body media align-items-center">
               <img
-                src={pic_url}
+                src={picUrl || pic_url}
                 alt=""
                 className="d-block ui-w-80"/>
                 <div className="media-body ml-4">
                   <label className="btn btn-outline-primary">
                     Upload new photo
-                    <input type="file" className="account-settings-fileinput" />
+                    <input type="file" className="account-settings-fileinput" onChange={handleSavepic}/>
                      </label>{" "}
                       &nbsp;
-                      <button type="button" className="btn btn-default md-btn-flat">
-                        Reset
-                      </button>
                         <div className="text-light small mt-1">
                           Allowed JPG, GIF or PNG. Max size of 800K
                         </div>

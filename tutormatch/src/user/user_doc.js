@@ -1,5 +1,5 @@
-import { auth } from "../firebase/firebaseConfig";
-import { db } from "../firebase/firebaseConfig";
+import { uploadBytes, ref, getDownloadURL } from "firebase/storage";
+import { auth, db ,storage } from "../firebase/firebaseConfig";
 import { collection, updateDoc, setDoc, getDoc, doc, Timestamp } from 'firebase/firestore';
 
 
@@ -54,6 +54,15 @@ async function getdata(field){
         return "Null";
     }
 };
+
+async function upload_profile_pic(file){
+    const fileref = ref(storage, 'profile_pic/' + auth.currentUser.uid + '.png');
+
+    const snapshot = await uploadBytes(fileref, file);
+    const photoURL = await getDownloadURL(fileref);
+
+    updata_profile("profile_pic", photoURL)
+}
   
     //reset user data
 async function reset_user_data(){
@@ -79,4 +88,4 @@ async function deletel_user_database(){
     }
 }
 
-export {updata_profile, getdata, reset_user_data, deletel_user_database, data };
+export {updata_profile, getdata, reset_user_data, deletel_user_database, upload_profile_pic, data };
