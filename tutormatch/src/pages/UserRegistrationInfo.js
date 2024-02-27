@@ -9,10 +9,15 @@ function UserRegistrationInfo() {
   const [lastName, setLastName] = useState("");
   const [phone, setPhone] = useState("");
   const [gender, setGender] = useState("");
+  const [year, setYear] = useState("");
   const [courses, setCourses] = useState([]);
 
   const handleGenderChange = (event) => {
     setGender(event.target.value);
+  };
+
+  const handleYearChange = (event) => {
+    setYear(event.target.value);
   };
 
   return (
@@ -41,6 +46,15 @@ function UserRegistrationInfo() {
           <option value="female">Female</option>
           <option value="non-binary">Non-Binary</option>
           <option value="other">Other</option>
+        </select>
+      </div>
+      <div className="yearContainer">
+        <label>Select your current year:</label>
+        <select value={year} onChange={handleYearChange}>
+          <option value="freshman">Freshman</option>
+          <option value="sophomore">Sophomore</option>
+          <option value="junior">Junior</option>
+          <option value="senior">Senior</option>
         </select>
       </div>
       <div className="courseContainer">
