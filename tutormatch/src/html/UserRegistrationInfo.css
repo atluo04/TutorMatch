@@ -9,6 +9,11 @@
     margin: 24px;
 }
 
+.yearContainer {
+    position: relative;
+    margin: 24px;
+}
+
 .courseContainer{
     position: relative;
     margin: 24px;
