@@ -15,6 +15,7 @@ import {
   Info,
 } from "../pages/ProfileSetting.js";
 import { RegistrationPage } from "../pages/Registration.js";
+import { UserRegistrationInfo } from "../pages/UserRegistrationInfo.js";
 
 function AppRouter_animated() {
   const location = useLocation();
@@ -32,6 +33,7 @@ function AppRouter_animated() {
           <Route path="info" element={<Info />} />
         </Route>
         <Route path="/register" element={<RegistrationPage />} />
+        <Route path="/info" element={<UserRegistrationInfo />} />
         <Route path="/post" element={<CreatePost />} />
       </Routes>
     </AnimatePresence>
