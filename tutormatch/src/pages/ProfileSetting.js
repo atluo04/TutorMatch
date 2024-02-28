@@ -24,7 +24,7 @@ function Main() {
     setNewname(fullname);
     setNewmajor(major);
     setPhoto(pic_url);
-    setPicUrl("");
+    setPicUrl(pic_url);
   }, [fullname, major, pic_url]);
 
   const handleSave = async () => {
@@ -60,9 +60,11 @@ function Main() {
   };
 
   const handleSavepic = (e) => {
-    if (e.target.files[0]) {
-      setPhoto(e.target.files[0]);
-      setPicUrl(URL.createObjectURL(e.target.files[0]));
+    const file = e.target.files[0];
+    if (file) {
+      setPhoto(file);
+      setPicUrl(URL.createObjectURL(file));
+      e.target.value = null;
     }
   };
 
@@ -71,7 +73,7 @@ function Main() {
     setNewname(fullname);
     setNewmajor(major);
     setPhoto(null);
-    setPicUrl("")
+    setPicUrl(pic_url)
     setError(null);
   };
 
@@ -84,7 +86,7 @@ function Main() {
           transition={{ duration: 0.5 }}>
             <div className="card-body media align-items-center">
               <img
-                src={picUrl || pic_url}
+                src={picUrl}
                 alt=""
                 className="d-block ui-w-80"/>
                 <div className="media-body ml-4">
