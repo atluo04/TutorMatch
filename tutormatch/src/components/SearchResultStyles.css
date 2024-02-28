@@ -1,0 +1,15 @@
+.search-result {
+    margin-top: 20px; /* Adjust as needed */
+    text-align: center;
+  }
+  
+  .search-box {
+    padding: 20px;
+    background-color: #f0f0f0; /* Light gray background */
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .search-box h4 {
+    margin-bottom: 10px; /* Add some space between each search result */
+  }
