@@ -15,6 +15,7 @@ import {
 } from "../pages/ProfileSetting.js";
 import { RegistrationPage } from "../pages/Registration.js";
 import App1 from "../comments/src/App.js";
+import ChatBody from "../message/src/components/chatBody/ChatBody.js";
 function AppRouter_animated() {
   const location = useLocation();
   return (
@@ -24,6 +25,7 @@ function AppRouter_animated() {
         <Route path="/home" element={<HomePage />} />
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/comments" element={<App1 />} />
+        <Route path="/chat" element={<ChatBody />} />
         <Route path="/settings" element={<ProfileSettingPage />}>
           <Route path="schedule" element={<Schedule />} />
           <Route path="main" element={<Main />} />

@@ -99,6 +99,7 @@ function ProfilePage () {
         </form>
         </div>
         <Link to="/settings/main">Go to Profile Settings: </Link>
+        <Link to="/chat">Go to Chat page</Link>
       </div>
     );
   }
