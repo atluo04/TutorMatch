@@ -7,13 +7,16 @@ function SearchResult({ results }) {
   return (
     <div className="search-result">
       <div className="search-box">
-        {/* ... your existing code */}
-        {results.map((result) => ( // Use the passed "results" here
+        {/* below is the function to display the found posts */}
+        
+        {results.map((result) => ( 
           <div key={result.id}>
             <h4>{result.title}</h4>
-            {/* Render other details of the search result */}
+            <h4>{result.content}</h4>
+
           </div>
         ))}
+
       </div>
     </div>
   );
