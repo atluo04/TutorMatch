@@ -4,6 +4,33 @@ import "react-phone-number-input/style.css";
 import PhoneInput from "react-phone-number-input";
 import "../html/UserRegistrationInfo.css";
 
+const CourseSearch = () => {
+  const [value, setValue] = useState("");
+ 
+  return (
+    <div>
+      <input
+        type="text"
+        className="courseSearch"
+        placeholder="Search for courses..."
+        onChange={e => setValue(e.target.value)}
+      />
+      {value && (<ul className="courseList">
+        {courseList.filter((course) => course.id.toLowerCase().includes(value)).map((course) => (
+          <button key={course.id} className="courseListItem">{course.id}</button>
+        ))}
+      </ul>)}
+    </div>
+  );
+};
+
+const courseList = [
+  { id: "CS31", name: "Introduction to Computer Science" },
+  { id: "CS32", name: "Data Structures and Algorithms" },
+  { id: "MATH33B", name: "Differential Equations" },
+  // Add more courses as needed
+];
+
 function UserRegistrationInfo() {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -24,16 +51,16 @@ function UserRegistrationInfo() {
     <div>
       <h2>Get Started with TutorMatch</h2>
       <PasswordEmailInput
-        placeHolder={" First Name"}
+        placeHolderText={" First Name"}
         handleInput={setFirstName}
       />
       <PasswordEmailInput
-        placeHolder={" Last Name"}
+        placeHolderText={" Last Name"}
         handleInput={setLastName}
       />
       <div className="phoneContainer">
         <PhoneInput
-          placeHolder={"Phone Number"}
+          placeholder={"Phone Number"}
           value={phone}
           onChange={setPhone}
           defaultCountry="US"
@@ -59,6 +86,7 @@ function UserRegistrationInfo() {
       </div>
       <div className="courseContainer">
         <label>Select your current courses:</label>
+        <CourseSearch/>
       </div>
     </div>
   );
