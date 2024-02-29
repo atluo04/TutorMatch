@@ -14,7 +14,8 @@ const data = {
     Phone:"+0 (123) 456 7891",
     Personal_mail:"example@ucla.edu",
     Bio:"Hello, World!",
-    created_date: Timestamp.now()
+    created_date: Timestamp.now(),
+    courses: []
 }
 
 // updata profile
@@ -22,9 +23,19 @@ async function updata_profile(field, new_content){
     const uid = auth.currentUser.uid;
     const usersCollection_updata = doc(db, 'users', uid);
     try {
-        await updateDoc(usersCollection_updata, {
-          [field]: new_content
-        });
+        if(field === 'courses'){
+            const course_list = await getdata('courses');
+            const updatedCourses = [...course_list, ...new_content];
+            await updateDoc(usersCollection_updata, {
+                [field]: updatedCourses
+              });
+        }
+        else{
+            await updateDoc(usersCollection_updata, {
+                [field]: new_content
+              });
+        }
+        
       //console.log("User information added to collection successfully!");
     } catch (error) {
         console.error("Error updating -" + field + "- :", error);
@@ -63,6 +74,19 @@ async function upload_profile_pic(file){
 
     updata_profile("profile_pic", photoURL)
 }
+
+async function remove_course(delete_content){
+    const uid = auth.currentUser.uid;
+    const usersCollection_updata = doc(db, 'users', uid);
+    const course_list = await getdata('courses');
+    const updatedCourses = course_list.filter(course => course !== delete_content);
+    
+    // Update the 'courses' field with the updated array
+    await updateDoc(usersCollection_updata, {
+        ['courses']: updatedCourses
+    })
+            
+}
   
     //reset user data
 async function reset_user_data(){
@@ -88,4 +112,4 @@ async function deletel_user_database(){
     }
 }
 
-export {updata_profile, getdata, reset_user_data, deletel_user_database, upload_profile_pic, data };
+export {updata_profile, getdata, reset_user_data, deletel_user_database, upload_profile_pic, remove_course, data };
