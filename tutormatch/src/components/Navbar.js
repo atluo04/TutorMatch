@@ -2,34 +2,52 @@ import { MenuData } from "./MenuData";
 import "./NavbarStyles.css";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { db } from "../firebase/firebaseConfig";
-import { collection, query, where, getDocs } from "firebase/firestore";
 import { SearchResult } from "./Searching_result";
+import { createAlgoliaClient } from "../firebase/algoliaConfig";
 
 
 function Navbar() {
   const [clicked, setClicked] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const [searchResults, setSearchResults] = useState([]);
-  // const test = "123456";
-  //console.log('y')
-  const handleSearch = async () => {
-   console.log('ya')
-    const q = query(collection(db, "posts"), where("title", "==", searchQuery));
-    const querySnapshot = await getDocs(q);
-    const results = [];
-    querySnapshot.forEach((doc) => {
-      console.log(doc.id, " => ", doc.data())
-      results.push({ id: doc.id, ...doc.data() });
-    });
+  //const [searchResults, setSearchResults] = useState([]);
+  const [search_for, setSearch_for] = useState("posts");
+  const [hits, setHits] = useState([]);
 
-    setSearchResults(results);
+  const handleSearch = async () => {
+    let index;
+
+    if (search_for === 'posts') {
+      index = createAlgoliaClient('posts');
+    }
+    if (search_for === 'users') {
+      index = createAlgoliaClient('users');
+    }
+
+    try {
+      if (!index) {
+        throw new Error('Index not initialized');
+      }
+
+      const { hits } = await index.search(searchQuery); 
+      console.log(hits);
+      setHits(hits); 
+
+    } catch (error) {
+      console.error('Error searching with Algolia:', error);
+      setHits([]);
+    }
   };
 
   const handleClick = () => {
     setClicked(!clicked);
   };
 
+
+
+  // we may need a filter to search because how algolia is implemented in firebase
+  // the filter should only contain post or user
+  // so need a design this
+  
   return (
     <nav className="NavbarItems">
       <h1 className="logo">
@@ -62,9 +80,8 @@ function Navbar() {
           );
         })}
       </ul>
-      <SearchResult results={searchResults}/>
+      <SearchResult results={hits} collection={search_for} />
     </nav>
-    
   );
 }
 
