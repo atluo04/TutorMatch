@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef} from "react";
 import { PasswordEmailInput } from "../components/PasswordEmailInput";
 import "react-phone-number-input/style.css";
 import PhoneInput from "react-phone-number-input";
@@ -7,20 +7,56 @@ import courseList from '../assets/courses.json'
 
 const CourseSearch = () => {
   const [value, setValue] = useState("");
+  const [courses, setCourses] = useState(new Set());
+  const [dropDown, setDropDown] = useState(false);
+  const inputRef = useRef(null);
+
+  const handleInput = (event) =>{
+    setValue(event.target.value);
+    setDropDown(true);
+  }
+
+  const handleCourseSelection = (id) => {
+    setCourses((courses) => new Set([...courses, id]));
+    inputRef.current.value = "";
+    setDropDown(false);
+    inputRef.current.focus();
+  };
  
   return (
     <div>
+      <ul>
+        {[...courses].map((course) => (
+          <button key={course} className="selectedCourse">
+            {course}
+          </button>
+        ))}
+      </ul>
       <input
         type="text"
+        ref={inputRef}
         className="courseSearch"
-        placeholder="Search for courses..."
-        onChange={e => setValue(e.target.value)}
+        placeholder="Search for course ID..."
+        onChange={handleInput}
       />
-      {value && (<ul className="courseList">
-        {courseList.filter((course) => course.ID.toLowerCase().includes(value.toLowerCase())).map((course) => (
-          <button key={course.ID} className="courseListItem">{course.ID}</button>
-        ))}
-      </ul>)}
+      {dropDown && value && (
+        <ul className="courseList">
+          {courseList
+            .filter((course) =>
+              course.ID.toLowerCase().includes(value.toLowerCase())
+            )
+            .slice(0, 5)
+            .map((course) => (
+              <button
+                key={course.ID}
+                className="courseListItem"
+                onClick={() => handleCourseSelection(course.ID)}
+              >
+                {course.ID}
+              </button>
+            ))}
+        </ul>
+      )}
     </div>
   );
 };

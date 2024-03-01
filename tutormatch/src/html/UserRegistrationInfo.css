@@ -52,3 +52,14 @@
 .courseListItem:hover {
     background-color: lightgray;
 }
+
+.selectedCourse{
+    border: 1px solid #ccc;
+    border-radius: 15px;
+    padding: 5px 10px;
+    margin-right: 5px;
+}
+
+.selectedCourse:hover {
+    background-color: lightgray;
+}
