@@ -3,6 +3,7 @@ import { PasswordEmailInput } from "../components/PasswordEmailInput";
 import "react-phone-number-input/style.css";
 import PhoneInput from "react-phone-number-input";
 import "../html/UserRegistrationInfo.css";
+import courseList from '../assets/courses.json'
 
 const CourseSearch = () => {
   const [value, setValue] = useState("");
@@ -16,20 +17,13 @@ const CourseSearch = () => {
         onChange={e => setValue(e.target.value)}
       />
       {value && (<ul className="courseList">
-        {courseList.filter((course) => course.id.toLowerCase().includes(value)).map((course) => (
-          <button key={course.id} className="courseListItem">{course.id}</button>
+        {courseList.filter((course) => course.ID.toLowerCase().includes(value.toLowerCase())).map((course) => (
+          <button key={course.ID} className="courseListItem">{course.ID}</button>
         ))}
       </ul>)}
     </div>
   );
 };
-
-const courseList = [
-  { id: "CS31", name: "Introduction to Computer Science" },
-  { id: "CS32", name: "Data Structures and Algorithms" },
-  { id: "MATH33B", name: "Differential Equations" },
-  // Add more courses as needed
-];
 
 function UserRegistrationInfo() {
   const [firstName, setFirstName] = useState("");
