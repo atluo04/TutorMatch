@@ -2,6 +2,7 @@ import { useState } from "react";
 import { registerUser } from "../user/auth";
 import { PasswordEmailInput } from "../components/PasswordEmailInput";
 import { useNavigate } from "react-router-dom";
+import { update_profile } from "../user/user_doc";
 
 function RegistrationPage() {
   // State for registration form
@@ -34,6 +35,7 @@ function RegistrationPage() {
       } else {
         setError(null);
         console.log("New account created", user);
+        update_profile("Personal_mail", email)
         navigate("/info");
         // need toasting message
       }
@@ -71,14 +73,14 @@ function RegistrationPage() {
     <div>
       <h2>Registration</h2>
       <form>
-        <PasswordEmailInput placeHolder={" Email"} handleInput={setEmail} />
+        <PasswordEmailInput placeHolderText={"Email"} handleInput={setEmail} />
         <PasswordEmailInput
-          placeHolder={" Password"}
+          placeHolderText={"Password"}
           handleInput={setPassword}
           isPassword={true}
         />
         <PasswordEmailInput
-          placeHolder={" Confirm Password"}
+          placeHolderText={"Confirm Password"}
           handleInput={setConfirmPassword}
           isPassword={true}
         />

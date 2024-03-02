@@ -7,6 +7,7 @@ import { addNewComment, increaseLike, getCommentsByLikes, deleteComments, delete
 
 function ProfilePage () {
   const user = auth.currentUser;
+
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState("")
   const [isDisabled, setIsDisabled] = useState(false);

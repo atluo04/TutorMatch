@@ -6,7 +6,7 @@ import { auth } from "../firebase/firebaseConfig";
 import { EmailAuthProvider, reauthenticateWithCredential, updatePassword } from "firebase/auth";
 import { db } from "../firebase/firebaseConfig";
 import { collection, updateDoc, setDoc, getDoc, doc } from 'firebase/firestore';
-import {updata_profile, getdata, upload_profile_pic, reset_user_data, deletel_user_database } from "../user/user_doc"
+import {update_profile, getdata, upload_profile_pic, reset_user_data, deletel_user_database } from "../user/user_doc"
 
 
 function Main() {
@@ -30,7 +30,7 @@ function Main() {
   const handleSave = async () => {
     if(newname !== fullname){
       try {
-        await updata_profile("Fullname", newname);
+        await update_profile("Fullname", newname);
         setError('Updated full name')
       } catch (error) {
         setError("Error updating full name")
@@ -39,7 +39,7 @@ function Main() {
     }
     if(newmajor !== major){
       try {
-        await updata_profile("Major", newmajor);
+        await update_profile("Major", newmajor);
         setError('Updated major')
       } catch (error) {
         setError("Error updating major")
@@ -255,7 +255,7 @@ function Info() {
   const handleSave = async () => {
     if(newbio !== bio){
       try {
-        await updata_profile("Bio", newbio);
+        await update_profile("Bio", newbio);
       } catch (error) {
         console.error("Error updating data:", error);
       }
@@ -264,21 +264,21 @@ function Info() {
       try {
         const dateParts = newbirth.split('-');
         const selectedDate = new Date(dateParts[0], dateParts[1] - 1, dateParts[2]);
-        await updata_profile("Birthday", selectedDate);
+        await update_profile("Birthday", selectedDate);
       } catch (error) {
         console.error("Error updating data:", error);
       }
     }
     if(newgender !== gender){
       try {
-        await updata_profile("Sex", newgender);
+        await update_profile("Sex", newgender);
       } catch (error) {
         console.error("Error updating data:", error);
       }
     }
     if(newphone !== phone){
       try {
-        await updata_profile("Phone", newphone);
+        await update_profile("Phone", newphone);
       } catch (error) {
         console.error("Error updating data:", error);
       }
@@ -291,7 +291,7 @@ function Info() {
           console.log("Invalid Email");
           return;
         }
-        await updata_profile("Personal_mail", newemail);
+        await update_profile("Personal_mail", newemail);
       } catch (error) {
         console.error("Error updating data:", error);
       }

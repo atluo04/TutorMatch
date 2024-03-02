@@ -5,35 +5,45 @@ import { collection, updateDoc, setDoc, getDoc, doc, Timestamp } from 'firebase/
 
 //user database
 const data = {
-    Fullname: "Bruin",
+    Fullname: "",
     Username:"",
     Birthday: Timestamp.fromDate(new Date(Date.UTC(1919, 4, 24))),
-    Sex:"-",
-    Major: "Computer Science",
+    Gender:"-",
+    Majors: [],
+    Year: "Freshman",
     profile_pic:"https://www.uclastore.com/site/product-images/606852_blue-01.jpg",
     Phone:"+0 (123) 456 7891",
-    Personal_mail:"example@ucla.edu",
+    Personal_mail: "",
     Bio:"Hello, World!",
     created_date: Timestamp.now(),
-    courses: []
+    Courses: []
 }
 
 // updata profile
-async function updata_profile(field, new_content){
+async function update_profile(field, new_content){
     const uid = auth.currentUser.uid;
     const usersCollection_updata = doc(db, 'users', uid);
     try {
-        if(field === 'courses'){
-            const course_list = await getdata('courses');
+        if(field === 'Courses'){
+            const course_list = await getdata('Courses');
             const updatedCourses = [...course_list, ...new_content];
             await updateDoc(usersCollection_updata, {
                 [field]: updatedCourses
               });
         }
-        else{
+        else if (field === "Majors") {
+          const majors_list = await getdata("Majors");
+          const updatedCourses = [...majors_list, ...new_content];
+          await updateDoc(usersCollection_updata, {
+            [field]: updatedCourses,
+          });
+        } else {
+          if(await check_field_exist(usersCollection_updata, field, new_content)){
             await updateDoc(usersCollection_updata, {
-                [field]: new_content
-              });
+              [field]: new_content,
+            });
+          }
+            
         }
         
       //console.log("User information added to collection successfully!");
@@ -41,7 +51,31 @@ async function updata_profile(field, new_content){
         console.error("Error updating -" + field + "- :", error);
     }
 }
-  
+
+  // this function check the field 
+  // and update the new input only if it was not exist
+async function check_field_exist(docRef, field, new_data = null){
+  // const docRef = doc(db, "users", uid);
+  const docSnap = await getDoc(docRef);
+  const user_data = docSnap.data()[field]
+  // check if data exist
+  if(user_data === null){
+    //check if need to use input value
+      if(new_data == null){   // no input, use default
+        await updateDoc(docRef, {
+          [field]: data[field]
+        });
+        return false
+      }else{
+        await updateDoc(docRef, {
+          [field]: new_data
+        });
+        return false
+      }
+  }
+  return true
+}
+
   //get data from firebase
 async function getdata(field){
     const uid = auth.currentUser.uid;
@@ -50,15 +84,11 @@ async function getdata(field){
       
     if (docSnap.exists()) {
         //console.log(docSnap.data()[field]);
-        const user_data = docSnap.data()[field]
-        if(user_data == null){
-            //console.log("null data, creating new one")
-            await updateDoc(docRef, {
-                [field]: data[field]
-              });
-              return data[field];
-            }
-        return docSnap.data()[field];
+        //const user_data = docSnap.data()[field]
+        //console.log("null data, creating new one")
+        
+        await check_field_exist(docRef, field);
+        return docSnap.data()[field];     // not sure if this works
     } else {
         await setDoc(docRef, data);
         console.log("No such Info");
@@ -72,7 +102,7 @@ async function upload_profile_pic(file){
     const snapshot = await uploadBytes(fileref, file);
     const photoURL = await getDownloadURL(fileref);
 
-    updata_profile("profile_pic", photoURL)
+    update_profile("profile_pic", photoURL)
 }
 
 async function remove_course(delete_content){
@@ -112,4 +142,4 @@ async function deletel_user_database(){
     }
 }
 
-export {updata_profile, getdata, reset_user_data, deletel_user_database, upload_profile_pic, remove_course, data };
+export {update_profile, getdata, reset_user_data, deletel_user_database, upload_profile_pic, remove_course, check_field_exist, data };
