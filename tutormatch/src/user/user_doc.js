@@ -38,9 +38,12 @@ async function update_profile(field, new_content){
             [field]: updatedCourses,
           });
         } else {
-          await updateDoc(usersCollection_updata, {
-            [field]: new_content,
-          });
+          if(await check_field_exist(usersCollection_updata, field, new_content)){
+            await updateDoc(usersCollection_updata, {
+              [field]: new_content,
+            });
+          }
+            
         }
         
       //console.log("User information added to collection successfully!");
@@ -48,7 +51,31 @@ async function update_profile(field, new_content){
         console.error("Error updating -" + field + "- :", error);
     }
 }
-  
+
+  // this function check the field 
+  // and update the new input only if it was not exist
+async function check_field_exist(docRef, field, new_data = null){
+  // const docRef = doc(db, "users", uid);
+  const docSnap = await getDoc(docRef);
+  const user_data = docSnap.data()[field]
+  // check if data exist
+  if(user_data === null){
+    //check if need to use input value
+      if(new_data == null){   // no input, use default
+        await updateDoc(docRef, {
+          [field]: data[field]
+        });
+        return false
+      }else{
+        await updateDoc(docRef, {
+          [field]: new_data
+        });
+        return false
+      }
+  }
+  return true
+}
+
   //get data from firebase
 async function getdata(field){
     const uid = auth.currentUser.uid;
@@ -57,15 +84,11 @@ async function getdata(field){
       
     if (docSnap.exists()) {
         //console.log(docSnap.data()[field]);
-        const user_data = docSnap.data()[field]
-        if(user_data == null){
-            //console.log("null data, creating new one")
-            await updateDoc(docRef, {
-                [field]: data[field]
-              });
-              return data[field];
-            }
-        return docSnap.data()[field];
+        //const user_data = docSnap.data()[field]
+        //console.log("null data, creating new one")
+        
+        await check_field_exist(docRef, field);
+        return docSnap.data()[field];     // not sure if this works
     } else {
         await setDoc(docRef, data);
         console.log("No such Info");
@@ -119,4 +142,4 @@ async function deletel_user_database(){
     }
 }
 
-export {update_profile, getdata, reset_user_data, deletel_user_database, upload_profile_pic, remove_course, data };
+export {update_profile, getdata, reset_user_data, deletel_user_database, upload_profile_pic, remove_course, check_field_exist, data };
