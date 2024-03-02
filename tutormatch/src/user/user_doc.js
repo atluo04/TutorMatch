@@ -5,15 +5,15 @@ import { collection, updateDoc, setDoc, getDoc, doc, Timestamp } from 'firebase/
 
 //user database
 const data = {
-    Fullname: "Bruin",
+    Fullname: "",
     Username:"",
     Birthday: Timestamp.fromDate(new Date(Date.UTC(1919, 4, 24))),
     Gender:"-",
-    Majors: "Computer Science",
+    Majors: [],
     Year: "Freshman",
     profile_pic:"https://www.uclastore.com/site/product-images/606852_blue-01.jpg",
     Phone:"+0 (123) 456 7891",
-    Personal_mail:"example@ucla.edu",
+    Personal_mail:auth.currentUser.email,
     Bio:"Hello, World!",
     created_date: Timestamp.now(),
     Courses: []
@@ -32,8 +32,8 @@ async function update_profile(field, new_content){
               });
         }
         else if (field === "Majors") {
-          const course_list = await getdata("Majors");
-          const updatedCourses = [...course_list, ...new_content];
+          const majors_list = await getdata("Majors");
+          const updatedCourses = [...majors_list, ...new_content];
           await updateDoc(usersCollection_updata, {
             [field]: updatedCourses,
           });
