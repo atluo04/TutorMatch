@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { registerUser } from "../user/auth";
 import { PasswordEmailInput } from "../components/PasswordEmailInput";
+import { useNavigate } from "react-router-dom";
 
 function RegistrationPage() {
   // State for registration form
@@ -8,6 +9,7 @@ function RegistrationPage() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   const handleRegistration = () => {
     if (process.env.NODE_ENV !== "development") {
@@ -32,6 +34,7 @@ function RegistrationPage() {
       } else {
         setError(null);
         console.log("New account created", user);
+        navigate("/info");
         // need toasting message
       }
     });

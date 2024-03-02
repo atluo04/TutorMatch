@@ -3,14 +3,26 @@ import { app, db, auth } from "../../../../firebase/firebaseConfig"
 import "./chatContent.css";
 import Avatar from "../chatList/Avatar";
 import ChatItem from "./ChatItem";
-import { sendMessage, receiveMessage, createNewchat, getConversations, getMessages } from "../../../../user/chat";
+import firebase from "firebase/storage"
+import { sendMessage, receiveMessage, createNewchat, getConversations, getMessages, storeFile } from "../../../../user/chat";
 import { collection, addDoc, getDocs, Timestamp, updateDoc, orderBy, doc, query, getDoc, deleteDoc, onSnapshot,setDoc } from "firebase/firestore";
 
-
 const handleTime = (date) => {
-  const timestamp = new Date(date);
+  const timestamp = date.toDate();
   const now = new Date();
-  //const timepast = (now.getTime() - timestamp.getTime(Time)) / 1000;
+  const timepast = (now.getTime() - timestamp.getTime(date)) / 1000;
+  if (timepast < 60) {
+    return `Just now`
+  }
+  else if (timepast < 3600) {
+    return `${Math.floor(timepast / 60)} minutes ago`;
+  }
+  else if (timepast < 3600*24 ) {
+    return `${Math.floor(timepast / 3600)} hours ago`;
+  }
+  else {
+    return `${timestamp.toLocaleString('en-US')}`
+  }
 }
 
 
@@ -23,55 +35,84 @@ export default class ChatContent extends Component {
       conversationId: this.props.conversationId,
       msg: "",
       userImage: "https://i.pinimg.com/236x/39/a1/eb/39a1eb1485516800d84981a72840d60e.jpg",
-      otherUserImage: "https://i.pinimg.com/236x/39/a1/eb/39a1eb1485516800d84981a72840d60e.jpg"
+      otherUserImage: "https://i.pinimg.com/236x/39/a1/eb/39a1eb1485516800d84981a72840d60e.jpg",
+      userName: "ABC",
+      otherUserName:"Bruin"
     };
+    this.fileInputRef = React.createRef();
   }
-  /*handleNewMessage = (newMessage) => {
-    if (auth.currentUser) {
-    this.setState(prevState => ({
-      chat: [...prevState.chat, {
-        type: newMessage.sender === auth.currentUser.uid ? "me" : "other",
-        msg: newMessage.content,
-        image: newMessage.sender === auth.currentUser.uid ? this.state.userImage : this.state.otherUserImage
-      }]
-    }), () => {
-      this.scrollToBottom();
-    });
-  }
-  }; */
+  handleNewMessage = (newMessage) => {
+    //To be modifeied, we may use update to load the history instead of use the subscribe entirely
+    console.log("chat", this.state.chat)
+    //if (newMessage.sender != auth.currentUser.uid) {
+    this.setState(prevState => {
+      return {
+        chat: [...prevState.chat, {
+            type: newMessage.sender === auth.currentUser.uid ? "me" : "other",
+            msgType: newMessage.type || "text",
+            fileName: newMessage.fileName || null,
+            msg: newMessage.content,
+            image: newMessage.sender === auth.currentUser.uid ? this.state.userImage : this.state.otherUserImage,
+            timestamp: newMessage.timestamp,
+            id: newMessage.id 
+        }]
+      };
+    }, () => {
+        this.scrollToBottom();
+    })};
 
   handleSubmit = (e, currentConversationId) => {
     e.preventDefault(); 
     if (currentConversationId && auth.currentUser) {
     const { msg, chat } = this.state;
-    if (msg.trim() === "") return;
-    const newMessage = {
-        type: "me", 
-        msg: msg, 
-        image: "https://i.pinimg.com/236x/39/a1/eb/39a1eb1485516800d84981a72840d60e.jpg",
-    };
   
     this.setState((prevState) => ({
-        chat: Array.isArray(prevState.chat) ? [...prevState.chat, newMessage] : [newMessage],
         msg: "",
     }), () => {
         this.scrollToBottom(); 
-    });
+    }); 
     sendMessage(currentConversationId, msg, auth.currentUser.uid)
     console.log("send, msg")
   }};
 
-  update = async() => {
+  //call storeImage/storeFile to store the data
+  handleFileUpload = async(e) => {
+    const file = e.target.files[0];
+    console.log(file, "file to upload")
+    try {
+      if (file) {
+        const upload = await storeFile(this.state.conversationId, file, auth.currentUser.uid);
+        if (upload) {
+          console.log("Success in file uploading")
+        }
+        else {console.log("Fail in file uploading ")}
+      }
+
+    }
+    catch(error) {
+      console.log(error.message)
+    } 
+  }
+
+  triggerFileInput = () => {
+    this.fileInputRef.current.click();
+  }
+ 
+
+  update = async(id) => {
+    console.log('Enter update')
     const { conversationId } = this.state;
+
     try {
       const messages = await getMessages(conversationId);
       if (auth.currentUser) {
-      const user = auth.currentUser
-      const formattedMessage = messages.map(message => ({
-        type: message.sender === user.uid ? "me" : "other",
-        msg: message.content,
-        image: message.sender === user.uid ? this.userImage : this.otherUserImage
-    }));
+        const user = auth.currentUser
+        const formattedMessage = messages.map(message => ({
+          type: message.sender === user.uid ? "me" : "other",
+          msg: message.content,
+          timestamp: message.timestamp,
+          image: message.sender === user.uid ? this.userImage : this.otherUserImage,
+      }));
       console.log(formattedMessage)
       this.setState({ chat: formattedMessage })
   }
@@ -84,46 +125,61 @@ export default class ChatContent extends Component {
     this.messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
   };
 
-  componentDidMount() {
-    const currentUser = auth.currentUser;
-    if (currentUser) {
-      this.props.getUserInfo(currentUser.uid).then(userInfo => {
+  async componentDidMount() {
+    if (auth.currentUser) {
+      //初始化userInfo
+      console.log("componentDidMount")
+      //这个可能在update压根不需要，等待测试
+      await this.props.getUserInfo(auth.currentUser.uid).then(userInfo => {
         const userImage = userInfo.image || "https://i.pinimg.com/236x/39/a1/eb/39a1eb1485516800d84981a72840d60e.jpg";
-        console.log(userImage)
-        this.setState({ userImage: userImage });
+        const userName = userInfo.name;
+        this.setState({ userImage: userImage, userName: userName });
+        this.props.setInfo({userImage: userImage, userName: userName})
       });
-      this.props.getUserInfo(this.props.otherUser).then(otherUserInfo => {
+    if (this.props.otherUser) {
+      await this.props.getUserInfo(this.props.otherUser).then(otherUserInfo => {
         const otherUserImage = otherUserInfo.image || "https://i.pinimg.com/236x/39/a1/eb/39a1eb1485516800d84981a72840d60e.jpg";
-        this.setState({ otherUserImage: otherUserImage });
-      });
+        const otherUserName = otherUserInfo.name;
+        this.setState({ otherUserImage: otherUserImage, otherUserName: otherUserName });
+      });}
+      //this.update()
+      if (this.state.conversationId) {
+      this.unsubscribe = receiveMessage(this.state.conversationId, this.handleNewMessage, auth.currentUser);}
     }
-    this.update();
-   
-    
     window.addEventListener("keydown", this.handleKeyDown);
     this.scrollToBottom();
   }
+
+  componentWillUnmount() {
+    if (typeof this.unsubscribe === 'function') {
+        this.unsubscribe();
+    }
+}
 
   onStateChange = (e) => {
     this.setState({ msg: e.target.value });
   };
 
-  componentDidUpdate(prevProps) {
+  async componentDidUpdate(prevProps) {
     if (prevProps.conversationId !== this.props.conversationId) {
+      //this.unsubscribe && this.unsubscribe();
       if (auth.currentUser) {
-        const user = auth.currentUser
-        this.props.getUserInfo(user.uid).then(userInfo => {
+        //初始化userInfo
+        await this.props.getUserInfo(auth.currentUser.uid).then(userInfo => {
           const userImage = userInfo.image || "https://i.pinimg.com/236x/39/a1/eb/39a1eb1485516800d84981a72840d60e.jpg";
-          console.log(userImage)
-          this.setState({ userImage: userImage });
+          const userName = userInfo.name;
+          this.setState({ userImage: userImage, userName });
         });
-        this.props.getUserInfo(this.props.otherUser).then(otherUserInfo => {
+      if (this.props.otherUser) {
+        await this.props.getUserInfo(this.props.otherUser).then(otherUserInfo => {
           const otherUserImage = otherUserInfo.image || "https://i.pinimg.com/236x/39/a1/eb/39a1eb1485516800d84981a72840d60e.jpg";
-          this.setState({ otherUserImage: otherUserImage });
-        });
-      }
-      this.setState({ conversationId: this.props.conversationId }, () => {
-        this.update();
+          const otherUserName = otherUserInfo.name;
+          this.setState({ otherUserImage: otherUserImage, otherUserName: otherUserName });
+        });}}
+      this.setState({ conversationId: this.props.conversationId, chat: [] }, () => {
+        //this.update(); 
+        console.log("didupdate")
+        this.unsubscribe = receiveMessage(this.state.conversationId, this.handleNewMessage, auth.currentUser);
       });
     }
   }
@@ -136,9 +192,10 @@ export default class ChatContent extends Component {
             <div className="current-chatting-user">
               <Avatar
                 isOnline="active"
-                image="https://i.pinimg.com/236x/39/a1/eb/39a1eb1485516800d84981a72840d60e.jpg"
+                image={this.state.otherUserImage}
               />
-              <p>Bruin</p>
+              {/*To be modified, should be other user's name and pic*/}
+              <p>{this.state.otherUserName}</p>
             </div>
           </div>
 
@@ -159,19 +216,29 @@ export default class ChatContent extends Component {
                   animationDelay={index + 2}
                   key={index}
                   user={itm.type ? itm.type : "me"}
+                  type={itm.msgType}
                   msg={itm.msg}
                   image={itm.image}
+                  fileName = {itm.fileName}
+                  timestamp = {handleTime(itm.timestamp)}
                 />
               );
             })}
             <div ref={this.messagesEndRef} />
           </div>
         </div>
+        {this.props.conversationId && (
         <div className="content__footer">
           <div className="sendNewMessage">
-            <button className="addFiles">
+            <button className="addFiles" onClick={(e) => this.triggerFileInput()}>
               <i className="fa fa-plus"></i>
             </button>
+            <input
+              type="file"
+              ref={this.fileInputRef}
+              onChange={this.handleFileUpload}
+              style={{ display:'none' }}
+            />
             <input
               type="text"
               placeholder="Type a message here"
@@ -183,6 +250,12 @@ export default class ChatContent extends Component {
             </button>
           </div>
         </div>
+        )}
+        {!this.props.conversationId && (
+          <div className="content__footer">
+          <span> Select a Conversation to start </span>
+          </div>
+        )}
       </div>
     );
   }

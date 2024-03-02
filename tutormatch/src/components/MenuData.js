@@ -13,7 +13,7 @@ export const MenuData = [
   },
   {
     title: "Post",
-    url: "#",
+    url: "/post",
     cName: "nav-links",
     icon: "fa-solid fa-pen",
   },
@@ -25,7 +25,7 @@ export const MenuData = [
   },
   {
     title: "Message",
-    url: "#",
+    url: "/chat",
     cName: "nav-links",
     icon: "fa-solid fa-message",
   },
