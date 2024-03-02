@@ -14,7 +14,15 @@
     margin: 24px;
 }
 
+.majorContainer {
+    position: relative;
+    margin: 24px;
+    width: 325px;
+}
+
 .courseContainer{
     position: relative;
     margin: 24px;
+    width: 325px;
 }
+

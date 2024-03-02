@@ -14,7 +14,7 @@ const LoginSignup = () => {
   const handleSignIn = () => {
     signInUser(email, password).then((user) => {
       // If it's an error object, handle the error
-      if (user instanceof Error) {
+      if (user instanceof Error) {  
         //console.error("Sign In failed", user.code, user.message);
         console.log("Error Message:", user.message);
         // need toasting message
@@ -35,12 +35,12 @@ const LoginSignup = () => {
       <div className="inputs">
         <div className="input">
           <img src={user_icon} alt="" />
-          <PasswordEmailInput placeHolder={"Email"} handleInput={setEmail} />
+          <PasswordEmailInput placeHolderText={"Email"} handleInput={setEmail} />
         </div>
         <div className="input">
           <img src={password_icon} alt="" />
           <PasswordEmailInput
-            placeHolder={"Password"}
+            placeHolderText={"Password"}
             handleInput={setPassword}
             isPassword={true}
           />

@@ -71,14 +71,14 @@ function RegistrationPage() {
     <div>
       <h2>Registration</h2>
       <form>
-        <PasswordEmailInput placeHolder={" Email"} handleInput={setEmail} />
+        <PasswordEmailInput placeHolderText={"Email"} handleInput={setEmail} />
         <PasswordEmailInput
-          placeHolder={" Password"}
+          placeHolderText={"Password"}
           handleInput={setPassword}
           isPassword={true}
         />
         <PasswordEmailInput
-          placeHolder={" Confirm Password"}
+          placeHolderText={"Confirm Password"}
           handleInput={setConfirmPassword}
           isPassword={true}
         />

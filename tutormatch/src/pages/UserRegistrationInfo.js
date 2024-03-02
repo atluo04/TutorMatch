@@ -1,16 +1,24 @@
-import { useState } from "react";
+import { useState} from "react";
 import { PasswordEmailInput } from "../components/PasswordEmailInput";
 import "react-phone-number-input/style.css";
 import PhoneInput from "react-phone-number-input";
 import "../html/UserRegistrationInfo.css";
+import courseList from '../assets/courses.json'
+import majorList from '../assets/majors.json'
+import { update_profile } from "../user/user_doc";
+import { useNavigate } from "react-router-dom";
+import { ItemSelectionSearch } from "../components/ItemSelectionSearch";
+
 
 function UserRegistrationInfo() {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [phone, setPhone] = useState("");
-  const [gender, setGender] = useState("");
-  const [year, setYear] = useState("");
-  const [courses, setCourses] = useState([]);
+  const [majors, setMajors] = useState(new Set());
+  const [gender, setGender] = useState("Male");
+  const [year, setYear] = useState("Freshman");
+  const [courses, setCourses] = useState(new Set());
+  const navigate = useNavigate()
 
   const handleGenderChange = (event) => {
     setGender(event.target.value);
@@ -20,20 +28,30 @@ function UserRegistrationInfo() {
     setYear(event.target.value);
   };
 
+  const handleSubmit = async () => {
+    update_profile("Fullname", firstName + " " + lastName);
+    update_profile("Gender", gender);
+    update_profile("Phone", phone);
+    update_profile("Majors", [...majors]);
+    update_profile("Year", year);
+    update_profile("Courses", [...courses]);
+    navigate("/home");
+  }
+
   return (
     <div>
       <h2>Get Started with TutorMatch</h2>
       <PasswordEmailInput
-        placeHolder={" First Name"}
+        placeHolderText={"First Name"}
         handleInput={setFirstName}
       />
       <PasswordEmailInput
-        placeHolder={" Last Name"}
+        placeHolderText={"Last Name"}
         handleInput={setLastName}
       />
       <div className="phoneContainer">
         <PhoneInput
-          placeHolder={"Phone Number"}
+          placeholder={"Phone Number"}
           value={phone}
           onChange={setPhone}
           defaultCountry="US"
@@ -57,9 +75,27 @@ function UserRegistrationInfo() {
           <option value="senior">Senior</option>
         </select>
       </div>
+      <div className="majorContainer">
+        <label>Select your current major(s):</label>
+        <ItemSelectionSearch
+          updateItems={setMajors}
+          itemList={majorList}
+          maxItems={3}
+          placeHolderText={"Search for majors..."}
+        />
+      </div>
       <div className="courseContainer">
         <label>Select your current courses:</label>
+        <ItemSelectionSearch
+          updateItems={setCourses}
+          itemList={courseList}
+          maxItems={5}
+          placeHolderText={"Search for course IDs..."}
+        />
       </div>
+      <button className="submitButton" onClick={handleSubmit}>
+        Submit
+      </button>
     </div>
   );
 }
