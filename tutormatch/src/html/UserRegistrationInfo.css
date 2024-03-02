@@ -14,52 +14,15 @@
     margin: 24px;
 }
 
+.majorContainer {
+    position: relative;
+    margin: 24px;
+    width: 325px;
+}
+
 .courseContainer{
     position: relative;
     margin: 24px;
-    width: 320px;
+    width: 325px;
 }
 
-.courseList {
-    position: relative;
-    display: block;
-}
-
-.courseSearch{
-    width: 100%;
-}
-
-.courseList-content {
-    display: block;
-    position: absolute;
-    width: 100%;
-    border: 1px solid #ccc;
-    border-top: none;
-    z-index: 1;
-    background-color: #fff;
-}
-
-.courseListItem {
-    width: 100%;
-    text-align: left;
-    padding: 8px;
-    border: none;
-    background-color: transparent;
-    cursor: pointer;
-    display: block;
-}
-
-.courseListItem:hover {
-    background-color: lightgray;
-}
-
-.selectedCourse{
-    border: 1px solid #ccc;
-    border-radius: 15px;
-    padding: 5px 10px;
-    margin-right: 5px;
-}
-
-.selectedCourse:hover {
-    background-color: lightgray;
-}

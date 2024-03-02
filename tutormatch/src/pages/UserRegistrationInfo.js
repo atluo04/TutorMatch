@@ -1,73 +1,24 @@
-import { useState, useRef} from "react";
+import { useState} from "react";
 import { PasswordEmailInput } from "../components/PasswordEmailInput";
 import "react-phone-number-input/style.css";
 import PhoneInput from "react-phone-number-input";
 import "../html/UserRegistrationInfo.css";
 import courseList from '../assets/courses.json'
+import majorList from '../assets/majors.json'
+import { update_profile } from "../user/user_doc";
+import { useNavigate } from "react-router-dom";
+import { ItemSelectionSearch } from "../components/ItemSelectionSearch";
 
-const CourseSearch = () => {
-  const [value, setValue] = useState("");
-  const [courses, setCourses] = useState(new Set());
-  const [dropDown, setDropDown] = useState(false);
-  const inputRef = useRef(null);
-
-  const handleInput = (event) =>{
-    setValue(event.target.value);
-    setDropDown(true);
-  }
-
-  const handleCourseSelection = (id) => {
-    setCourses((courses) => new Set([...courses, id]));
-    inputRef.current.value = "";
-    setDropDown(false);
-    inputRef.current.focus();
-  };
- 
-  return (
-    <div>
-      <ul>
-        {[...courses].map((course) => (
-          <button key={course} className="selectedCourse">
-            {course}
-          </button>
-        ))}
-      </ul>
-      <input
-        type="text"
-        ref={inputRef}
-        className="courseSearch"
-        placeholder="Search for course ID..."
-        onChange={handleInput}
-      />
-      {dropDown && value && (
-        <ul className="courseList">
-          {courseList
-            .filter((course) =>
-              course.ID.toLowerCase().includes(value.toLowerCase())
-            )
-            .slice(0, 5)
-            .map((course) => (
-              <button
-                key={course.ID}
-                className="courseListItem"
-                onClick={() => handleCourseSelection(course.ID)}
-              >
-                {course.ID}
-              </button>
-            ))}
-        </ul>
-      )}
-    </div>
-  );
-};
 
 function UserRegistrationInfo() {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [phone, setPhone] = useState("");
-  const [gender, setGender] = useState("");
-  const [year, setYear] = useState("");
-  const [courses, setCourses] = useState([]);
+  const [majors, setMajors] = useState(new Set());
+  const [gender, setGender] = useState("Male");
+  const [year, setYear] = useState("Freshman");
+  const [courses, setCourses] = useState(new Set());
+  const navigate = useNavigate()
 
   const handleGenderChange = (event) => {
     setGender(event.target.value);
@@ -77,15 +28,25 @@ function UserRegistrationInfo() {
     setYear(event.target.value);
   };
 
+  const handleSubmit = async () => {
+    update_profile("Fullname", firstName + " " + lastName);
+    update_profile("Gender", gender);
+    update_profile("Phone", phone);
+    update_profile("Majors", [...majors]);
+    update_profile("Year", year);
+    update_profile("Courses", [...courses]);
+    navigate("/home");
+  }
+
   return (
     <div>
       <h2>Get Started with TutorMatch</h2>
       <PasswordEmailInput
-        placeHolderText={" First Name"}
+        placeHolderText={"First Name"}
         handleInput={setFirstName}
       />
       <PasswordEmailInput
-        placeHolderText={" Last Name"}
+        placeHolderText={"Last Name"}
         handleInput={setLastName}
       />
       <div className="phoneContainer">
@@ -114,10 +75,27 @@ function UserRegistrationInfo() {
           <option value="senior">Senior</option>
         </select>
       </div>
+      <div className="majorContainer">
+        <label>Select your current major(s):</label>
+        <ItemSelectionSearch
+          updateItems={setMajors}
+          itemList={majorList}
+          maxItems={3}
+          placeHolderText={"Search for majors..."}
+        />
+      </div>
       <div className="courseContainer">
         <label>Select your current courses:</label>
-        <CourseSearch/>
+        <ItemSelectionSearch
+          updateItems={setCourses}
+          itemList={courseList}
+          maxItems={5}
+          placeHolderText={"Search for course IDs..."}
+        />
       </div>
+      <button className="submitButton" onClick={handleSubmit}>
+        Submit
+      </button>
     </div>
   );
 }

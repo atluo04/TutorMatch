@@ -8,32 +8,39 @@ const data = {
     Fullname: "Bruin",
     Username:"",
     Birthday: Timestamp.fromDate(new Date(Date.UTC(1919, 4, 24))),
-    Sex:"-",
-    Major: "Computer Science",
+    Gender:"-",
+    Majors: "Computer Science",
+    Year: "Freshman",
     profile_pic:"https://www.uclastore.com/site/product-images/606852_blue-01.jpg",
     Phone:"+0 (123) 456 7891",
     Personal_mail:"example@ucla.edu",
     Bio:"Hello, World!",
     created_date: Timestamp.now(),
-    courses: []
+    Courses: []
 }
 
 // updata profile
-async function updata_profile(field, new_content){
+async function update_profile(field, new_content){
     const uid = auth.currentUser.uid;
     const usersCollection_updata = doc(db, 'users', uid);
     try {
-        if(field === 'courses'){
-            const course_list = await getdata('courses');
+        if(field === 'Courses'){
+            const course_list = await getdata('Courses');
             const updatedCourses = [...course_list, ...new_content];
             await updateDoc(usersCollection_updata, {
                 [field]: updatedCourses
               });
         }
-        else{
-            await updateDoc(usersCollection_updata, {
-                [field]: new_content
-              });
+        else if (field === "Majors") {
+          const course_list = await getdata("Majors");
+          const updatedCourses = [...course_list, ...new_content];
+          await updateDoc(usersCollection_updata, {
+            [field]: updatedCourses,
+          });
+        } else {
+          await updateDoc(usersCollection_updata, {
+            [field]: new_content,
+          });
         }
         
       //console.log("User information added to collection successfully!");
@@ -72,7 +79,7 @@ async function upload_profile_pic(file){
     const snapshot = await uploadBytes(fileref, file);
     const photoURL = await getDownloadURL(fileref);
 
-    updata_profile("profile_pic", photoURL)
+    update_profile("profile_pic", photoURL)
 }
 
 async function remove_course(delete_content){
@@ -112,4 +119,4 @@ async function deletel_user_database(){
     }
 }
 
-export {updata_profile, getdata, reset_user_data, deletel_user_database, upload_profile_pic, remove_course, data };
+export {update_profile, getdata, reset_user_data, deletel_user_database, upload_profile_pic, remove_course, data };
