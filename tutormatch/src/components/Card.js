@@ -19,4 +19,4 @@ function Card({name, major, about, comment}) {
     );
 }
 
-export default Card;
+export {Card};
