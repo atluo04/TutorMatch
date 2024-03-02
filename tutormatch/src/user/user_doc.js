@@ -13,7 +13,7 @@ const data = {
     Year: "Freshman",
     profile_pic:"https://www.uclastore.com/site/product-images/606852_blue-01.jpg",
     Phone:"+0 (123) 456 7891",
-    Personal_mail:auth.currentUser.email,
+    Personal_mail: "",
     Bio:"Hello, World!",
     created_date: Timestamp.now(),
     Courses: []
