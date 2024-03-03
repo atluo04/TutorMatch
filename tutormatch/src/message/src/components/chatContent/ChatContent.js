@@ -43,8 +43,6 @@ export default class ChatContent extends Component {
   }
   handleNewMessage = (newMessage) => {
     //To be modifeied, we may use update to load the history instead of use the subscribe entirely
-    console.log("chat", this.state.chat)
-    //if (newMessage.sender != auth.currentUser.uid) {
     this.setState(prevState => {
       return {
         chat: [...prevState.chat, {
@@ -100,7 +98,6 @@ export default class ChatContent extends Component {
  
 
   update = async(id) => {
-    console.log('Enter update')
     const { conversationId } = this.state;
 
     try {
@@ -127,9 +124,6 @@ export default class ChatContent extends Component {
 
   async componentDidMount() {
     if (auth.currentUser) {
-      //初始化userInfo
-      console.log("componentDidMount")
-      //这个可能在update压根不需要，等待测试
       await this.props.getUserInfo(auth.currentUser.uid).then(userInfo => {
         const userImage = userInfo.image || "https://i.pinimg.com/236x/39/a1/eb/39a1eb1485516800d84981a72840d60e.jpg";
         const userName = userInfo.name;
@@ -169,7 +163,8 @@ export default class ChatContent extends Component {
           const userImage = userInfo.image || "https://i.pinimg.com/236x/39/a1/eb/39a1eb1485516800d84981a72840d60e.jpg";
           const userName = userInfo.name;
           this.setState({ userImage: userImage, userName });
-        });
+          this.props.setInfo({userImage: userImage, userName: userName})
+        }); 
       if (this.props.otherUser) {
         await this.props.getUserInfo(this.props.otherUser).then(otherUserInfo => {
           const otherUserImage = otherUserInfo.image || "https://i.pinimg.com/236x/39/a1/eb/39a1eb1485516800d84981a72840d60e.jpg";

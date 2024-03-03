@@ -34,7 +34,7 @@
     padding-right: 0;
 }
 
-.search-btn {
+/* .search-btn {
     height: 46px;
     border: none;
     background-color: transparent;
@@ -42,7 +42,46 @@
     width: 20%;
     cursor: pointer;
     font-size: 20px;
+} */
+.search-btn {
+    height: 30px;
+    border: 2px solid #ceccf4; ;
+    background-color: transparent;
+    outline: none;
+    width: 30%;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: bold;
+    color: rgb(255, 255, 255);
+    background-color: #3f3aa5;
+    border-radius: 20px;
+    margin-left: 5px; 
+    transition: background-color 0.3s ease; 
 }
+
+.search-btn:hover {
+    background-color: #1e1a50; 
+}
+
+.add-chat-btn {
+    height: 30px;
+    border: 2px solid #ceccf4; ;
+    background-color: transparent;
+    outline: none;
+    width: 30%;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: bold;
+    color: rgb(255, 255, 255);
+    background-color: #3f3aa5;
+    border-radius: 20px;
+    margin-left: 10px; 
+    transition: background-color 0.3s ease; 
+  }
+  
+  .add-chat-btn:hover {
+    background-color: #1e1a50; 
+  }
 
 .chatlist__items {
     margin-top: 30px;
@@ -99,6 +138,23 @@
     max-width: 100%;
     object-fit: cover;
 }
+.avatar-wrapper {
+    width: 40px;
+    height: 40px;
+    overflow: hidden;
+    border-radius: 50%;
+}
+
+.avatar-img {
+    max-width: 40px;
+    height: auto;
+    border-radius: 50%;
+}
+.targetInfo {
+    display: flex;
+    align-items: center;
+  }
+  
   
 .chatlist__item .userMeta p {
     margin: 0;

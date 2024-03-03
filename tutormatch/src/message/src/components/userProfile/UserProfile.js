@@ -5,6 +5,7 @@ export default class UserProfile extends Component {
   toggleInfo = (e) => {
     e.target.parentNode.classList.toggle("open");
   };
+
   render() {
     return (
       <div className="main__userprofile">

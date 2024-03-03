@@ -4,7 +4,28 @@ import { getDownloadURL, uploadBytes, ref } from "firebase/storage";
 
 //not yet been tested
 const createNewChat = async (users) => {
+    const conversationsRef = collection(db, 'conversations');
+    const conversationsSnapshot = await getDocs(conversationsRef);
+
+    if (conversationsSnapshot.empty) {
+        const conversationData = {
+            participants: users,
+            createdAt: Timestamp.now(),
+            latestMessage: null,
+            status: "active",
+            unread: 0
+        };
+        const conversationRef = await addDoc(conversationsRef, conversationData);
+        console.log(`First conversation created with id: ${conversationRef.id}`);
+        return conversationRef.id;
+    }
+    else{
+
     const conversationRef = doc(collection(db, "conversations"));
+    const order = query(conversationRef, where("participants", "array-contains-any", users));
+    const querySnapshot = await getDocs(order)
+    if (!querySnapshot.empty) {console.log('np')
+        return null}
     const conversationData = {
         participants: users,
         createdAt: Timestamp.now(),
@@ -13,6 +34,7 @@ const createNewChat = async (users) => {
         unread: 0
     }
     try {
+        console.log('有')
         await setDoc(conversationRef, conversationData);
         console.log(`"Success with id: ${conversationRef.id}`)
         return conversationRef.id;
@@ -21,6 +43,7 @@ const createNewChat = async (users) => {
         console.log(error.message);
         return null;
     }
+}
 }
 const sendMessage = async (conversationId, message, user) => {
     try {
@@ -62,7 +85,6 @@ const receiveMessage = async (conversationId, handleAdd, user) => {
             if (change.type === "added") {
                 const newMessage = change.doc.data()
                 handleAdd(newMessage)
-                console.log("成功调用，", newMessage.sender, user.uid)
             }
             if (change.type === "modified") {
                 //To be updated: update the UI

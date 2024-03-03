@@ -8,6 +8,7 @@ import { data } from "../../../../user/user_doc";
 
 //This is the chat lists, including all the current active chats, integrate it with the previous things, maybe abandon the whole class
 export default class ChatList extends Component {
+  
   handleConversationSelect = (id) => {
     this.props.selectConversation(id);
   };
@@ -24,50 +25,41 @@ export default class ChatList extends Component {
     const info = await this.props.getTargetUser(this.state.targetEmail);
     this.setState({ targetUserInfo: info})
   }
-  handleAddChat = () => {
+  handleAddChat = async() => {
     if (this.state.currentUser && this.state.targetUserInfo) {
       try {
-        this.props.createChat(this.state.currentUser, this.state.targetUserInfo.id);
-        this.setState( {targetUserInfo: null} )}
+        const id = await this.props.createChat(this.state.currentUser, this.state.targetUserInfo.id);
+        this.setState(prevState => ( {
+          allChats: [
+            ...prevState.allChats,
+            {
+              image: this.state.targetUserInfo.image,
+              id: id,
+              name: this.state.targetUserInfo.name,
+              active: true,
+              isOnline: false
+            }
+          ],
+          targetUserInfo: null
+        }));
+      }
       catch(error) {
         console.log("Error creating chat", error.message)
       }
   }
 }
 
-
-  allChatUsers = [
-    {
-      image:
-        "https://i.pinimg.com/236x/39/a1/eb/39a1eb1485516800d84981a72840d60e.jpg",
-      id: 1,
-      name: "A",
-      active: true,
-      isOnline: true,
-    },
-    
-  ];
   constructor(props) {
     super(props);
     this.state = {
-      allChats: props.conversations && props.conversations.length > 0 ? props.conversations : [
-        {
-          image: "https://i.pinimg.com/236x/39/a1/eb/39a1eb1485516800d84981a72840d60e.jpg",
-          id: 1,
-          name: "A",
-          active: true,
-          isOnline: true,
-        }
-      ],
+      allChats: props.conversations && props.conversations.length > 0 ? props.conversations : [],
       activeId: null,
       targetUserInfo: null,
       targetEmail: '',
       currentUser: auth.currentUser ? auth.currentUser.uid : null
-    };
-    console.log(props.conversations)}
+    };}
   
   componentDidUpdate(prevProps) {
-    console.log("entered ww")
     if (prevProps.conversations !== this.props.conversations) {
       this.setState({
         allChats: this.props.conversations && this.props.conversations.length > 0
@@ -77,15 +69,10 @@ export default class ChatList extends Component {
     }
   }
   
-
   render() {
     return (
   
       <div className="main__chatlist">
-        {/*<button className="btn">
-          <i className="fa fa-plus"></i>
-          <span>New conversation</span>
-        </button>*/}
         <div className="chatlist__heading">
           <h2>Chats</h2>
           <button className="btn-nobg">
@@ -103,16 +90,24 @@ export default class ChatList extends Component {
               <i className="fa fa-search"></i>
               Search
             </button>
-            {/*返回UserInfo，加一个按键问是否添加好友*/}
+            <br /> 
             {this.state.targetUserInfo && (
-              <button className="add-chat-btn" onClick={this.handleAddChat}>
+              <div className="targetInfo">
+                <br /> 
+              <img src={this.state.targetUserInfo.image} alt="User Avatar" className="avatar-img" />
+              <span style={{ fontFamily: 'Arial, sans-serif', fontWeight: 600, fontSize: '14px', marginLeft: '10px' }}>
+                {this.state.targetUserInfo.name}
+              </span>
+              <br /> 
+              <button className="add-chat-btn" onClick={this.handleAddChat} >
                 Add Chat
               </button>
+              </div>
             )}
           </div>
         </div>
         <div className="chatlist__items">
-          {Array.isArray(this.state.allChats) && this.state.allChats.map((item, index) => {
+          {Array.isArray(this.state.allChats) && this.state.allChats.length > 0 && this.state.allChats.map((item, index) => {
         return (
         <ChatListItems
           name={item.name}

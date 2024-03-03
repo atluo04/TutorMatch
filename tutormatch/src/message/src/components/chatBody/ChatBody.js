@@ -23,7 +23,6 @@ export default function ChatBody() {
   };
   const getUserInfo = async (uid) => {
     try {
-    console.log('enter')
     const userRef = doc(db, `users/${uid}`);
     const docSnap = await getDoc(userRef);
   
@@ -33,7 +32,7 @@ export default function ChatBody() {
         id: uid,
         name: userData.Fullname,
         image: userData.profile_pic,
-        isOnline: false // to be modified 
+        isOnline: true // to be modified 
       };
     } else {
       console.log("No such user!");
@@ -58,23 +57,24 @@ export default function ChatBody() {
 
   const findUserByEmail = async(email) => {
     //const getUserByEmail = httpsCallable(functions, 'getUserByEmail');
-    console.log("emmm")
     try {
       const userRef = collection(db, "users");
-      const querySnapshot = await query(userRef, where('email', '==', email));
-      if (querySnapshot.empty) {
-        console.log("No such user with email:", email);
-        return null;
+      const querySnapshot = await getDocs(userRef);
+      let userId = null;
+      for (const doc of querySnapshot.docs) {
+        const userData = doc.data();
+        console.log(email, userData.Personal_mail, userData.Personal_mail === email);
+        if (userData.Personal_mail === email) {
+            userId = doc.id;
+            return {
+                id: userId,
+                image: doc.data().profile_pic,
+                name: doc.data().Fullname,
+            };
+        }
     }
-    else {
-      const targetUserInfo = querySnapshot.docs[0].data();
-      return {
-        id: targetUserInfo.id,
-        name: targetUserInfo.Fullname,
-        img: targetUserInfo.profile_pic,
-        email: targetUserInfo.Personal_mail
-      };}
-    }
+    return null; 
+}
     catch (error) {
       console.log("No such user", error);
       return null;
@@ -84,51 +84,88 @@ export default function ChatBody() {
   const handleCreateChat = async(targetId, userId) => {
     if (targetId && userId) {
       const participants = [userId, targetId];
-      createNewChat(participants);
+      const id = await createNewChat(participants);
+      return id
     }
     else {
       console.log("Error creating new chat");
     }
   }
+  const conversationSubscriptions = [];
+  let processedMessages = []
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(user => {
       if (user) {
-        const fetchConversations = async () => {
-          try {
-            const conversationsData = await getConversations(user.uid);
-            //console.log('Fetching', conversationsData)
-            const conversationsWithDetails = await Promise.all(
-              conversationsData.map(async (conversation) => {
-                const otherParticipantUid = conversation.participants.find(uid => uid !== user.uid);
-                setOtherUser(otherParticipantUid)
-                //need to be modified if we allow group chat
-                const otherParticipantInfo = await getUserInfo(otherParticipantUid);
-                return {
-                  image: otherParticipantInfo.image,
-                  id: conversation.id,
-                  name: otherParticipantInfo.name,
-                  active: false,
-                  isOnline: otherParticipantInfo.isOnline,
-                };
-              })
-            );
-            console.log(conversationsWithDetails); 
-            setConversations(conversationsWithDetails);
-          } catch (error) {
-            console.error("Error fetching conversations:", error);
-          }
-        };
+        const now = new Date();
+        const conversationsRef = collection(db, "conversations");
+        const order = query(conversationsRef, where("participants", "array-contains", user.uid));
+        
   
-        fetchConversations();
+        const unsubscribeConversations = onSnapshot(order, async (snapshot) => {
+          const conversationsWithDetailsPromise = snapshot.docs.map(async doc => {
+            const conversation = doc.data();
+            const conversationId = doc.id;
+            const otherParticipantUid = conversation.participants.find(uid => uid !== user.uid);
+            setOtherUser(otherParticipantUid)
+            const otherParticipantInfo = await getUserInfo(otherParticipantUid);
+            /* const unsubscribeMessages = onSnapshot(query(collection(db, "conversations", conversationId, "messages"), orderBy("timestamp")), (messageSnapshot) => {
+              const messages = messageSnapshot.docs.map(doc => doc.data());
+              const messageTimestamp = doc.data().timestamp.toDate();
+              if (messageTimestamp > now) {
+                console.log(`New message in ${conversationId}:`);
+              }
+            }); */
+            const unsubscribeMessages = onSnapshot(
+              query(collection(db, "conversations", conversationId, "messages"), orderBy("timestamp")),
+              (messageSnapshot) => {
+                messageSnapshot.docChanges().forEach((change) => {
+                  if (change.type === "added") {
+                    setTimeout(() => {
+                    const messageData = change.doc.data();
+                    const messageId = messageData.id;
+                    const messageTimestamp = messageData.timestamp ? messageData.timestamp.toDate() : null;
+                    const messageSender = messageData.sender ? messageData.sender : null;
+                    console.log('in',processedMessages.includes(messageId), messageTimestamp > now.getTime() - 2000)
+                    if (messageTimestamp && messageTimestamp > now.getTime() - 2000 && messageSender && messageSender != user.uid && !processedMessages.includes(messageId)) {
+                      console.log(`New message in ${conversationId}:`, messageData);
+                    }
+                    processedMessages.push(messageId)
+                  }, 100);
+                  }
+                });
+              }
+            );
+
+            conversationSubscriptions.push(unsubscribeMessages);
+  
+            return {
+              image: otherParticipantInfo.image,
+              id: conversationId,
+              name: otherParticipantInfo.name,
+              active: false, 
+              isOnline: otherParticipantInfo.isOnline,
+            };
+          });
+  
+          const conversationsWithDetails = await Promise.all(conversationsWithDetailsPromise);
+          setConversations(conversationsWithDetails);
+        });
+  
+        return () => {
+          unsubscribe();
+          unsubscribeConversations();
+          if (unsubscribeConversations) {
+            unsubscribeConversations();
+          }
+          conversationSubscriptions.forEach(unsubscribe => unsubscribe());
+        };
       } else {
-        console.log('Error login');
+        setConversations([]);
       }
     });
-    return () => unsubscribe();
   }, []);
-
-  console.log(conversations, "what we got");
+  
     return (
       <div className="main__chatbody">
         <ChatList conversations={conversations} selectConversation={selectConversation} createChat={handleCreateChat}
