@@ -65,6 +65,7 @@ const sendMessage = async (conversationId, message, user) => {
             type: "text",
             sender: user,
             content: message,
+            conversationId: conversationId,
             timestamp: Timestamp.now()
         });
         await updateDoc(conversationRef, {
@@ -72,6 +73,7 @@ const sendMessage = async (conversationId, message, user) => {
                 type: "text",
                 sender: user,
                 content: message,
+                conversationId: conversationId,
                 timestamp: Timestamp.now()               
         }});
         console.log("success");
@@ -178,6 +180,7 @@ const storeFile = async(conversationId, file, user) => {
             type: typeName,
             sender: user,
             content: URL,
+            conversationId: conversationId,
             timestamp: Timestamp.now()
         });
         await updateDoc(conversationRef, {
@@ -185,6 +188,7 @@ const storeFile = async(conversationId, file, user) => {
                 type: typeName,
                 sender: user,
                 content: URL,
+                conversationId: conversationId,
                 timestamp: Timestamp.now()               
         }});
         return true

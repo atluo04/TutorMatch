@@ -14,7 +14,6 @@ export default function ChatBody() {
   //const user = auth.currentUser;
   const [conversations, setConversations] = useState([])
   const [currentConversationId, setConversationId] = useState(null)
-  const [otherUser, setOtherUser] = useState([])
   const [userInfo, setUserInfo] = useState(null)
   const [userId, setUserId] = useState(null)
 
@@ -110,7 +109,6 @@ export default function ChatBody() {
             const conversation = doc.data();
             const conversationId = doc.id;
             const otherParticipantUid = conversation.participants.find(uid => uid !== user.uid);
-            setOtherUser(otherParticipantUid)
             const otherParticipantInfo = await getUserInfo(otherParticipantUid);
             const unsubscribeMessages = onSnapshot(
               query(collection(db, "conversations", conversationId, "messages"), orderBy("timestamp")),
@@ -123,13 +121,10 @@ export default function ChatBody() {
                     const messageTimestamp = messageData.timestamp ? messageData.timestamp.toDate() : null;
                     const messageSender = messageData.sender ? messageData.sender : null;
                     const messageId = change.doc.id
-                    //console.log('in',messageTimestamp, processedMessages.includes(messageId), messageTimestamp > now, messageId)
                     if (messageTimestamp && messageTimestamp > now && messageSender && messageSender != user.uid && !processedMessages.includes(messageId)) {
-                      console.log(processedMessages.includes(messageId), messageId, processedMessages)
                       console.log(`New message in ${conversationId}:`, messageData);
                     }
-                    if (messageTimestamp != null && !processedMessages.includes(messageId)) {processedMessages.push(messageId)
-                    console.log("updated nb", messageId, processedMessages)}
+                    if (messageTimestamp != null && !processedMessages.includes(messageId)) {processedMessages.push(messageId)}
                   }
                 });
               }
@@ -143,6 +138,7 @@ export default function ChatBody() {
               name: otherParticipantInfo.name,
               active: false, 
               isOnline: otherParticipantInfo.isOnline,
+              conversationId: conversationId
             };
           });
   
@@ -152,27 +148,34 @@ export default function ChatBody() {
   
         return () => {
           unsubscribe();
-          unsubscribeConversations();
           if (unsubscribeConversations) {
             unsubscribeConversations();
           }
-          conversationSubscriptions.forEach(unsubscribe => unsubscribe()
-          );
+          conversationSubscriptions.forEach(unsubscribe => unsubscribe());
+          conversationSubscriptions.length = 0;
           componentMounted = false;
         };
       } else {
-        //setConversations([]);
+        setConversations([]);
       }
     });
   }, []);
   
     return (
       <div className="main__chatbody">
-        <ChatList conversations={conversations} selectConversation={selectConversation} createChat={handleCreateChat}
-        getTargetUser={findUserByEmail} />
-        <ChatContent conversationId={currentConversationId} getUserInfo={getUserInfo} otherUser={otherUser}
-        setInfo={setUserInfo} userInfo={userInfo}/>
-        <UserProfile getUserInfo={getUserInfo} user={userId} setInfo={setUserInfo}/>
+        <ChatList
+          conversations={conversations}
+          selectConversation={selectConversation}
+          createChat={handleCreateChat}
+          getTargetUser={findUserByEmail} />
+        <ChatContent
+          conversationId={currentConversationId}
+          conversations={conversations}
+          userInfo={userInfo}/>
+        <UserProfile
+          getUserInfo={getUserInfo}
+          user={userId}
+          setInfo={setUserInfo}/>
       </div>
     );
   }

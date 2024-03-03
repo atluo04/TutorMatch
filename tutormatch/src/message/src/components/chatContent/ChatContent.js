@@ -43,21 +43,23 @@ export default class ChatContent extends Component {
   }
   handleNewMessage = (newMessage) => {
     //To be modifeied, we may use update to load the history instead of use the subscribe entirely
-    this.setState(prevState => {
-      return {
-        chat: [...prevState.chat, {
-            type: newMessage.sender === auth.currentUser.uid ? "me" : "other",
-            msgType: newMessage.type || "text",
-            fileName: newMessage.fileName || null,
-            msg: newMessage.content,
-            image: newMessage.sender === auth.currentUser.uid ? this.state.userImage : this.state.otherUserImage,
-            timestamp: newMessage.timestamp,
-            id: newMessage.id 
-        }]
-      };
-    }, () => {
+    if (newMessage.conversationId == this.state.conversationId || !newMessage.conversationId) {
+      this.setState(prevState => {
+        return {
+          chat: [...prevState.chat, {
+              type: newMessage.sender === auth.currentUser.uid ? "me" : "other",
+              msgType: newMessage.type || "text",
+              fileName: newMessage.fileName || null,
+              msg: newMessage.content,
+              image: newMessage.sender === auth.currentUser.uid ? this.state.userImage : this.state.otherUserImage,
+              timestamp: newMessage.timestamp,
+              id: newMessage.id 
+          }]
+        };
+      }, () => {
         this.scrollToBottom();
-    })};
+      })};
+    }
 
   handleSubmit = (e, currentConversationId) => {
     e.preventDefault(); 
@@ -124,18 +126,22 @@ export default class ChatContent extends Component {
 
   async componentDidMount() {
     if (auth.currentUser) {
-      await this.props.getUserInfo(auth.currentUser.uid).then(userInfo => {
-        const userImage = userInfo.image || "https://i.pinimg.com/236x/39/a1/eb/39a1eb1485516800d84981a72840d60e.jpg";
-        const userName = userInfo.name;
-        this.setState({ userImage: userImage, userName: userName });
-        this.props.setInfo({userImage: userImage, userName: userName})
-      });
-    if (this.props.otherUser) {
-      await this.props.getUserInfo(this.props.otherUser).then(otherUserInfo => {
+      if (this.props.userInfo) {
+        const userImage = this.props.userInfo.userImage || "https://i.pinimg.com/236x/39/a1/eb/39a1eb1485516800d84981a72840d60e.jpg";
+        const userName = this.props.userInfo.userName;
+        console.log(this.props.userInfo)
+        this.setState({ userImage, userName });
+        }
+      if (this.props.conversations) {
+        const otherUserInfo = this.props.conversations.find(conversation => 
+          conversation.conversationId === this.props.conversationId
+        );
+        console.log(otherUserInfo)
+        if (otherUserInfo) {
         const otherUserImage = otherUserInfo.image || "https://i.pinimg.com/236x/39/a1/eb/39a1eb1485516800d84981a72840d60e.jpg";
         const otherUserName = otherUserInfo.name;
         this.setState({ otherUserImage: otherUserImage, otherUserName: otherUserName });
-      });}
+      }}
       //this.update()
       if (this.state.conversationId) {
       this.unsubscribe = receiveMessage(this.state.conversationId, this.handleNewMessage, auth.currentUser);}
@@ -156,22 +162,29 @@ export default class ChatContent extends Component {
 
   async componentDidUpdate(prevProps) {
     if (prevProps.conversationId != this.props.conversationId) {
-      //this.unsubscribe && this.unsubscribe();
+      if (typeof this.unsubscribe === 'function') {
+        this.unsubscribe();
+      }
+      console.log(this.props.userInfo, '?')
       if (auth.currentUser) {
-        await this.props.getUserInfo(auth.currentUser.uid).then(userInfo => {
-          const userImage = userInfo.image || "https://i.pinimg.com/236x/39/a1/eb/39a1eb1485516800d84981a72840d60e.jpg";
-          const userName = userInfo.name;
-          this.setState({ userImage: userImage, userName });
-          this.props.setInfo({userImage: userImage, userName: userName})
-        }); 
-      if (this.props.otherUser) {
-        await this.props.getUserInfo(this.props.otherUser).then(otherUserInfo => {
+        console.log(this.props.userInfo, '?')
+        if (this.props.userInfo) {
+          const userImage = this.props.userInfo.image || "https://i.pinimg.com/236x/39/a1/eb/39a1eb1485516800d84981a72840d60e.jpg";
+          const userName = this.props.userInfo.name;
+          this.setState({ userImage:userImage, userName:userName });
+          }
+        
+        if (this.props.conversations) {
+          const otherUserInfo = this.props.conversations.find(conversation => 
+            conversation.conversationId === this.props.conversationId
+          );
+          if (otherUserInfo) {
           const otherUserImage = otherUserInfo.image || "https://i.pinimg.com/236x/39/a1/eb/39a1eb1485516800d84981a72840d60e.jpg";
           const otherUserName = otherUserInfo.name;
-          this.setState({ otherUserImage: otherUserImage, otherUserName: otherUserName });
-        });}}
+          this.setState({ otherUserImage: otherUserImage, otherUserName: otherUserName })};
+        }
+      }
       this.setState({ conversationId: this.props.conversationId, chat: [] }, () => {
-        console.log("didupdate")
         this.unsubscribe = receiveMessage(this.state.conversationId, this.handleNewMessage, auth.currentUser);
       });
     }

@@ -22,19 +22,16 @@ export default class ChatList extends Component {
   }
   handleSearchUser = async() => {
     const info = await this.props.getTargetUser(this.state.targetEmail);
-    console.log(info)
     this.setState({ targetUserInfo: info})
   }
   handleAddChat = async() => {
-    console.log('Enter',this.state.currentUser,this.state.targetUserInfo, !this.state.addDisabled )
+    console.log('Enter',this.state.currentUser,"1", this.state.targetUserInfo,"2", !this.state.addDisabled )
     if (this.state.currentUser && this.state.targetUserInfo && !this.state.addDisabled) {
       try {
         
-        console.log('Yes')
         const result = await this.props.createChat(this.state.currentUser, this.state.targetUserInfo.id);
         const id = result.id
         const creater = result.creater
-        console.log(id, '?')
         if (creater != this.state.currentUser) {
         this.setState(prevState => ( {
           allChats: [

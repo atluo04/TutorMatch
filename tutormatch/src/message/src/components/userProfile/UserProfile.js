@@ -15,14 +15,15 @@ export default class UserProfile extends Component {
     if (prevProps.user != this.props.user && this.props.user) {
       const info = await this.props.getUserInfo(this.props.user);
       this.setState({ userInfo: info})
-      this.props.setInfo(this.state.userInfo)
+      this.props.setInfo(info)
     }
   }
   async componentDidMount() {
     if (this.props.user) {
       const info = await this.props.getUserInfo(this.props.user);
       this.setState({ userInfo: info })
-      this.props.setInfo(this.state.userInfo)
+      this.props.setInfo(info)
+      //console.log(info, "emm")
     }
   }
 
