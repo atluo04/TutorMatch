@@ -3,8 +3,7 @@ import "./chatList.css";
 import ChatListItems from "./ChatListItems";
 import { sendMessage, receiveMessage, createNewchat, getConversations } from "../../../../user/chat";
 import { app, db, auth } from "../../../../firebase/firebaseConfig"
-import { collection, addDoc, getDocs, Timestamp, updateDoc, orderBy, doc, query, getDoc, deleteDoc, onSnapshot,setDoc } from "firebase/firestore";
-import { data } from "../../../../user/user_doc";
+
 
 //This is the chat lists, including all the current active chats, integrate it with the previous things, maybe abandon the whole class
 export default class ChatList extends Component {
@@ -23,12 +22,20 @@ export default class ChatList extends Component {
   }
   handleSearchUser = async() => {
     const info = await this.props.getTargetUser(this.state.targetEmail);
+    console.log(info)
     this.setState({ targetUserInfo: info})
   }
   handleAddChat = async() => {
-    if (this.state.currentUser && this.state.targetUserInfo) {
+    console.log('Enter',this.state.currentUser,this.state.targetUserInfo, !this.state.addDisabled )
+    if (this.state.currentUser && this.state.targetUserInfo && !this.state.addDisabled) {
       try {
-        const id = await this.props.createChat(this.state.currentUser, this.state.targetUserInfo.id);
+        
+        console.log('Yes')
+        const result = await this.props.createChat(this.state.currentUser, this.state.targetUserInfo.id);
+        const id = result.id
+        const creater = result.creater
+        console.log(id, '?')
+        if (creater != this.state.currentUser) {
         this.setState(prevState => ( {
           allChats: [
             ...prevState.allChats,
@@ -40,8 +47,8 @@ export default class ChatList extends Component {
               isOnline: false
             }
           ],
-          targetUserInfo: null
-        }));
+          targetUserInfo: null,
+        }));}
       }
       catch(error) {
         console.log("Error creating chat", error.message)
@@ -56,7 +63,8 @@ export default class ChatList extends Component {
       activeId: null,
       targetUserInfo: null,
       targetEmail: '',
-      currentUser: auth.currentUser ? auth.currentUser.uid : null
+      currentUser: auth.currentUser ? auth.currentUser.uid : null,
+      addDisabled: false
     };}
   
   componentDidUpdate(prevProps) {

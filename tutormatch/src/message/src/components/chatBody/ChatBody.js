@@ -1,6 +1,5 @@
 import React, { Component, useEffect, useState } from "react";
 import { httpsCallable } from 'firebase/functions';
-//import { getUserByEmail } from "../../../../firebase/corsConfig";
 import { sendMessage, receiveMessage, createNewChat, getConversations } from "../../../../user/chat";
 import { app, db, auth, functions } from "../../../../firebase/firebaseConfig"
 import { collection, addDoc, getDocs, Timestamp, updateDoc, orderBy, doc, query, getDoc, deleteDoc, onSnapshot,setDoc, where } from "firebase/firestore";
@@ -17,6 +16,7 @@ export default function ChatBody() {
   const [currentConversationId, setConversationId] = useState(null)
   const [otherUser, setOtherUser] = useState([])
   const [userInfo, setUserInfo] = useState(null)
+  const [userId, setUserId] = useState(null)
 
   const selectConversation = (conversationId) => {
     setConversationId(conversationId);
@@ -70,6 +70,8 @@ export default function ChatBody() {
                 id: userId,
                 image: doc.data().profile_pic,
                 name: doc.data().Fullname,
+                major: doc.data().Major,
+                bio: doc.data().Bio
             };
         }
     }
@@ -81,7 +83,7 @@ export default function ChatBody() {
     }
   }
 
-  const handleCreateChat = async(targetId, userId) => {
+  const handleCreateChat = async(userId, targetId) => {
     if (targetId && userId) {
       const participants = [userId, targetId];
       const id = await createNewChat(participants);
@@ -95,13 +97,14 @@ export default function ChatBody() {
   let processedMessages = []
 
   useEffect(() => {
+    let componentMounted = true;
+    const now = new Date();
     const unsubscribe = auth.onAuthStateChanged(user => {
       if (user) {
-        const now = new Date();
+        setUserId(user.uid)
         const conversationsRef = collection(db, "conversations");
         const order = query(conversationsRef, where("participants", "array-contains", user.uid));
         
-  
         const unsubscribeConversations = onSnapshot(order, async (snapshot) => {
           const conversationsWithDetailsPromise = snapshot.docs.map(async doc => {
             const conversation = doc.data();
@@ -109,29 +112,24 @@ export default function ChatBody() {
             const otherParticipantUid = conversation.participants.find(uid => uid !== user.uid);
             setOtherUser(otherParticipantUid)
             const otherParticipantInfo = await getUserInfo(otherParticipantUid);
-            /* const unsubscribeMessages = onSnapshot(query(collection(db, "conversations", conversationId, "messages"), orderBy("timestamp")), (messageSnapshot) => {
-              const messages = messageSnapshot.docs.map(doc => doc.data());
-              const messageTimestamp = doc.data().timestamp.toDate();
-              if (messageTimestamp > now) {
-                console.log(`New message in ${conversationId}:`);
-              }
-            }); */
             const unsubscribeMessages = onSnapshot(
               query(collection(db, "conversations", conversationId, "messages"), orderBy("timestamp")),
               (messageSnapshot) => {
+                if (!componentMounted) return;
+
                 messageSnapshot.docChanges().forEach((change) => {
                   if (change.type === "added") {
-                    setTimeout(() => {
                     const messageData = change.doc.data();
-                    const messageId = messageData.id;
                     const messageTimestamp = messageData.timestamp ? messageData.timestamp.toDate() : null;
                     const messageSender = messageData.sender ? messageData.sender : null;
-                    console.log('in',processedMessages.includes(messageId), messageTimestamp > now.getTime() - 2000)
-                    if (messageTimestamp && messageTimestamp > now.getTime() - 2000 && messageSender && messageSender != user.uid && !processedMessages.includes(messageId)) {
+                    const messageId = change.doc.id
+                    //console.log('in',messageTimestamp, processedMessages.includes(messageId), messageTimestamp > now, messageId)
+                    if (messageTimestamp && messageTimestamp > now && messageSender && messageSender != user.uid && !processedMessages.includes(messageId)) {
+                      console.log(processedMessages.includes(messageId), messageId, processedMessages)
                       console.log(`New message in ${conversationId}:`, messageData);
                     }
-                    processedMessages.push(messageId)
-                  }, 100);
+                    if (messageTimestamp != null && !processedMessages.includes(messageId)) {processedMessages.push(messageId)
+                    console.log("updated nb", messageId, processedMessages)}
                   }
                 });
               }
@@ -158,10 +156,12 @@ export default function ChatBody() {
           if (unsubscribeConversations) {
             unsubscribeConversations();
           }
-          conversationSubscriptions.forEach(unsubscribe => unsubscribe());
+          conversationSubscriptions.forEach(unsubscribe => unsubscribe()
+          );
+          componentMounted = false;
         };
       } else {
-        setConversations([]);
+        //setConversations([]);
       }
     });
   }, []);
@@ -171,8 +171,8 @@ export default function ChatBody() {
         <ChatList conversations={conversations} selectConversation={selectConversation} createChat={handleCreateChat}
         getTargetUser={findUserByEmail} />
         <ChatContent conversationId={currentConversationId} getUserInfo={getUserInfo} otherUser={otherUser}
-        setInfo={setUserInfo}/>
-        <UserProfile userInfo={userInfo}/>
+        setInfo={setUserInfo} userInfo={userInfo}/>
+        <UserProfile getUserInfo={getUserInfo} user={userId} setInfo={setUserInfo}/>
       </div>
     );
   }

@@ -6,15 +6,35 @@ export default class UserProfile extends Component {
     e.target.parentNode.classList.toggle("open");
   };
 
+  constructor(props) {
+    super(props);
+    this.state = {userInfo: null}
+  }
+
+  async componentDidUpdate(prevProps) {
+    if (prevProps.user != this.props.user && this.props.user) {
+      const info = await this.props.getUserInfo(this.props.user);
+      this.setState({ userInfo: info})
+      this.props.setInfo(this.state.userInfo)
+    }
+  }
+  async componentDidMount() {
+    if (this.props.user) {
+      const info = await this.props.getUserInfo(this.props.user);
+      this.setState({ userInfo: info })
+      this.props.setInfo(this.state.userInfo)
+    }
+  }
+
   render() {
     return (
       <div className="main__userprofile">
         <div className="profile__card user__profile__image">
           <div className="profile__image">
-            <img src={this.props.userInfo && this.props.userInfo.userImage ? this.props.userInfo.userImage : "https://i.pinimg.com/236x/39/a1/eb/39a1eb1485516800d84981a72840d60e.jpg"} />
+            <img src={this.state.userInfo && this.state.userInfo.image ? this.state.userInfo.image : "https://i.pinimg.com/236x/39/a1/eb/39a1eb1485516800d84981a72840d60e.jpg"} />
           </div>
-          <h4>{this.props.userInfo && this.props.userInfo.userName ?  this.props.userInfo.userName: "Bruin"}</h4>
-          {/*<p>CS Student</p>*/}
+          <h4>{this.state.userInfo && this.state.userInfo.name ?  this.state.userInfo.name: "Bruin"}</h4>
+          <p>{this.state.userInfo && this.state.userInfo.major ? this.state.major: "CS Student"}</p>
         </div>
         <div className="profile__card">
           <div className="card__header" onClick={this.toggleInfo}>
@@ -22,7 +42,7 @@ export default class UserProfile extends Component {
             <i className="fa fa-angle-down"></i>
           </div>
           <div className="card__content">
-            Hello, World!
+           {this.state.userInfo && this.state.userInfo.bio ? this.state.userInfo.bio: "Hello World!"}
           </div>
         </div>
       </div>

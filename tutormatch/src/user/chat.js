@@ -6,13 +6,14 @@ import { getDownloadURL, uploadBytes, ref } from "firebase/storage";
 const createNewChat = async (users) => {
     const conversationsRef = collection(db, 'conversations');
     const conversationsSnapshot = await getDocs(conversationsRef);
-
+    console.log("Enter2")
     if (conversationsSnapshot.empty) {
         const conversationData = {
             participants: users,
             createdAt: Timestamp.now(),
             latestMessage: null,
             status: "active",
+            creater: users[0],
             unread: 0
         };
         const conversationRef = await addDoc(conversationsRef, conversationData);
@@ -20,27 +21,32 @@ const createNewChat = async (users) => {
         return conversationRef.id;
     }
     else{
-
-    const conversationRef = doc(collection(db, "conversations"));
-    const order = query(conversationRef, where("participants", "array-contains-any", users));
-    const querySnapshot = await getDocs(order)
-    if (!querySnapshot.empty) {console.log('np')
+    console.log('Correct Branch', users)
+    const order = query(conversationsRef, where("participants", "array-contains", users));
+    const querySnapshot = await getDocs(order);
+    console.log("Success up to 2")
+    if (!querySnapshot.empty) {querySnapshot.forEach(doc => {
+        console.log(doc.id, " => ", doc.data());
+      });
         return null}
+        console.log("Success up to 1")
     const conversationData = {
         participants: users,
         createdAt: Timestamp.now(),
         latestMessage: null,
         status: "active",
+        creater: users[0],
         unread: 0
     }
+    console.log("Success up to")
     try {
-        console.log('有')
-        await setDoc(conversationRef, conversationData);
+        const conversationRef = await addDoc(conversationsRef, conversationData);
         console.log(`"Success with id: ${conversationRef.id}`)
-        return conversationRef.id;
+        return {id: conversationRef.id, creater: conversationData.creater};
     }
     catch(error) {
         console.log(error.message);
+        console.log("Issue here")
         return null;
     }
 }

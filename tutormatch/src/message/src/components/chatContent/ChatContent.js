@@ -155,10 +155,9 @@ export default class ChatContent extends Component {
   };
 
   async componentDidUpdate(prevProps) {
-    if (prevProps.conversationId !== this.props.conversationId) {
+    if (prevProps.conversationId != this.props.conversationId) {
       //this.unsubscribe && this.unsubscribe();
       if (auth.currentUser) {
-        //初始化userInfo
         await this.props.getUserInfo(auth.currentUser.uid).then(userInfo => {
           const userImage = userInfo.image || "https://i.pinimg.com/236x/39/a1/eb/39a1eb1485516800d84981a72840d60e.jpg";
           const userName = userInfo.name;
@@ -172,7 +171,6 @@ export default class ChatContent extends Component {
           this.setState({ otherUserImage: otherUserImage, otherUserName: otherUserName });
         });}}
       this.setState({ conversationId: this.props.conversationId, chat: [] }, () => {
-        //this.update(); 
         console.log("didupdate")
         this.unsubscribe = receiveMessage(this.state.conversationId, this.handleNewMessage, auth.currentUser);
       });
