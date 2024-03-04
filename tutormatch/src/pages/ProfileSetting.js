@@ -7,25 +7,30 @@ import { EmailAuthProvider, reauthenticateWithCredential, updatePassword } from 
 import { db } from "../firebase/firebaseConfig";
 import { collection, updateDoc, setDoc, getDoc, doc } from 'firebase/firestore';
 import {update_profile, getdata, upload_profile_pic, reset_user_data, deletel_user_database } from "../user/user_doc"
-
+import { ItemSelectionSearch } from "../components/ItemSelectionSearch";
+import majorList from '../assets/majors.json'
 
 function Main() {
   const fullname = Get_user_data("Fullname");
   const [newname, setNewname] = useState("");
-  const major = Get_user_data("Major");
-  const [newmajor, setNewmajor] = useState("");
+  const major = Get_user_data("Majors");
+  const [newmajor, setNewmajor] = useState(new Set());
   const pic_url = Get_user_data("profile_pic")
   const [picUrl, setPicUrl] = useState(""); // State to store the URL of the selected image
   const [photo, setPhoto] = useState(null);
+  const year = Get_user_data("year")
+  const [newyear, setNewyear] = useState("");
   const [error, setError] = useState(null);  
   //error stores the message of succeed or fail, it can be used as for the pop message
 
+console.log(major);
   useEffect(() => {
     setNewname(fullname);
     setNewmajor(major);
     setPhoto(pic_url);
     setPicUrl(pic_url);
-  }, [fullname, major, pic_url]);
+    setNewyear(year);
+  }, [fullname, major, pic_url, year]);
 
   const handleSave = async () => {
     if(newname !== fullname){
@@ -39,7 +44,7 @@ function Main() {
     }
     if(newmajor !== major){
       try {
-        await update_profile("Major", newmajor);
+        await update_profile("Majors", newmajor);
         setError('Updated major')
       } catch (error) {
         setError("Error updating major")
@@ -53,6 +58,15 @@ function Main() {
         setError('Updated pic')
       } catch (error) {
         setError("Error updating pic")
+        console.error("Error updating data:", error);
+      }
+    }
+    if(newyear !== year){
+      try {
+        await update_profile("Year", newyear);
+        setError('Updated year')
+      } catch (error) {
+        setError("Error updating year")
         console.error("Error updating data:", error);
       }
     }
@@ -75,9 +89,12 @@ function Main() {
     setPhoto(null);
     setPicUrl(pic_url)
     setError(null);
+    setNewyear("")
   };
 
-  
+  if (major === null || newmajor === null) {
+    return <div>Loading...</div>; // Render loading indicator
+  }
     return(
         <motion.div className="tab-pane active show" id="account-main-page"
           initial={{ opacity: 0 }}
@@ -113,13 +130,27 @@ function Main() {
                       </div>
                       <div className="form-group">
                         <label className="form-label">Major</label>
-                        <input
-                          type="text"
-                          className="form-control"
-                          value={newmajor}
-                          onChange={(e) => setNewmajor(e.target.value)}
-                        />
+                        <div 
+                          className="form-control" 
+                          style={{ backgroundColor: 'white', height: 'auto', whiteSpace: 'pre-line' }} // Set height to auto and white-space to pre-line
+                        >
+                          {newmajor.map((major, index) => `${index + 1}. ${major}\n`)}
+                        </div>
                       </div>
+                      <div className="form-group">
+                        <label className="form-label">Year</label>
+                          <select
+                            className="form-control"
+                            value={newyear}
+                            onChange={(e) => setNewyear(e.target.value)}
+                          >
+                            <option value="none" disabled hidden>Gender</option>
+                            <option value="freshman">Freshman</option>
+                            <option value="sophomore">Sophomore</option>
+                            <option value="junior">Junior</option>
+                            <option value="senior">Senior</option>
+                          </select>
+                        </div>
                     </div>
                     <div className="text-right mt-3">
                       <button type="button" className="btn btn-primary" onClick={handleSave}>
@@ -132,8 +163,8 @@ function Main() {
                     </div>
         </motion.div>
     );
-
 }
+
 
 function ChangePassword() {
   const [currentPS, setCurrentPS] = useState('');
@@ -283,19 +314,19 @@ function Info() {
         console.error("Error updating data:", error);
       }
     }
-    if(newemail !== email){
-      try {
-        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailPattern.test(newemail)) {
-          setError("Invalid Email");
-          console.log("Invalid Email");
-          return;
-        }
-        await update_profile("Personal_mail", newemail);
-      } catch (error) {
-        console.error("Error updating data:", error);
-      }
-    }
+    // if(newemail !== email){
+    //   try {
+    //     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    //     if (!emailPattern.test(newemail)) {
+    //       setError("Invalid Email");
+    //       console.log("Invalid Email");
+    //       return;
+    //     }
+    //     await update_profile("Personal_mail", newemail);
+    //   } catch (error) {
+    //     console.error("Error updating data:", error);
+    //   }
+    // }
     
   };
 
@@ -342,6 +373,7 @@ function Info() {
                   <option value="none" disabled hidden>Gender</option>
                   <option value="Male">Male</option>
                   <option value="Female">Female</option>
+                  <option value="non-binary">Non-Binary</option>
                   <option value="Other">Other</option>
                 </select>
               </div>
@@ -364,7 +396,7 @@ function Info() {
               type="text"
               className="form-control"
               value={newemail}
-              onChange={(e) => setNewemail(e.target.value)}
+              //onChange={(e) => setNewemail(e.target.value)}
             />
           </div>
         </div>
