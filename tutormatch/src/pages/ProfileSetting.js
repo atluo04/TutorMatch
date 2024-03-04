@@ -18,8 +18,10 @@ function Main() {
   const pic_url = Get_user_data("profile_pic")
   const [picUrl, setPicUrl] = useState(""); // State to store the URL of the selected image
   const [photo, setPhoto] = useState(null);
-  const year = Get_user_data("year")
+  const year = Get_user_data("Year")
   const [newyear, setNewyear] = useState("");
+  const course = Get_user_data("Courses");
+  const [newcourese, setNewcourse] = useState(new Set()); 
   const [error, setError] = useState(null);  
   //error stores the message of succeed or fail, it can be used as for the pop message
 
@@ -30,7 +32,8 @@ console.log(major);
     setPhoto(pic_url);
     setPicUrl(pic_url);
     setNewyear(year);
-  }, [fullname, major, pic_url, year]);
+    setNewcourse(course);
+  }, [fullname, major, pic_url, year, course]);
 
   const handleSave = async () => {
     if(newname !== fullname){
@@ -134,7 +137,7 @@ console.log(major);
                           className="form-control" 
                           style={{ backgroundColor: 'white', height: 'auto', whiteSpace: 'pre-line' }} // Set height to auto and white-space to pre-line
                         >
-                          {newmajor.map((major, index) => `${index + 1}. ${major}\n`)}
+                          {newmajor.map((major) => `• ${major}\n`)}
                         </div>
                       </div>
                       <div className="form-group">
@@ -152,6 +155,15 @@ console.log(major);
                           </select>
                         </div>
                     </div>
+                    <div className="form-group">
+                        <label className="form-label">Courses I'm taking</label>
+                        <div 
+                          className="form-control" 
+                          style={{ backgroundColor: 'white', height: 'auto', whiteSpace: 'pre-line' }} // Set height to auto and white-space to pre-line
+                        >
+                          {newcourese.length === 0 ? "-" : newcourese.map((courses) => `• ${courses}\n`)}
+                        </div>
+                      </div>
                     <div className="text-right mt-3">
                       <button type="button" className="btn btn-primary" onClick={handleSave}>
                       Save changes
@@ -658,7 +670,7 @@ function ProfileSettingPage () {
       //const [isLoading, setIsLoading] = useState(true); 
       // Add loading state
       const [userData, setUserData] = useState(null);
-
+      console.log("getting", field)
       useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged(async (user) => {
           if (user) {

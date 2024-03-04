@@ -9,7 +9,7 @@ const data = {
     Username:"",
     Birthday: Timestamp.fromDate(new Date(Date.UTC(1919, 4, 24))),
     Gender:"-",
-    Majors: [],
+    Majors: ["Com Sci"],
     Year: "Freshman",
     profile_pic:"https://www.uclastore.com/site/product-images/606852_blue-01.jpg",
     Phone:"+0 (123) 456 7891",
@@ -59,9 +59,10 @@ async function check_field_exist(docRef, field, new_data = null){
   const docSnap = await getDoc(docRef);
   const user_data = docSnap.data()[field]
   // check if data exist
-  if(user_data === null){
+  console.log("a", user_data)
+  if(user_data === null || user_data === undefined){
     //check if need to use input value
-      if(new_data == null){   // no input, use default
+      if(new_data === null){   // no input, use default
         await updateDoc(docRef, {
           [field]: data[field]
         });
