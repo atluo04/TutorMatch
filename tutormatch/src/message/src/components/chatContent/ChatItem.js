@@ -37,7 +37,7 @@ export default class ChatItem extends Component {
           style = {customStyles} >
           <img src={msg} alt="Image" stryle={{ maxWidth: '100%' }}/>
           <br />
-          <a href={msg} dowload="Download Image"> ownload Image </a>
+          <a href={msg} dowload="Download Image"> Download Image </a>
         </Modal>
       </>
     )

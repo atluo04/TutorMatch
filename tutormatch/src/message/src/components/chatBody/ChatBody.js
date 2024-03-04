@@ -31,6 +31,8 @@ export default function ChatBody() {
         id: uid,
         name: userData.Fullname,
         image: userData.profile_pic,
+        major: userData.Major,
+        bio: userData.Bio,
         isOnline: true // to be modified 
       };
     } else {
