@@ -14,6 +14,7 @@ export default class ChatListItems extends Component {
       e.currentTarget.parentNode.children[index].classList.remove("active");
     }
     e.currentTarget.classList.add("active");
+    this.props.onClick()
   };
 
   render() {

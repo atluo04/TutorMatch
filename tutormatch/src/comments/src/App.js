@@ -1,6 +1,6 @@
 import Comments from "./comments/Comments";
 
-const App = () => {
+const App1 = () => {
   return (
     <div>
       <Comments
@@ -11,4 +11,4 @@ const App = () => {
   );
 };
 
-export default App;
+export default App1;

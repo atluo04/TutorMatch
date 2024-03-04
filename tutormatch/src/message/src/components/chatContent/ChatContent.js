@@ -1,97 +1,194 @@
 import React, { Component, useState, createRef, useEffect } from "react";
-
+import { app, db, auth } from "../../../../firebase/firebaseConfig"
 import "./chatContent.css";
 import Avatar from "../chatList/Avatar";
 import ChatItem from "./ChatItem";
+import firebase from "firebase/storage"
+import { sendMessage, receiveMessage, createNewchat, getConversations, getMessages, storeFile } from "../../../../user/chat";
+import { collection, addDoc, getDocs, Timestamp, updateDoc, orderBy, doc, query, getDoc, deleteDoc, onSnapshot,setDoc } from "firebase/firestore";
+
+const handleTime = (date) => {
+  const timestamp = date.toDate();
+  const now = new Date();
+  const timepast = (now.getTime() - timestamp.getTime(date)) / 1000;
+  if (timepast < 60) {
+    return `Just now`
+  }
+  else if (timepast < 3600) {
+    return `${Math.floor(timepast / 60)} minutes ago`;
+  }
+  else if (timepast < 3600*24 ) {
+    return `${Math.floor(timepast / 3600)} hours ago`;
+  }
+  else {
+    return `${timestamp.toLocaleString('en-US')}`
+  }
+}
+
 
 export default class ChatContent extends Component {
   messagesEndRef = createRef(null);
-  chatItms = [
-    {
-      key: 1,
-      image:
-        "https://i.pinimg.com/236x/39/a1/eb/39a1eb1485516800d84981a72840d60e.jpg",
-      type: "",
-      msg: "A",
-    },
-    {
-      key: 2,
-      image:
-        "https://i.pinimg.com/236x/39/a1/eb/39a1eb1485516800d84981a72840d60e.jpg",
-      type: "other",
-      msg: "B",
-    },
-    {
-      key: 3,
-      image:
-        "https://i.pinimg.com/236x/39/a1/eb/39a1eb1485516800d84981a72840d60e.jpg",
-      type: "other",
-      msg: "C",
-    },
-    {
-      key: 4,
-      image:
-        "https://i.pinimg.com/236x/39/a1/eb/39a1eb1485516800d84981a72840d60e.jpg",
-      type: "",
-      msg: "D",
-    },
-    {
-      key: 5,
-      image:
-        "https://i.pinimg.com/236x/39/a1/eb/39a1eb1485516800d84981a72840d60e.jpg",
-      type: "other",
-      msg: "E",
-    },
-    {
-      key: 6,
-      image:
-        "https://i.pinimg.com/236x/39/a1/eb/39a1eb1485516800d84981a72840d60e.jpg",
-      type: "",
-      msg: "F",
-    },
-    {
-      key: 7,
-      image:
-        "https://i.pinimg.com/236x/39/a1/eb/39a1eb1485516800d84981a72840d60e.jpg",
-      type: "other",
-      msg: "G",
-    },
-  ];
-
   constructor(props) {
     super(props);
     this.state = {
-      chat: this.chatItms,
+      chat: [],
+      conversationId: this.props.conversationId,
       msg: "",
+      userImage: "https://i.pinimg.com/236x/39/a1/eb/39a1eb1485516800d84981a72840d60e.jpg",
+      otherUserImage: "https://i.pinimg.com/236x/39/a1/eb/39a1eb1485516800d84981a72840d60e.jpg",
+      userName: "ABC",
+      otherUserName:"Bruin"
     };
+    this.fileInputRef = React.createRef();
   }
+  handleNewMessage = (newMessage) => {
+    //To be modifeied, we may use update to load the history instead of use the subscribe entirely
+    if (newMessage.conversationId == this.state.conversationId || !newMessage.conversationId) {
+      this.setState(prevState => {
+        return {
+          chat: [...prevState.chat, {
+              type: newMessage.sender === auth.currentUser.uid ? "me" : "other",
+              msgType: newMessage.type || "text",
+              fileName: newMessage.fileName || null,
+              msg: newMessage.content,
+              image: newMessage.sender === auth.currentUser.uid ? this.state.userImage : this.state.otherUserImage,
+              timestamp: newMessage.timestamp,
+              id: newMessage.id 
+          }]
+        };
+      }, () => {
+        this.scrollToBottom();
+      })};
+    }
+
+  handleSubmit = (e, currentConversationId) => {
+    e.preventDefault(); 
+    if (currentConversationId && auth.currentUser) {
+    const { msg, chat } = this.state;
+  
+    this.setState((prevState) => ({
+        msg: "",
+    }), () => {
+        this.scrollToBottom(); 
+    }); 
+    sendMessage(currentConversationId, msg, auth.currentUser.uid)
+    console.log("send, msg")
+  }};
+
+  //call storeImage/storeFile to store the data
+  handleFileUpload = async(e) => {
+    const file = e.target.files[0];
+    console.log(file, "file to upload")
+    try {
+      if (file) {
+        const upload = await storeFile(this.state.conversationId, file, auth.currentUser.uid);
+        if (upload) {
+          console.log("Success in file uploading")
+        }
+        else {console.log("Fail in file uploading ")}
+      }
+
+    }
+    catch(error) {
+      console.log(error.message)
+    } 
+  }
+
+  triggerFileInput = () => {
+    this.fileInputRef.current.click();
+  }
+ 
+
+  update = async(id) => {
+    const { conversationId } = this.state;
+
+    try {
+      const messages = await getMessages(conversationId);
+      if (auth.currentUser) {
+        const user = auth.currentUser
+        const formattedMessage = messages.map(message => ({
+          type: message.sender === user.uid ? "me" : "other",
+          msg: message.content,
+          timestamp: message.timestamp,
+          image: message.sender === user.uid ? this.userImage : this.otherUserImage,
+      }));
+      console.log(formattedMessage)
+      this.setState({ chat: formattedMessage })
+  }
+
+  } catch (error) {
+    console.log(error.message)
+  }}
 
   scrollToBottom = () => {
     this.messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
   };
 
-  componentDidMount() {
-    window.addEventListener("keydown", (e) => {
-      if (e.keyCode == 13) {
-        if (this.state.msg != "") {
-          this.chatItms.push({
-            key: 1,
-            type: "",
-            msg: this.state.msg,
-            image:
-              "https://i.pinimg.com/236x/39/a1/eb/39a1eb1485516800d84981a72840d60e.jpg",
-          });
-          this.setState({ chat: [...this.chatItms] });
-          this.scrollToBottom();
-          this.setState({ msg: "" });
+  async componentDidMount() {
+    if (auth.currentUser) {
+      if (this.props.userInfo) {
+        const userImage = this.props.userInfo.userImage || "https://i.pinimg.com/236x/39/a1/eb/39a1eb1485516800d84981a72840d60e.jpg";
+        const userName = this.props.userInfo.userName;
+        console.log(this.props.userInfo)
+        this.setState({ userImage, userName });
         }
-      }
-    });
+      if (this.props.conversations) {
+        const otherUserInfo = this.props.conversations.find(conversation => 
+          conversation.conversationId === this.props.conversationId
+        );
+        console.log(otherUserInfo)
+        if (otherUserInfo) {
+        const otherUserImage = otherUserInfo.image || "https://i.pinimg.com/236x/39/a1/eb/39a1eb1485516800d84981a72840d60e.jpg";
+        const otherUserName = otherUserInfo.name;
+        this.setState({ otherUserImage: otherUserImage, otherUserName: otherUserName });
+      }}
+      //this.update()
+      if (this.state.conversationId) {
+      this.unsubscribe = receiveMessage(this.state.conversationId, this.handleNewMessage, auth.currentUser);}
+    }
+    window.addEventListener("keydown", this.handleKeyDown);
     this.scrollToBottom();
   }
+
+  componentWillUnmount() {
+    if (typeof this.unsubscribe === 'function') {
+        this.unsubscribe();
+    }
+}
+
   onStateChange = (e) => {
     this.setState({ msg: e.target.value });
   };
+
+  async componentDidUpdate(prevProps) {
+    if (prevProps.conversationId != this.props.conversationId) {
+      if (typeof this.unsubscribe === 'function') {
+        this.unsubscribe();
+      }
+      console.log(this.props.userInfo, '?')
+      if (auth.currentUser) {
+        console.log(this.props.userInfo, '?')
+        if (this.props.userInfo) {
+          const userImage = this.props.userInfo.image || "https://i.pinimg.com/236x/39/a1/eb/39a1eb1485516800d84981a72840d60e.jpg";
+          const userName = this.props.userInfo.name;
+          this.setState({ userImage:userImage, userName:userName });
+          }
+        
+        if (this.props.conversations) {
+          const otherUserInfo = this.props.conversations.find(conversation => 
+            conversation.conversationId === this.props.conversationId
+          );
+          if (otherUserInfo) {
+          const otherUserImage = otherUserInfo.image || "https://i.pinimg.com/236x/39/a1/eb/39a1eb1485516800d84981a72840d60e.jpg";
+          const otherUserName = otherUserInfo.name;
+          this.setState({ otherUserImage: otherUserImage, otherUserName: otherUserName })};
+        }
+      }
+      this.setState({ conversationId: this.props.conversationId, chat: [] }, () => {
+        this.unsubscribe = receiveMessage(this.state.conversationId, this.handleNewMessage, auth.currentUser);
+      });
+    }
+  }
 
   render() {
     return (
@@ -101,9 +198,10 @@ export default class ChatContent extends Component {
             <div className="current-chatting-user">
               <Avatar
                 isOnline="active"
-                image="https://i.pinimg.com/236x/39/a1/eb/39a1eb1485516800d84981a72840d60e.jpg"
+                image={this.state.otherUserImage}
               />
-              <p>Bruin</p>
+              {/*To be modified, should be other user's name and pic*/}
+              <p>{this.state.otherUserName}</p>
             </div>
           </div>
 
@@ -117,36 +215,53 @@ export default class ChatContent extends Component {
         </div>
         <div className="content__body">
           <div className="chat__items">
-            {this.state.chat.map((itm, index) => {
+            {Array.isArray(this.state.chat) && this.state.chat.map((itm, index) => {
               return (
+                //adding chat items, (previous messages i guess)
                 <ChatItem
                   animationDelay={index + 2}
-                  key={itm.key}
+                  key={index}
                   user={itm.type ? itm.type : "me"}
+                  type={itm.msgType}
                   msg={itm.msg}
                   image={itm.image}
+                  fileName = {itm.fileName}
+                  timestamp = {handleTime(itm.timestamp)}
                 />
               );
             })}
             <div ref={this.messagesEndRef} />
           </div>
         </div>
+        {this.props.conversationId && (
         <div className="content__footer">
           <div className="sendNewMessage">
-            <button className="addFiles">
+            <button className="addFiles" onClick={(e) => this.triggerFileInput()}>
               <i className="fa fa-plus"></i>
             </button>
+            <input
+              type="file"
+              ref={this.fileInputRef}
+              onChange={this.handleFileUpload}
+              style={{ display:'none' }}
+            />
             <input
               type="text"
               placeholder="Type a message here"
               onChange={this.onStateChange}
               value={this.state.msg}
             />
-            <button className="btnSendMsg" id="sendMsgBtn">
+            <button className="btnSendMsg" id="sendMsgBtn" onClick={(e) => this.handleSubmit(e, this.state.conversationId)}>
               <i className="fa fa-paper-plane"></i>
             </button>
           </div>
         </div>
+        )}
+        {!this.props.conversationId && (
+          <div className="content__footer">
+          <span> Select a Conversation to start </span>
+          </div>
+        )}
       </div>
     );
   }

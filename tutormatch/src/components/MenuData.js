@@ -25,7 +25,7 @@ export const MenuData = [
   },
   {
     title: "Message",
-    url: "#",
+    url: "/chat",
     cName: "nav-links",
     icon: "fa-solid fa-message",
   },
