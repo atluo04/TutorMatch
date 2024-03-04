@@ -7,6 +7,7 @@ import { auth } from "../firebase/firebaseConfig";
 import { db } from "../firebase/firebaseConfig";
 import { setDoc, doc } from 'firebase/firestore';
 import { data } from "./user_doc"
+import { update_profile } from "./user_doc";
 
 
 
@@ -15,7 +16,10 @@ function registerUser(email, password) {
     .then((userCredential) => {
       const user = userCredential.user;
       //create profile
-      return setDoc(doc(db, "users", user.uid), data);
+      return setDoc(doc(db, "users", user.uid), data).then(() => {
+        // After successfully creating the profile, update additional user data
+        return update_profile("personal_email", user.email);
+      });
     })
     .catch((error) => {
       const errorCode = error.code; //could be ignored
@@ -86,57 +90,5 @@ function reset_passward(){
   }
 }
 
-
-
-// // updata profile
-// async function updata_profile(field, new_content){
-//   const uid = auth.currentUser.uid;
-//   const usersCollection_updata = collection(db, 'users', uid);
-//   try {
-//     await updateDoc(usersCollection_updata, {
-//       field: new_content
-//     });
-//     //console.log("User information added to collection successfully!");
-//   } catch (error) {
-//     console.error("Error updating " + field + " :", error);
-//   }
-// }
-
-// //get data from firebase
-//   async function getdata(field){
-//     const uid = auth.currentUser.uid;
-//     const docRef = doc(db, "users", uid);
-//     const docSnap = await getDoc(docRef);
-    
-//     if (docSnap.exists()) {
-//         console.log(docSnap.data().field);
-//     } else {
-//         console.log("No such Info");
-//     }
-//   };
-
-//   //reset user data
-// async function reset_user_data(){
-//   const uid = auth.currentUser.uid;
-//   //const usersCollection_updata = collection(db, 'users', uid);
-//   try {
-//     return setDoc(doc(db, "users", uid), data);
-    
-//     //console.log("User database reset successfully!");
-//   } catch (error) {
-//     console.error("Error resetting", error);
-//   }
-// }
-// //delete user's all data
-// async function deletel_user_database(){
-//   const uid = auth.currentUser.uid;
-//   const userDoc= collection(db, 'users', uid);
-//   try {
-//     return userDoc.delete();
-//     //console.log("User information added to collection successfully!");
-//   } catch (error) {
-//     console.error("Error deleting user database", error);
-//   }
-// }
 
 export { registerUser, signInUser, signOutUser, email_verification, reset_passward };
