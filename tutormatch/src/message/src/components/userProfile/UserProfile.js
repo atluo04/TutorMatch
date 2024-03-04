@@ -21,9 +21,9 @@ export default class UserProfile extends Component {
   async componentDidMount() {
     if (this.props.user) {
       const info = await this.props.getUserInfo(this.props.user);
+      console.log(info.major)
       this.setState({ userInfo: info })
       this.props.setInfo(info)
-      //console.log(info, "emm")
     }
   }
 
@@ -35,7 +35,7 @@ export default class UserProfile extends Component {
             <img src={this.state.userInfo && this.state.userInfo.image ? this.state.userInfo.image : "https://i.pinimg.com/236x/39/a1/eb/39a1eb1485516800d84981a72840d60e.jpg"} />
           </div>
           <h4>{this.state.userInfo && this.state.userInfo.name ?  this.state.userInfo.name: "Bruin"}</h4>
-          <p>{this.state.userInfo && this.state.userInfo.major ? this.state.major: "CS Student"}</p>
+          <p>{this.state.userInfo && this.state.userInfo.major ? this.state.userInfo.major: "CS Student"}</p>
         </div>
         <div className="profile__card">
           <div className="card__header" onClick={this.toggleInfo}>
