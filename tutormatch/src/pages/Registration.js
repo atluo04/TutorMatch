@@ -3,6 +3,7 @@ import { registerUser } from "../user/auth";
 import { PasswordEmailInput } from "../components/PasswordEmailInput";
 import { useNavigate } from "react-router-dom";
 import { update_profile } from "../user/user_doc";
+import "../html/Registration.css";
 
 function RegistrationPage() {
   // State for registration form
@@ -70,27 +71,38 @@ function RegistrationPage() {
   };
 
   return (
-    <div>
-      <h2>Registration</h2>
-      <form>
+    <div className="registration-container">
+      <div className="header">
+        <div className="title">Registration</div>
+        <div className="underline"></div>
+      </div>
+      <div className="inputs">
+        <div className="input">
         <PasswordEmailInput placeHolderText={"Email"} handleInput={setEmail} />
+        </div>
+        <div className="input">
         <PasswordEmailInput
           placeHolderText={"Password"}
           handleInput={setPassword}
           isPassword={true}
         />
+        </div>
+        <div className="input">
         <PasswordEmailInput
           placeHolderText={"Confirm Password"}
           handleInput={setConfirmPassword}
           isPassword={true}
         />
+        </div>
         <div>
           <span className="error">{error}</span>
         </div>
-        <button type="button" onClick={handleRegistration}>
+        <div className="submit-container">
+        <div className="button" onClick={handleRegistration}>
           Register
-        </button>
-      </form>
+        </div>
+        </div>
+      </div>
     </div>
   );
 }
