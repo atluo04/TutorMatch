@@ -39,16 +39,23 @@ function UserRegistrationInfo() {
   }
 
   return (
-    <div>
-      <h2>Get Started with TutorMatch</h2>
-      <PasswordEmailInput
+    <div className="userregistrationinfo-container">
+      <div className="header">
+        <div className="title">Get Started with TutorMatch</div>
+        <div className="underline"></div>
+      </div>
+      <div className="inputs">
+        <div className="input">
+        <PasswordEmailInput
         placeHolderText={"First Name"}
         handleInput={setFirstName}
       />
-      <PasswordEmailInput
+        </div>
+        <div className="input">
+          <PasswordEmailInput
         placeHolderText={"Last Name"}
-        handleInput={setLastName}
-      />
+        handleInput={setLastName}/>
+        </div>
       <div className="phoneContainer">
         <PhoneInput
           placeholder={"Phone Number"}
@@ -67,7 +74,7 @@ function UserRegistrationInfo() {
         </select>
       </div>
       <div className="yearContainer">
-        <label>Select your current year:</label>
+        <label>Select your current year: </label>
         <select value={year} onChange={handleYearChange}>
           <option value="freshman">Freshman</option>
           <option value="sophomore">Sophomore</option>
@@ -93,9 +100,12 @@ function UserRegistrationInfo() {
           placeHolderText={"Search for course IDs..."}
         />
       </div>
-      <button className="submitButton" onClick={handleSubmit}>
+      <div className="submit-container">
+      <div className="button" onClick={handleSubmit}>
         Submit
-      </button>
+      </div>
+      </div>
+      </div>
     </div>
   );
 }
