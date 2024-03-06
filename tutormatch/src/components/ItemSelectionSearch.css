@@ -1,10 +1,16 @@
 .itemList {
-    position: relative;
-    display: block;
+    position: absolute;
+    top: 40px;
+    left: 5px; /* Adjust left position as needed */
+    width: 110%; /* Adjust width as needed */
+    border: 1px solid #ccc;
+    border-top: none;
+    z-index: 1;
+    background-color: #fff;
 }
 
 .itemSearch {
-    width: 100%;
+    width: 110%;
     height: 30px;
     border-radius: 10px;
     padding-left: 5px;
@@ -13,18 +19,9 @@
     margin-left: 5px;
 }
 
-.itemList-content {
-    display: block;
-    position: absolute;
-    width: 100%;
-    border: 1px solid #ccc;
-    border-top: none;
-    z-index: 1;
-    background-color: #fff;
-}
-
 .listButton {
-    width: 100%;
+    margin-left: 10px;
+    width: 90%;
     text-align: left;
     padding: 8px;
     border: none;
@@ -42,7 +39,7 @@
     border: 1px solid #ccc;
     border-radius: 15px;
     padding: 5px 10px;
-    font-size: medium;
+    font-size: small;
     margin: 5px;
     margin-bottom: 0px;
 }
@@ -73,3 +70,14 @@
     position: relative;
     margin-left: 24px;
 }
+
+.selectedItemsContainer {
+    position: absolute;
+    top: 100%; /* Adjust as needed */
+    left: 0; /* Adjust as needed */
+    width: 100%; /* Adjust as needed */
+    background-color: #ffffff;
+    border-top: none;
+    z-index: 2;
+  }
+  
