@@ -19,11 +19,13 @@
     color: #fff;
     justify-self: start;
     cursor: pointer;
+    margin-left: -15px;
 }
 
 .search-bar {
     display: flex;
     align-items: center;
+    margin-left: 10px;
 }
   
 .search-bar input[type="text"] {
@@ -158,4 +160,14 @@
     }
     
     
+}
+
+select{
+    height: 35px;
+    margin-right: 10px;
+    padding: 5px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 15px;
+    text-align: center;
 }
