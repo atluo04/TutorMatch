@@ -295,6 +295,7 @@ function Info() {
       setNewemail(email);
   }, [bio, birth, gender, phone, email]);
   
+  console.log("aa",newbirth);
   const handleSave = async () => {
     if(newbio !== bio){
       try {
@@ -696,6 +697,7 @@ function ProfileSettingPage () {
     function get_time(field) {
       try {
         const userData = Get_user_data(field);
+        console.log("bb", userData);
         if (userData !== null) {
           const birth = userData.toDate();
           const ConvertDate = new Intl.DateTimeFormat('en', { year: 'numeric', month: '2-digit', day: '2-digit' }).format(birth);
@@ -708,6 +710,22 @@ function ProfileSettingPage () {
         return null;
       }
     }
+
+    // function get_time(birth_ugly) {
+    //   try {
+        
+    //     if (birth_ugly !== null) {
+    //       const birth = birth_ugly.toDate();
+    //       const ConvertDate = new Intl.DateTimeFormat('en', { year: 'numeric', month: '2-digit', day: '2-digit' }).format(birth);
+    //       const parts = ConvertDate.split("/");
+    //       const formattedDate = `${parts[2]}-${parts[0].padStart(2, '0')}-${parts[1].padStart(2, '0')}`;
+    //       //console.log(formattedDate);
+    //       return formattedDate;
+    //   }} catch (error) {
+    //     console.error("Error retrieving data:", error);
+    //     return null;
+    //   }
+    // }
 
     const validatePassword = (password, confirmPassword) => {
 // comment out below to enable password restriction
