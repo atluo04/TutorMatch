@@ -5,13 +5,12 @@ import { Link } from "react-router-dom";
 import { SearchResult } from "./Searching_result";
 import { createAlgoliaClient } from "../firebase/algoliaConfig";
 
-
 function Navbar() {
   const [clicked, setClicked] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  //const [searchResults, setSearchResults] = useState([]);
-  const [search_for, setSearch_for] = useState("posts");
+  const [search_for, setSearch_for] = useState("posts"); // Default search type
   const [hits, setHits] = useState([]);
+  const [selectedTag, setSelectedTag] = useState(""); // State variable for selected tag
 
   const handleSearch = async () => {
     let index;
@@ -28,8 +27,12 @@ function Navbar() {
         throw new Error('Index not initialized');
       }
 
-      const { hits } = await index.search(searchQuery); 
-      console.log(hits);
+      let tagFilters = [];
+      if (selectedTag) {
+        tagFilters.push(selectedTag);
+      }
+
+      const { hits } = await index.search(searchQuery, { tagFilters }); // Include selected tag
       setHits(hits); 
 
     } catch (error) {
@@ -42,12 +45,6 @@ function Navbar() {
     setClicked(!clicked);
   };
 
-
-
-  // we may need a filter to search because how algolia is implemented in firebase
-  // the filter should only contain post or user
-  // so need a design this
-  
   return (
     <nav className="NavbarItems">
       <h1 className="logo">
@@ -60,9 +57,13 @@ function Navbar() {
           onChange={(e) => setSearchQuery(e.target.value)}
           value={searchQuery}
         />
+        <select onChange={(e) => setSelectedTag(e.target.value)} value={selectedTag}>
+          <option value="">All Tags</option>
+          <option value="tag1">Post</option>
+          <option value="tag2">Users</option>
+        </select>
         <button type="submit" onClick={handleSearch}>
-          Search
-          <i className="fas fa-search"></i>
+          Search <i className="fas fa-search"></i>
         </button>
       </div>
       <div className="menu-icons" onClick={handleClick}>
@@ -86,3 +87,4 @@ function Navbar() {
 }
 
 export { Navbar };
+

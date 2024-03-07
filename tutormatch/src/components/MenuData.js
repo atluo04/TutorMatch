@@ -18,12 +18,6 @@ export const MenuData = [
     icon: "fa-solid fa-pen",
   },
   {
-    title: "Mentor",
-    url: "#",
-    cName: "nav-links",
-    icon: "fa-solid fa-star",
-  },
-  {
     title: "Message",
     url: "/chat",
     cName: "nav-links",
