@@ -25,3 +25,4 @@ yarn-error.log*
 /backend/src/firebaseConfig.js
 /backend/src/algoliaConfig.js
 /sync_algolia
+../node_modules
