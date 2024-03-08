@@ -22,6 +22,6 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-/src/firebase/firebaseConfig.js
-/src/firebase/algoliaConfig.js
+/backend/src/firebaseConfig.js
+/backend/src/algoliaConfig.js
 /sync_algolia

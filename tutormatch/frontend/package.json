@@ -1,0 +1,61 @@
+{
+  "name": "frontend",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@fortawesome/free-solid-svg-icons": "^6.5.1",
+    "@fortawesome/react-fontawesome": "^0.2.0",
+    "@emotion/react": "^11.11.4",
+    "@emotion/styled": "^11.11.0",
+    "@mui/icons-material": "^5.15.12",
+    "@mui/material": "^5.15.12",
+    "@testing-library/jest-dom": "^5.17.0",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^13.5.0",
+    "algoliasearch": "^4.22.1",
+    "cross-env": "^7.0.3",
+    "exenv": "^1.2.2",
+    "express": "^4.18.3",
+    "firebase": "^10.8.1",
+    "firebase-functions": "^4.7.0",
+    "framer-motion": "^11.0.8",
+    "multer": "^1.4.5-lts.1",
+    "react": "^18.2.0",
+    "react-bootstrap": "^2.10.1",
+    "react-dom": "^18.2.0",
+    "react-modal": "^3.16.1",
+    "react-phone-number-input": "^3.3.9",
+    "react-quill": "^2.0.0",
+    "react-router-dom": "^6.22.2",
+    "react-scripts": "^5.0.1",
+    "the": "^1.0.2",
+    "web-vitals": "^2.1.4"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.17"
+  }
+}
