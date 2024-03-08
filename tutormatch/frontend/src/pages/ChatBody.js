@@ -101,9 +101,9 @@ export default function ChatBody() {
     
         const result = await response.json();
     
-        if (response.ok) {
+        if (response.ok && result.value) {
           console.log("New chat created or existing chat found:", result.value);
-          setConversationId(result.value); 
+          setConversationId(result.value.id); 
           return result.value; 
         } else {
           console.error("Failed to create new chat:", result.message);
