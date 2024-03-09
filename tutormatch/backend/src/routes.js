@@ -1,29 +1,21 @@
 import express from "express";
 import multer from "multer";
-import { app, db, auth, storage } from "./firebaseConfig.js";
+import { db, auth, storage } from "./firebaseConfig.js";
 import { createAlgoliaClient } from "./algoliaConfig.js";
 import {
-  getAuth,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
-  onAuthStateChanged,
   EmailAuthProvider, 
   reauthenticateWithCredential, 
   updatePassword
 } from "firebase/auth";
 import {
-  collection,
-  deleteDoc,
   doc,
-  getDoc,
-  getDocs,
   setDoc,
-  updateDoc,
 } from "firebase/firestore";
 import { getdata, update_profile, data } from "./user.js";
-import { Timestamp } from "firebase/firestore";
 import { addNewComment, deleteComment, getCommentsByLikes, increaseLike } from "./comment.js";
-import { uploadBytes, ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
+import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
 import { createNewChat, sendMessage, receiveMessage, getConversations, getMessages, storeFile, getUserInfo, findUserByEmail } from "./chat.js";
 import { addPost } from "./post.js";
 
@@ -101,7 +93,7 @@ router.post("/signin", async (req, res) => {
 });
 
 router.post("/create-user-info", async (req, res) => {
-  const { uid, Fullname, Phone, Majors, Gender, Year, Courses } = req.body;
+  const { uid, Fullname, Phone, Majors, Gender, Year, Courses, Tags } = req.body;
   try {
     update_profile(uid, "Fullname", Fullname);
     update_profile(uid, "Phone", Phone);
@@ -109,6 +101,7 @@ router.post("/create-user-info", async (req, res) => {
     update_profile(uid, "Gender", Gender);
     update_profile(uid, "Year", Year);
     update_profile(uid, "Courses", Courses);
+    update_profile(uid, "Tags", Tags);
     res.status(200).json({success: true});
   } catch (error) {
     res.status(401).json({ success: false, message: error.message });

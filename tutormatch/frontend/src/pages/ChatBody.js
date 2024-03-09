@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useUser } from '../userContext';
 import "../html/chatBody.css";
 import ChatList from "../components/chat/chatComponents/ChatList.js"
@@ -15,6 +15,7 @@ export default function ChatBody() {
   const [currentConversationId, setConversationId] = useState(null);
   const [userInfo, setUserInfo] = useState(null);
   const { uid, setUid } = useUser();
+  const navigate = useNavigate();
 
   const selectConversation = (conversationId) => {
     setConversationId(conversationId);
@@ -131,6 +132,10 @@ export default function ChatBody() {
     return data;
   }
   useEffect(() => {
+    if (!uid) {
+      alert('Please log in first');
+      navigate("/");
+  }
     const handleOutsideChat = async () => {
         await fetchConversations(uid);
         if (location.state && location.state.activeId) {

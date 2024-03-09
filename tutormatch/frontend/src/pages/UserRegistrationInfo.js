@@ -19,14 +19,27 @@ function UserRegistrationInfo() {
   const [year, setYear] = useState("Freshman");
   const [courses, setCourses] = useState(new Set());
   const [error, setError] = useState("");
+  const [tags, setTags] = useState([]);
   const navigate = useNavigate();
 
+  console.log("tag: ", tags);
   const handleGenderChange = (event) => {
     setGender(event.target.value);
   };
 
   const handleYearChange = (event) => {
     setYear(event.target.value);
+  };
+
+  const handleTagInput = (e) => {
+    if (e.key === 'Enter' && e.target.value.trim() !== '') {
+        setTags([...tags, e.target.value.trim()]);
+        e.target.value = ''; // Clear the input field
+    }
+  };
+
+  const removeTag = (indexToRemove) => {
+    setTags(tags.filter((_, index) => index !== indexToRemove));
   };
 
   const handleSubmit = async () => {
@@ -46,6 +59,7 @@ function UserRegistrationInfo() {
             Gender: gender,
             Year: year,
             Courses: [...courses],
+            Tags: [...tags],
           }),
         }
       );
@@ -115,21 +129,38 @@ function UserRegistrationInfo() {
         </div>
         <div className="majorContainer">
           <label>Select your current major(s):</label>
-          <ItemSelectionSearch
-            updateItems={setMajors}
-            itemList={majorList}
-            maxItems={3}
-            placeHolderText={"Search for majors..."}
-          />
-        </div>
+            <div className="input-left">
+              <ItemSelectionSearch
+                updateItems={setMajors}
+                itemList={majorList}
+                maxItems={3}
+                placeHolderText={"Search for majors..."}
+              />
+            </div>
+          </div>
         <div className="courseContainer">
           <label>Select your current courses:</label>
-          <ItemSelectionSearch
-            updateItems={setCourses}
-            itemList={courseList}
-            maxItems={5}
-            placeHolderText={"Search for course IDs..."}
-          />
+            <div className="input-left">
+                <ItemSelectionSearch
+                    updateItems={setCourses}
+                    itemList={courseList}
+                    maxItems={5}
+                    placeHolderText={"Search for course IDs..."}
+                />
+            </div>
+        </div>
+        
+        <div className="courseContainer">
+        <label>Enter your tags:</label>
+            <input type="text" className="tag-box" placeholder="Type and press enter to add tags" onKeyDown={handleTagInput} />
+            <div className="tag-list">
+              {tags.map((tag, index) => (
+                  <div className="tag" key={index}>
+                      {tag}
+                      <span className="delete-tag" onClick={() => removeTag(index)}> x </span>
+                  </div>
+              ))}
+          </div>
         </div>
         <div className="submit-container">
           <div className="button" onClick={handleSubmit}>

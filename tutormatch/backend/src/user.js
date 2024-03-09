@@ -1,14 +1,12 @@
-import { uploadBytes, ref, getDownloadURL } from "firebase/storage";
-import { auth, db, storage } from "./firebaseConfig.js";
+import { db } from "./firebaseConfig.js";
 import {
-  collection,
   updateDoc,
   setDoc,
   getDoc,
   doc,
   Timestamp,
 } from "firebase/firestore";
-import { getCommentsByLikes } from "./comment.js";
+
 
 
 export const data = {
@@ -25,13 +23,13 @@ export const data = {
   Bio: "Hello, World!",
   created_date: Timestamp.now(),
   Courses: [],
-  Tags: ["React"],
+  Tags: [],
 };
   //get data from firebase
 export const getdata = async (uid, field) =>{
     const docRef = doc(db, "users", uid);
     const docSnap = await getDoc(docRef);
-    console.log("getting ", field);
+    //console.log("getting ", field);
     if (docSnap.exists()) {
         //console.log(docSnap.data()[field]);
         //const user_data = docSnap.data()[field]
@@ -42,7 +40,7 @@ export const getdata = async (uid, field) =>{
         return docSnap.data()[field];     // not sure if this works
     } else {
         await setDoc(docRef, data);
-        console.log("No such Info");
+        //console.log("No such Info");
         return "Null";
     }
 };
@@ -60,6 +58,13 @@ export const update_profile = async (uid, field, new_content) => {
         else if (field === "Majors") {
           const majors_list = await getdata(uid, "Majors");
           const updatedCourses = [...majors_list, ...new_content];
+          await updateDoc(usersCollection_updata, {
+            [field]: updatedCourses,
+          });
+        }
+        else if (field === "Tags") {
+          const tags_list = await getdata(uid, "Tags");
+          const updatedCourses = [...tags_list, ...new_content];
           await updateDoc(usersCollection_updata, {
             [field]: updatedCourses,
           });
@@ -83,7 +88,7 @@ export const check_field_exist = async (docRef, field, new_data = null) =>{
   const docSnap = await getDoc(docRef);
   const user_data = docSnap.data()[field];
   // check if data exist
-  if (user_data === null) {
+  if (user_data === null || user_data === undefined) {
     //console.log("user=", user_data)
     //check if need to use input value
     if (new_data == null) {
@@ -100,6 +105,7 @@ export const check_field_exist = async (docRef, field, new_data = null) =>{
       return false;
     }
   }
+  //console.log("user has =", user_data)
   return true;
 }
 
