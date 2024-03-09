@@ -55,9 +55,6 @@ const Post = ({post, look_for, onAvatarClick}) => {
                         <div className="postBottomLeft">
                             {/* Any content for postBottomLeft */}
                         </div>
-                        <div className="postBottomRight">
-                            <span className="postCommentText">{post.comment} comments</span>
-                        </div>
                     </div>
                 </div>
             </div>
