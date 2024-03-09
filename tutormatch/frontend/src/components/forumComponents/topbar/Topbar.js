@@ -3,14 +3,14 @@ import "./topbar.css"
 import SearchIcon from "@mui/icons-material/Search";
 import {Link} from "react-router-dom";
 
-const Topbar = () => {
+const Topbar = ({course}) => {
   return (
     <div className="topbarContainer">
 
        <div className="topbarLeft">
-
-       <Link to="/" className="logo">Tutor Match</Link>
+        <Link to="/home" className="logo">TutorMatch</Link>
        </div>
+       <span className="courseName">{course}</span>
 
        <div className="topbarCenter">
          <div className="searchbar">

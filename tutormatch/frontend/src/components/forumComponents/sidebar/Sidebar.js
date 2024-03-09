@@ -35,7 +35,6 @@ const Sidebar = () => {
                           </li>
                     </ul>
 
-                    <button className="sidebarButton">Sign Out</button>
 
                     <hr className="sidebarHr"></hr>
 

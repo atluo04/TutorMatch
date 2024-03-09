@@ -374,7 +374,7 @@ router.post("/create-post", upload.single('image'), async(req, res) =>{
   } catch(error) {
     res.status(500).json({success: false, message: error.message})
   }
-})
+});
 
 
 router.post("/add-post-comment", async (req, res) => {
@@ -384,6 +384,32 @@ router.post("/add-post-comment", async (req, res) => {
     return res.status(200).json({success: true})
   } catch(error){
     res.status(500).json({success: false, message: error.message});
+  }
+});
+
+router.post("/get-courses", async(req,res) => {
+  const {uid} = req.body;
+  try{
+    const docRef = doc(db, "users", uid);
+    const docSnap = await getDoc(docRef);
+    if(docSnap.exists()){
+      const courses = docSnap.data().Courses;
+      res.status(200).json({success: true, value: courses});
+    }
+    else {
+      throw new Error("Could not find user.")
+    }
+  } catch(error){
+    res.status(500).json({success: false, message: error.message});
+  }
+});
+
+router.post("/get-posts-by-course", async(req,res) => {
+  const {course} = req.body;
+  try{
+    
+  } catch(error) {
+    res.status(500).json({ success: false, message: error.message });
   }
 })
 
