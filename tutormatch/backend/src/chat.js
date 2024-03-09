@@ -3,6 +3,7 @@ import { collection, addDoc, getDocs, Timestamp, updateDoc, orderBy, doc, query,
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 
 const createNewChat = async (userId, targetId) => {
+    console.log(userId, targetId)
     let users = [];
     if (userId && targetId) {
         users = [userId, targetId]
@@ -86,7 +87,6 @@ const receiveMessage = async (conversationId, lastTimestamp) => {
         console.log(conversationId,"In receiveMessage")
         const messagesRef = collection(db, 'conversations', conversationId, 'messages');
         let order = query(messagesRef, orderBy('timestamp'));
-        console.log(conversationId,"In receiveMessage")
         if (lastTimestamp) {
             const firebaseTimestamp = Timestamp.fromMillis(lastTimestamp);
             order = query(messagesRef, where('timestamp', '>', firebaseTimestamp), orderBy('timestamp'));
