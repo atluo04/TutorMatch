@@ -18,6 +18,7 @@ function Navbar({ setResults, setLook_for }) {
         `${process.env.REACT_APP_SERVER_URL}/home?query=${search_for}&searchQuery=${searchQuery}`
       );
 
+      setSearchQuery("");
       if (!response.ok) {
         throw new Error('Failed to fetch post database');
       }
@@ -30,7 +31,8 @@ function Navbar({ setResults, setLook_for }) {
         // console.log("yes")
         setHits(data.hits);
         setResults(data.hits);
-        setLook_for(search_for)
+        setLook_for(search_for);
+        
       } else {
         throw new Error('Failed to fetch user info');
       }
@@ -42,6 +44,7 @@ function Navbar({ setResults, setLook_for }) {
 
   const handleClick = () => {
     setClicked(!clicked);
+    
   };
 
 

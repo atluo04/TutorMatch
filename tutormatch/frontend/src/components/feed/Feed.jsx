@@ -9,9 +9,6 @@ const Feed = ({searchResults, look_for}) => {
     return (
         <div className="feed">
             <div className="feedWrapper">
-            {searchResults.length === 0 && (
-                    <p>Try searching for something else.</p>
-            )}
             {searchResults.map((result, index) => (
                 <Post post={result} key={index} look_for={look_for} />
             ))}

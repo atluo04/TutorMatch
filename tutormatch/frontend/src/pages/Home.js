@@ -12,6 +12,9 @@ function HomePage() {
       <div className="home-page">
         <Navbar setResults={setSearchResults} setLook_for={setLook_for}/>
         <div className="home">
+          {searchResults.length === 0 && (
+            <h1>Try searching for something</h1>
+          )}
           <Home searchResults={searchResults} look_for={look_for}/>
         </div>
       </div>

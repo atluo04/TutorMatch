@@ -1,29 +1,21 @@
 import express from "express";
 import multer from "multer";
-import { app, db, auth, storage } from "./firebaseConfig.js";
+import { db, auth, storage } from "./firebaseConfig.js";
 import { createAlgoliaClient } from "./algoliaConfig.js";
 import {
-  getAuth,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
-  onAuthStateChanged,
   EmailAuthProvider, 
   reauthenticateWithCredential, 
   updatePassword
 } from "firebase/auth";
 import {
-  collection,
-  deleteDoc,
   doc,
-  getDoc,
-  getDocs,
   setDoc,
-  updateDoc,
 } from "firebase/firestore";
 import { getdata, update_profile, data } from "./user.js";
-import { Timestamp } from "firebase/firestore";
 import { addNewComment, deleteComment, getCommentsByLikes, increaseLike } from "./comment.js";
-import { uploadBytes, ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
+import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
 import { createNewChat, sendMessage, receiveMessage, getConversations, getMessages, storeFile, getUserInfo, findUserByEmail } from "./chat.js";
 import { addPost } from "./post.js";
 

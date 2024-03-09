@@ -1,14 +1,12 @@
-import { uploadBytes, ref, getDownloadURL } from "firebase/storage";
-import { auth, db, storage } from "./firebaseConfig.js";
+import { db } from "./firebaseConfig.js";
 import {
-  collection,
   updateDoc,
   setDoc,
   getDoc,
   doc,
   Timestamp,
 } from "firebase/firestore";
-import { getCommentsByLikes } from "./comment.js";
+
 
 
 export const data = {
@@ -31,7 +29,7 @@ export const data = {
 export const getdata = async (uid, field) =>{
     const docRef = doc(db, "users", uid);
     const docSnap = await getDoc(docRef);
-    console.log("getting ", field);
+    //console.log("getting ", field);
     if (docSnap.exists()) {
         //console.log(docSnap.data()[field]);
         //const user_data = docSnap.data()[field]
@@ -42,7 +40,7 @@ export const getdata = async (uid, field) =>{
         return docSnap.data()[field];     // not sure if this works
     } else {
         await setDoc(docRef, data);
-        console.log("No such Info");
+        //console.log("No such Info");
         return "Null";
     }
 };
@@ -91,11 +89,11 @@ export const check_field_exist = async (docRef, field, new_data = null) =>{
   const user_data = docSnap.data()[field];
   // check if data exist
   if (user_data === null || user_data === undefined) {
-    console.log("user=", user_data)
+    //console.log("user=", user_data)
     //check if need to use input value
     if (new_data == null) {
       // no input, use default
-      console.log("createing", field)
+      //console.log("createing", field)
       await updateDoc(docRef, {
         [field]: data[field],
       });
@@ -107,7 +105,7 @@ export const check_field_exist = async (docRef, field, new_data = null) =>{
       return false;
     }
   }
-  console.log("user has =", user_data)
+  //console.log("user has =", user_data)
   return true;
 }
 

@@ -98,16 +98,9 @@ function Main() {
   const handleSavepic = (e) => {
     const file = e.target.files[0];
     if (file) {
-      console.log("a");
       setPhoto(file);
-      if(photo !== null)
-      {
-        console.log("shit", photo.size)
-      }
       setPicUrl(URL.createObjectURL(file));
-      console.log("a");
       e.target.value = null;
-      
     }
   };
 
@@ -166,21 +159,21 @@ function Main() {
                         </div>
                       </div>
                       <div className="form-group">
-                        <label className="form-label">Year</label>
+                        <label className="form-label" >Year</label>
                           <select
                             className="form-control"
                             value={newyear}
                             onChange={(e) => setNewyear(e.target.value)}
+                            style={{ width: '150px' }}
                           >
-                            <option value="none" disabled hidden>Gender</option>
+                            <option value="none" disabled hidden>year</option>
                             <option value="freshman">Freshman</option>
                             <option value="sophomore">Sophomore</option>
                             <option value="junior">Junior</option>
                             <option value="senior">Senior</option>
                           </select>
                         </div>
-                    </div>
-                    <div className="form-group">
+                        <div className="form-group">
                         <label className="form-label">I am good at</label>
                         <div 
                           className="form-control" 
@@ -198,6 +191,8 @@ function Main() {
                           {newcourese.length === 0 ? "-" : newcourese.map((courses) => `• ${courses}\n`)}
                         </div>
                       </div>
+                    </div>
+                    
                     <div className="text-right mt-3">
                       <button type="button" className="btn btn-primary" onClick={handleSave}>
                       Save changes
@@ -339,6 +334,7 @@ function Info() {
                   className="form-control"
                   value={newgender}
                   onChange={(e) => setNewgender(e.target.value)}
+                  style={{ width: '125px' }}
                 >
                   <option value="none" disabled hidden>Gender</option>
                   <option value="Male">Male</option>

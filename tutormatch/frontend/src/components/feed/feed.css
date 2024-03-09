@@ -4,5 +4,7 @@
 
 .feedWrapper {
     padding: 20px;
-    margin-top: 1850px;
+    /* margin-top: 50px;  */
+    position: relative;
+    top: 2550px;
 }
