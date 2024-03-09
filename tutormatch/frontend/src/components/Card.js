@@ -176,7 +176,7 @@ function Card({userId, onClose}) {
 
       async function handleNewChat(user, target) {
         try {
-        if (user!=target) {
+        if (user!=target && user && target) {
           const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/create-new-chat`, {
             method: 'POST',
             headers: {
@@ -195,7 +195,7 @@ function Card({userId, onClose}) {
 
           }
         }
-        else {alert("Cannot create a chat with youself")}
+        else {alert("Cannot create a chat with youself or Please log in")}
         } catch (error) {
           console.error('Error creating chat:', error);
         }
@@ -250,7 +250,6 @@ function Card({userId, onClose}) {
             </div>
             </div>
             <div className='card-header'>
-              <button onClick={onClose}>Close</button>
             </div>
         </div>
     );

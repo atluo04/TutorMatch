@@ -9,7 +9,8 @@ function PopUp({ isOpen, onClose, children }) {
     return (
         <div className="popup-overlay">
             <div className="popup-content">
-                <button onClick={onClose}>Close</button>
+                <br/>
+                <button style={{marginTop: '60px'}} onClick={onClose}>Close</button>
                 {children}
             </div>
         </div>

@@ -2,7 +2,7 @@ import React, {useState} from "react";
 import "./post.css";
 
 
-const Post = ({post, look_for}) => {
+const Post = ({post, look_for, onAvatarClick}) => {
     return (
         <>
             {look_for === 'posts' && (
@@ -10,7 +10,7 @@ const Post = ({post, look_for}) => {
                     <div className="postWrapper">
                         <div className="postTop">
                             <div className="postTopLeft">
-                                <img className="postProfileImg" src={post.profile_pic} alt="" />
+                                <img className="postProfileImg" src={post.profile_pic} alt="" onClick={() => onAvatarClick(post.objectID)}/>
                                 <span className="postUsername">{post.Fullname}</span>
                                 <span className="postDate">{format_time(post.date)}</span>
                             </div>
@@ -39,7 +39,7 @@ const Post = ({post, look_for}) => {
                 <div className="postWrapper">
                     <div className="postTop">
                         <div className="postTopLeft">
-                            <img className="postProfileImg" src={post.profile_pic} alt="" />
+                            <img className="postProfileImg" src={post.profile_pic} alt=""  onClick={() => onAvatarClick(post.objectID)}/>
                             <span className="postUsername">{post.Fullname}</span>
                             <span className="postDate">{format_time(post.Birthday)}</span>
                         </div>
