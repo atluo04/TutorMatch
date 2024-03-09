@@ -41,15 +41,15 @@ const Post = ({post, look_for}) => {
                         <div className="postTopLeft">
                             <img className="postProfileImg" src={post.profile_pic} alt="" />
                             <span className="postUsername">{post.Fullname}</span>
-                            <span className="postDate">{format_time(post.date)}</span>
+                            <span className="postDate">{format_time(post.Birthday)}</span>
                         </div>
                         <div className="postTopRight">
                             {/* Any content for postTopRight */}
                         </div>
                     </div>
                     <div className="postCenter">
+                        <span className="postText">{post.Tags}</span>
                         <span className="postText">{post.Bio}</span>
-                        <img className="postImg" src="" alt="" />
                     </div>
                     <div className="postBottom">
                         <div className="postBottomLeft">

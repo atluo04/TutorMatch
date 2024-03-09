@@ -24,6 +24,10 @@ function Navbar({ setResults, setLook_for }) {
 
       const data = await response.json();
       if (data.success) {
+        // if(data.hits.length === 0)
+        //   console.log(data.hits);
+        // else
+        // console.log("yes")
         setHits(data.hits);
         setResults(data.hits);
         setLook_for(search_for)
