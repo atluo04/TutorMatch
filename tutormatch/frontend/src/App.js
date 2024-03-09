@@ -46,7 +46,7 @@ function AppRouter(){
             {/* Add other nested routes under /profile-setting here */}
           </Route>
           <Route path="/profile" element={<ProfilePage/>}/>
-          <Route path="/otherprofile/:userId" element={<OthersProfile/>}/>
+          <Route path="/otherprofile" element={<OthersProfile/>}/>
           <Route path="/chat" element={<ChatBody/>}/>
           <Route path="/forum" element={<Forum />}/>
           <Route path="/post" element={<CreatePost/>}/>

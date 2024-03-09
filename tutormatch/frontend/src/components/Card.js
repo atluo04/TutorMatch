@@ -8,7 +8,7 @@ import { faThumbsUp } from '@fortawesome/free-solid-svg-icons';
 
 import "../html/Profile.css"
 
-function Card({userId}) {
+function Card({userId, onClose}) {
     const [name, setName] = useState('Name');
     const [major, setMajor] = useState([]);
     const [about, setAbout] = useState("ok");
@@ -218,7 +218,7 @@ function Card({userId}) {
             <div className='lower-container'>
                 <h3> {name} </h3>
                 <h4> Major: {Array.isArray(major) && major.map((item) => `${item}\n`)} </h4>
-                <p style={{ textAlign: 'center' }}> {about} </p>
+                <p style={{ textAlign: 'center', color: 'darkgrey' }}> {about} </p>
                 <button onClick={() => handleNewChat(uid, userId)}>Send a message</button>
             </div>
             <div className='lower-container'>
@@ -248,6 +248,9 @@ function Card({userId}) {
           <button type="submit">Submit Comment </button>
           </form>
             </div>
+            </div>
+            <div className='card-header'>
+              <button onClick={onClose}>Close</button>
             </div>
         </div>
     );
