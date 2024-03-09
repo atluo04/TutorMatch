@@ -5,16 +5,19 @@ import Sidebar from "../components/forumComponents/sidebar/Sidebar.js";
 import Feed from "../components/forumComponents/feed/Feed.js";
 import "../html/Forum.css";
 import { useParams } from "react-router-dom";
+import { ForumProvider} from "../components/forumComponents/forumContext.js";
 
 function Forum() {
   const {course} = useParams();
   return (
     <div>
-      <Topbar course={course}/>
-      <div className="forumContainer">
-        <Sidebar />
-        <Feed />
-      </div>
+      <ForumProvider>
+        <Topbar course={course} />
+        <div className="forumContainer">
+          <Sidebar course={course} />
+          <Feed />
+        </div>
+      </ForumProvider>
     </div>
   );
 }

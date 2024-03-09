@@ -1,6 +1,6 @@
 import { MenuData } from "./MenuData";
 import "./NavbarStyles.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useUser } from "../userContext.js";
 import { useNavigate } from "react-router-dom";
@@ -66,7 +66,9 @@ function Navbar({ setResults, setLook_for }) {
     }
   };
 
-  getCourses(uid);
+  useEffect(() => {
+    getCourses(uid); // Fetch user courses when the component mounts
+  }, [uid]);
 
   const handleClick = () => {
     setClicked(!clicked);
@@ -125,9 +127,7 @@ function Navbar({ setResults, setLook_for }) {
                 <>
                   <div className="nav-dropdown">
                     <Link
-                      to={item.url}
                       className={item.cName}
-                      onClick={item.logout ? HandleLogout : null}
                     >
                       <i className={item.icon}></i>
                       {item.title}

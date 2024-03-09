@@ -2,34 +2,6 @@ import React, {useState} from "react";
 import "./post.css";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 
-const Users = [ //temporary data
-  {
-    id: 1,
-    profilePicture: "assets/person/mert.jpg",
-    username: "Mert Kaan",
-  },
-  {
-    id: 2,
-    profilePicture: "assets/person/moriarty.jpg",
-    username: "James Moriarty",
-  },
-  {
-    id: 3,
-    profilePicture: "assets/person/patrick.jpg",
-    username: "Patrick Bateman",
-  },
-  {
-    id: 4,
-    profilePicture: "assets/person/tyler.jpg",
-    username: "Tyler Durden",
-  },
-  {
-    id: 5,
-    profilePicture: "assets/person/kayzer.jpg",
-    username: "Kayzer Söze",
-  },
-];
-
 const Post = ({post}) => {
     const [like, setLike] = useState(post.like);
     const [isLiked, setIsLiked] = useState(false);

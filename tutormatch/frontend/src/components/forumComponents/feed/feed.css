@@ -1,8 +1,8 @@
 .feed {
     flex: 5.5;
-}
-
-/*İç boşluk*/
-.feedWrapper {
-    padding: 20px;
+    border: 1px solid #e0e0e0;
+    margin-top: 20px;
+    border-radius: 10px;
+    padding: 10px;
+    height: 600px;
 }
