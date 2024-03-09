@@ -12,7 +12,7 @@ const Post = ({post, look_for, onAvatarClick}) => {
                             <div className="postTopLeft">
                                 <img className="postProfileImg" src={post.profile_pic} alt="" onClick={() => onAvatarClick(post.objectID)}/>
                                 <span className="postUsername">{post.Fullname}</span>
-                                <span className="postDate">{format_time(post.date)}</span>
+                                <span className="postDate">{format_time(post.date, look_for)}</span>
                             </div>
                             <div className="postTopRight">
                                 {/* Any content for postTopRight */}
@@ -41,7 +41,7 @@ const Post = ({post, look_for, onAvatarClick}) => {
                         <div className="postTopLeft">
                             <img className="postProfileImg" src={post.profile_pic} alt=""  onClick={() => onAvatarClick(post.objectID)}/>
                             <span className="postUsername">{post.Fullname}</span>
-                            <span className="postDate">{format_time(post.Birthday)}</span>
+                            <span className="postDate">{format_time(post.Birthday, look_for)}</span>
                         </div>
                         <div className="postTopRight">
                             {/* Any content for postTopRight */}
@@ -63,7 +63,7 @@ const Post = ({post, look_for, onAvatarClick}) => {
     );
 };
 
-function format_time(timestamp) {
+function format_time(timestamp, look_for) {
 
     const utcDate = new Date(timestamp);
 
@@ -76,7 +76,11 @@ function format_time(timestamp) {
     const minutes = ('0' + targetDate.getUTCMinutes()).slice(-2);
     const seconds = ('0' + targetDate.getUTCSeconds()).slice(-2);
 
-    const formattedDate = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+    let formattedDate;
+    if (look_for === "users")
+        formattedDate = `${year}-${month}-${day} ${hours}`;
+    else
+    formattedDate = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 
     return formattedDate;
 }
