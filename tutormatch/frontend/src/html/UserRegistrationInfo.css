@@ -106,6 +106,11 @@
     border-radius: 6px;
 }
 
+.input-left {
+    margin-left: 80px; 
+    width: 100%;
+}
+
 .submit-container {
     display: flex;
     gap: 30px;
@@ -125,4 +130,37 @@
     font-weight: 700;
     cursor: pointer;
     margin-top: -50px;
+}
+
+.tag-input-container input {
+    width: calc(100% - 20px); /* Adjust based on padding */
+    padding: 8px;
+    margin-bottom: 10px; /* Space between input and tag list */
+}
+
+.tag-box{
+    margin-top: 11px;
+    border-radius: 10px;
+    padding: 7px;
+    width: 350px;
+    margin-right: -5px; 
+}
+
+.tag-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px; /* Space between tags */
+    margin-top: 10px;
+}
+
+.tag {
+    padding: 5px 10px;
+    background-color: #d1e3f8; /* Light blue background, adjust as needed */
+    border-radius: 15px; /* Rounded corners for tags */
+    white-space: nowrap; /* Prevents the text inside tags from wrapping */
+}
+.delete-tag {
+    margin-left: 8px;
+    cursor: pointer;
+    color: #ff0000; /* Red color for the delete icon, adjust as needed */
 }

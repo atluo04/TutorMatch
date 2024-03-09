@@ -101,7 +101,7 @@ router.post("/signin", async (req, res) => {
 });
 
 router.post("/create-user-info", async (req, res) => {
-  const { uid, Fullname, Phone, Majors, Gender, Year, Courses } = req.body;
+  const { uid, Fullname, Phone, Majors, Gender, Year, Courses, Tags } = req.body;
   try {
     update_profile(uid, "Fullname", Fullname);
     update_profile(uid, "Phone", Phone);
@@ -109,6 +109,7 @@ router.post("/create-user-info", async (req, res) => {
     update_profile(uid, "Gender", Gender);
     update_profile(uid, "Year", Year);
     update_profile(uid, "Courses", Courses);
+    update_profile(uid, "Tags", Tags);
     res.status(200).json({success: true});
   } catch (error) {
     res.status(401).json({ success: false, message: error.message });

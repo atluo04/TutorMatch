@@ -25,7 +25,7 @@ export const data = {
   Bio: "Hello, World!",
   created_date: Timestamp.now(),
   Courses: [],
-  Tags: ["React"],
+  Tags: [],
 };
   //get data from firebase
 export const getdata = async (uid, field) =>{
@@ -63,6 +63,13 @@ export const update_profile = async (uid, field, new_content) => {
           await updateDoc(usersCollection_updata, {
             [field]: updatedCourses,
           });
+        }
+        else if (field === "Tags") {
+          const tags_list = await getdata(uid, "Tags");
+          const updatedCourses = [...tags_list, ...new_content];
+          await updateDoc(usersCollection_updata, {
+            [field]: updatedCourses,
+          });
         } else {
           if(await check_field_exist(usersCollection_updata, field, new_content)){
             await updateDoc(usersCollection_updata, {
@@ -83,12 +90,12 @@ export const check_field_exist = async (docRef, field, new_data = null) =>{
   const docSnap = await getDoc(docRef);
   const user_data = docSnap.data()[field];
   // check if data exist
-  if (user_data === null) {
-    //console.log("user=", user_data)
+  if (user_data === null || user_data === undefined) {
+    console.log("user=", user_data)
     //check if need to use input value
     if (new_data == null) {
       // no input, use default
-      //console.log("createing", field)
+      console.log("createing", field)
       await updateDoc(docRef, {
         [field]: data[field],
       });
@@ -100,6 +107,7 @@ export const check_field_exist = async (docRef, field, new_data = null) =>{
       return false;
     }
   }
+  console.log("user has =", user_data)
   return true;
 }
 

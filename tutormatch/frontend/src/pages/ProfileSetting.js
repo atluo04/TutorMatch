@@ -120,7 +120,7 @@ function Main() {
     setNewyear(year)
   };
 
-  if (newmajor === null || newcourese === null || picUrl === null || tags === null) {
+  if (newmajor === null || newcourese === null || picUrl === null || tags === undefined) {
     return <div>Loading...</div>; // Render loading indicator
   }
     return(
