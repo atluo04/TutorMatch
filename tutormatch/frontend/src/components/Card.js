@@ -174,24 +174,28 @@ function Card({userId}) {
         }
       };
 
-      async function handleNewChat(userId, targetId) {
+      async function handleNewChat(user, target) {
         try {
+        if (user!=target) {
           const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/create-new-chat`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-              userId, targetId
+              userId: user,
+              targetId: target,
             }),
           });
           const data = await response.json();
-          if (response.ok && data.value && data.success && uid) {
+          if (response.ok && data.value && data.success) {
             navigate('/chat', { state: { activeId: data.value.id } });
           } else {
             alert(data.message);
 
           }
+        }
+        else {alert("Cannot create a chat with youself")}
         } catch (error) {
           console.error('Error creating chat:', error);
         }
@@ -215,7 +219,7 @@ function Card({userId}) {
                 <h3> {name} </h3>
                 <h4> Major: {Array.isArray(major) && major.map((item) => `${item}\n`)} </h4>
                 <p style={{ textAlign: 'center' }}> {about} </p>
-                <button onClick={() => handleNewChat(uid || "IFPBzeNj7fXQnKvyb9fVk2yPivq1" ,userId)}>Send a message</button>
+                <button onClick={() => handleNewChat(uid, userId)}>Send a message</button>
             </div>
             <div className='lower-container'>
             <div className='comments-container'>
