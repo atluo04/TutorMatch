@@ -1,65 +1,64 @@
-.Card{
-    width: 500px;
+.Card {
+    width: 650px;
     min-height: 800px;
     background: white;
     border-radius: 10px;
-    box-shadow: 0px 1px 10px 1px black;
+    box-shadow: 0px 1px 10px 1px rgba(0, 0, 0, 0.1);
     overflow: hidden;
+    margin: 20px;
+    padding: 20px;
+    box-sizing: border-box;
 }
 
-.upper-container{
-    height: 160px;
+.upper-container {
+    height: 110px;
     background: linear-gradient(to left, #00CCCC, #6666FF);
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
-  
-.image-container img{
-    background: white;
+
+.image-container img {
     width: 100px;
     height: 100px;
     border-radius: 50%;
-    padding: 5px;
-    transform: translate(190px, 88px);
+    border: 3px solid white;
+    box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.1);
 }
 
-.lower-container{
-    margin-top: 50px;
-    height: 200px;
-    background: white;
+.user-info-container, .contact-info-container, .personal-info-container, .tags-courses-container {
+    padding: 20px;
+    border-bottom: 1px solid #eee;
+}
+
+.user-info-container h2 {
+    margin: 10px 0 5px;
+    color: #333;
+}
+
+.user-info-container h4, .contact-info-container p, .personal-info-container p, .tags-courses-container p {
+    margin: 5px 0;
+    color: #666;
+}
+
+.comments-container, .interaction-container {
+    padding: 20px;
+}
+
+.comments-container {
+    border-top: 1px solid #eee;
+}
+
+.interaction-container {
     text-align: center;
-    font-family: 'Titillium Web', sans-serif;
 }
 
-
-.lower-container h3, h4, p{
-    margin: 0;
-    padding: 0;
-}
-
-.lower-container h2 {
-    color: rgba(66, 73, 204, 0.775);
-    font-weight: 600;
-    font-size: 1.5rem;
-    margin-top: 5px;
-}
-
-.lower-container h3 {
-    color: black;
-    font-weight: 600;
-    font-size: 1.5rem;
-}
-
-.lower-container h4 {
-    color: black;
-    font-weight: 700;
-    font-size: 1.2rem;
-}
-
-.lower-container p {
-    margin: 1rem;
-    font-family: sans-serif;
-    color: black;
-    font-size: 0.9rem;
-    text-align: justify;
+.input-comment {
+    width: calc(100% - 24px);
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
 }
 
 button{
@@ -87,31 +86,3 @@ button:hover{
     border: none;
     color: white;
 }
-
-.input-comment {
-    width: 80%; 
-    margin-top: 10px;
-    margin-right: 10px;
-    padding: 10px 15px;
-    font-weight: bold;
-    margin-bottom: 10px; 
-    border-radius: 5px;
-    border: 1px solid rgb(102, 160, 205); 
-    background-color: #f2f5ff; 
-    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
-    font-size: 16px; 
-    transition: border-color 0.3s, box-shadow 0.3s; 
-  }
-.input-comment:focus,
-.input-comment:hover {
-    outline: none; 
-    border-color: #3e6691; 
-    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2), 0 0 8px rgba(121, 103, 205, 0.6); 
-}
-
-
-  .like-icon {
-    color: #6460aa; 
-    margin-right: 5px; 
-    margin-left: 5px;
-  }

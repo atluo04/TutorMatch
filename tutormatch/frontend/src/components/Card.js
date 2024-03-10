@@ -8,21 +8,61 @@ import { faThumbsUp } from '@fortawesome/free-solid-svg-icons';
 
 import "../html/Profile.css"
 
-function Card({userId}) {
+function Card({userId, onClose}) {
     const [name, setName] = useState('Name');
     const [major, setMajor] = useState([]);
     const [about, setAbout] = useState("ok");
     const [comments, setComments] = useState("find");
     const [image, setImage] = useState("https://i.pinimg.com/236x/39/a1/eb/39a1eb1485516800d84981a72840d60e.jpg")
     const [newComment, setNewComment] = useState([]);
+    const [email, setEmail] = useState("");
+    const [course, setCourse] = useState([]);
+    const [phone, setPhone] = useState("");
+    const [year, setYear] = useState("");
+    const [tags, setTags] = useState("");
+    const [create_date, setCreate_date] = useState("");
+    const [Gender, setGender] = useState("");
+    const [birth, setBirth] = useState("");
     const { uid, setUid } = useUser();
     const [error, setError] = useState(null);
     let navigate = useNavigate();
 
 
-    async function setUserInfo(userId) {
+    // async function setUserInfo(userId) {
+    //     try {
+    //         const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/get-user-info`, {
+    //             method: 'POST',
+    //             headers: {
+    //             'Content-Type': 'application/json'
+    //             },
+    //             body: JSON.stringify({ user: userId })
+    //             },
+    //         );
+    //         if (!response.ok) {
+    //             throw new Error('Network response was not ok');
+    //         }
+    //         const data = await response.json();
+    //         if (data.success) {
+    //             const targetInfo = data.value;
+    //             setMajor(targetInfo.majors);
+    //             console.log(targetInfo.majors);
+    //             setName(targetInfo.name);
+    //             console.log(targetInfo.name, "name")
+    //             setAbout(targetInfo.bio);
+    //             setImage(targetInfo.image)}
+    //         else {
+    //         setError("Error fetching userInfo.");
+    //         }
+    //     }
+    // catch(error) {
+    //     console.log("Error fetching userInfo.")
+
+    // }
+    //   }
+
+      async function setUserInfo(userId) {
         try {
-            const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/get-user-info`, {
+            const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/get-user-info2`, {
                 method: 'POST',
                 headers: {
                 'Content-Type': 'application/json'
@@ -35,13 +75,19 @@ function Card({userId}) {
             }
             const data = await response.json();
             if (data.success) {
-                const targetInfo = data.value;
-                setMajor(targetInfo.majors);
-                console.log(targetInfo.majors);
-                setName(targetInfo.name);
-                console.log(targetInfo.name, "name")
-                setAbout(targetInfo.bio);
-                setImage(targetInfo.image)}
+              console.log(data.value.Fullname )
+                setName(data.value.Fullname || 'Unknown');
+                setMajor(data.value.Majors || []);
+                setAbout(data.value.Bio || 'No bio provided');
+                setImage(data.value.profile_pic || "https://i.pinimg.com/236x/39/a1/eb/39a1eb1485516800d84981a72840d60e.jpg");
+                setEmail(data.value.Personal_mail || 'Unknown');
+                setPhone(data.value.Phone || 'Unknown');
+                setYear(data.value.Year || 'Unknown');
+                setTags(data.value.Tags || []);
+                setCreate_date(data.value.create_date || '');
+                setGender(data.value.Gender || 'Unknown');
+                setCourse(data.value.Courses || []);
+                setBirth(data.value.Birthday || '');}
             else {
             setError("Error fetching userInfo.");
             }
@@ -176,7 +222,7 @@ function Card({userId}) {
 
       async function handleNewChat(user, target) {
         try {
-        if (user!=target) {
+        if (user!=target && user && target) {
           const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/create-new-chat`, {
             method: 'POST',
             headers: {
@@ -195,7 +241,7 @@ function Card({userId}) {
 
           }
         }
-        else {alert("Cannot create a chat with youself")}
+        else {alert("Cannot create a chat with youself or Please log in")}
         } catch (error) {
           console.error('Error creating chat:', error);
         }
@@ -208,49 +254,49 @@ function Card({userId}) {
             getComments(userId)}
       }, [userId]);
 
-    return (
+      return (
         <div className='Card'>
             <div className='upper-container'>
                 <div className='image-container'>
                     <img src={image} alt='' height='100px' width='100px' />
                 </div>
             </div>
-            <div className='lower-container'>
-                <h3> {name} </h3>
-                <h4> Major: {Array.isArray(major) && major.map((item) => `${item}\n`)} </h4>
-                <p style={{ textAlign: 'center' }}> {about} </p>
-                <button onClick={() => handleNewChat(uid, userId)}>Send a message</button>
+            <div className='user-info-container'>
+                <h2> {name} </h2>
+                <h4> Major: {Array.isArray(major) ? major.join(', ') : major} </h4>
+                <p> {about} </p>
             </div>
-            <div className='lower-container'>
+            <div className='contact-info-container'>
+                <p>Email: {email}</p>
+                <p>Phone: {phone}</p>
+            </div>
+            <div className='personal-info-container'>
+                <p>Year: {year}</p>
+                <p>Gender: {Gender}</p>
+                {/* <p>Birth Date: {birth}</p> */}
+            </div>
+            <div className='tags-courses-container'>
+                <p>Tags: {Array.isArray(tags) ? tags.join(', ') : tags}</p>
+                <p>Courses: {Array.isArray(course) ? course.join(', ') : course}</p>
+            </div>
             <div className='comments-container'>
-            <h2>Comments:</h2>
-        {Array.isArray(comments)&& comments.length > 0 ? (
-          <ul className='comment-text'>
-            {comments.map((comment) => (
-              <li key={comment.id}>
-                {comment.content} <FontAwesomeIcon icon={faThumbsUp} className="like-icon"/> {comment.likes}
-                <button onClick={() => handleLikes(comment.id)}>Like</button>
-                <button onClick={() => handleDelete(comment.id)}>Delete</button>
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <p>No comments found.</p>
-        )}
-            <form onSubmit={handleInput}>
-            <input
-                type="text"
-                className="input-comment"
-                value={newComment}
-                onChange={(e) => setNewComment(e.target.value)}
-                placeholder="New comment"
-            />
-          <button type="submit">Submit Comment </button>
-          </form>
+                {/* Comments display and interaction code */}
             </div>
+            <div className='interaction-container'>
+                <button onClick={() => handleNewChat(uid, userId)}>Send a message</button>
+                <form onSubmit={handleInput}>
+                    <input
+                        type="text"
+                        className="input-comment"
+                        value={newComment}
+                        onChange={(e) => setNewComment(e.target.value)}
+                        placeholder="New comment"
+                    />
+                    <button type="submit">Submit Comment</button>
+                </form>
             </div>
         </div>
     );
-}
+      }
 
 export {Card};

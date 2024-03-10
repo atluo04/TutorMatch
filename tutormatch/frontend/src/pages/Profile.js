@@ -174,7 +174,7 @@ function ProfilePage({user}) {
       </div>
 
       <Link to="/profile-setting/main">Go to Profile Settings: </Link>
-      <Link to="/otherprofile/IFPBzeNj7fXQnKvyb9fVk2yPivq1">Go to test other page</Link>
+      <Link to="/otherprofile?userId=LAwp7KFQLZf6QzYwNxOz5LGtsrB2">Go to test other page</Link>
 
     </div>
   );

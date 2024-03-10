@@ -35,6 +35,7 @@ export default class ChatListItems extends Component {
 
         <div className="userMeta">
           <p>{this.props.name}</p>
+          {this.props.unread && <div className="unread-dot"></div>}
           {/*<span className="activeTime">32 mins ago</span>*/}
         </div>
       </div>

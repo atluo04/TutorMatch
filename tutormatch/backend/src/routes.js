@@ -1,9 +1,8 @@
 import express from "express";
 import multer from "multer";
-import { app, db, auth, storage } from "./firebaseConfig.js";
+import { db, auth, storage } from "./firebaseConfig.js";
 import { createAlgoliaClient } from "./algoliaConfig.js";
 import {
-  getAuth,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   onAuthStateChanged,
@@ -46,8 +45,14 @@ import {
   storeFile,
   getUserInfo,
   findUserByEmail,
+  updateLastOpen,
 } from "./chat.js";
-import { addPost } from "./post.js";
+import { 
+  addPost,
+  addPostComment,
+  getPostComments
+ } from "./post.js";
+
 
 const router = express.Router();
 const upload = multer({ storage: multer.memoryStorage() });
@@ -121,7 +126,7 @@ router.post("/signin", async (req, res) => {
 });
 
 router.post("/create-user-info", async (req, res) => {
-  const { uid, Fullname, Phone, Majors, Gender, Year, Courses } = req.body;
+  const { uid, Fullname, Phone, Majors, Gender, Year, Courses, Tags } = req.body;
   try {
     update_profile(uid, "Fullname", Fullname);
     update_profile(uid, "Phone", Phone);
@@ -129,7 +134,8 @@ router.post("/create-user-info", async (req, res) => {
     update_profile(uid, "Gender", Gender);
     update_profile(uid, "Year", Year);
     update_profile(uid, "Courses", Courses);
-    res.status(200).json({ success: true });
+    update_profile(uid, "Tags", Tags);
+    res.status(200).json({success: true});
   } catch (error) {
     res.status(401).json({ success: false, message: error.message });
   }
@@ -453,14 +459,26 @@ router.post("/get-post-by-id", async (req, res) => {
 });
 
 router.post("/add-post-comment", async (req, res) => {
-  const { uid, content, fromUid } = req.body;
+  const { target, commentContent, fromUser, parentId=null } = req.body;
   try {
-    await addPostComment(uid, content, fromUid);
+    await addPostComment(target, commentContent, fromUser, parentId);
     return res.status(200).json({ success: true });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
 });
+
+router.post("/get-post-comments", async(req, res) => {
+  const { target } = req.body;
+  try {
+    const fetchedComments = await getPostComments(target);
+    res.status(200).json({ success: true, value: fetchedComments} );
+  } catch(error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+})
+
+
 
 router.post("/get-courses", async (req, res) => {
   const { uid } = req.body;
@@ -473,10 +491,12 @@ router.post("/get-courses", async (req, res) => {
     } else {
       throw new Error("Could not find user.");
     }
+
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
 });
+
 
 router.post("/get-posts-by-course", async (req, res) => {
   const { course } = req.body;
@@ -496,6 +516,30 @@ router.post("/get-posts-by-course", async (req, res) => {
       });
     });
     res.status(200).json({ success: true, value: posts });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+});
+
+router.post("/update-last-open", async (req, res) => {
+  const {conversationId, userId} = req.body;
+  try {
+    await updateLastOpen(conversationId, userId);
+    return res.status(200).json({success: true})
+  } catch(error){
+    res.status(500).json({success: false, message: error.message});
+  }
+})
+
+router.post("/get-user-info2", async (req, res) => {
+  const {user} = req.body;
+
+  try {
+    // const userInfo = await getUserInfo(user);
+    // const docRef = doc(db, "users", uid);
+    const docSnap = await getDoc(doc(db, "users", user));
+    const user_info = docSnap.data();
+    res.status(200).json({ success: true, message: "User information retrieved successfully", value: user_info });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }

@@ -1,0 +1,107 @@
+.post_h{
+
+    width: 800px;
+    border-radius: 10px;
+    -webkit-box-shadow: 0px 0px 16px -8px rgba(0,0,0,0.68); 
+    box-shadow: 0px 0px 16px -8px rgba(0,0,0,0.68);   
+    margin: 30px 0;
+    background-color: white;
+
+}
+
+.postWrapper_h {
+    padding: 100px; 
+}
+
+.postTop_h {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.postTopLeft_h {
+    display: flex;
+    align-items: center;
+}
+
+.postProfileImg_h {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    cursor: pointer;
+}
+
+.postUsername_h {
+    font-size: 15px;
+    font-weight: 500;
+    margin: 0 10px;
+    cursor: pointer;
+}
+
+.postDate_h {
+    font-size: 12px;
+}
+
+.postCenter_h {
+    margin: 20px 0;
+}
+
+.postImg_h {
+    margin-top: 20px;
+    width: 100%;
+    max-height: 500px;
+    object-fit: cover;
+}
+
+.postBottom_h {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.postBottomLeft_h {
+    display: flex;
+    align-items: center;
+}
+
+.likeIcon_h {
+    width: 24px;
+    height: 24px;
+    margin-right: 5px;
+    cursor: pointer;
+}
+
+.postLikeCounter_h {
+    font-size: 15px;
+}
+
+.postCommentText_h {
+    cursor: pointer;
+    border-bottom: 1px dashed gray;
+    font-size: 15px;
+}
+
+.postCreateDate_h {
+    font-size: 15px;
+}
+
+.postMajorsList_h {
+    list-style-type: none; /* Removes the default list bullet */
+    padding: 0;
+  }
+  
+  
+  .postMajorsTags_h {
+    display: flex; /* Align tags in a row */
+    flex-wrap: wrap; /* Wrap to next line if not enough space */
+    gap: 5px; /* Spacing between tags */
+  }
+  
+  .postMajorTag_h {
+    background-color: #a75be0; /* Bootstrap primary blue */
+    color: white; /* White text */
+    padding: 5px 10px; /* Padding inside each tag */
+    border-radius: 15px; /* Rounded corners for tag look */
+    font-size: 0.8em; /* Smaller font size */
+  }

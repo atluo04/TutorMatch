@@ -21,12 +21,17 @@ function Navbar({ setResults, setLook_for }) {
         `${process.env.REACT_APP_SERVER_URL}/home?query=${search_for}&searchQuery=${searchQuery}`
       );
 
+      setSearchQuery("");
       if (!response.ok) {
         throw new Error("Failed to fetch post database");
       }
 
       const data = await response.json();
       if (data.success) {
+        // if(data.hits.length === 0)
+        //   console.log(data.hits);
+        // else
+        // console.log("yes")
         setHits(data.hits);
         setResults(data.hits);
         setLook_for(search_for);
@@ -72,6 +77,7 @@ function Navbar({ setResults, setLook_for }) {
 
   const handleClick = () => {
     setClicked(!clicked);
+    
   };
 
   const HandleLogout = () => {
