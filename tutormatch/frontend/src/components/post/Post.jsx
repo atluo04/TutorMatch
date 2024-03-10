@@ -40,21 +40,32 @@ const Post = ({post, look_for, onAvatarClick}) => {
                     <div className="postTop">
                         <div className="postTopLeft">
                             <img className="postProfileImg" src={post.profile_pic} alt=""  onClick={() => onAvatarClick(post.objectID)}/>
-                            <span className="postUsername">{post.Fullname}</span>
-                            <span className="postDate">{format_time(post.Birthday, look_for)}</span>
+                            <span className="postUsername"  onClick={() => onAvatarClick(post.objectID)}>{post.Fullname}</span>
+                            {/* <span className="postDate">{format_time(post.Birthday, look_for)}</span> */}
                         </div>
                         <div className="postTopRight">
-                            {/* Any content for postTopRight */}
+                            <span className="postText">{post.Year}</span>
                         </div>
                     </div>
                     <div className="postCenter">
-                        <span className="postText">{post.Tags}</span>
-                        <span className="postText">{post.Bio}</span>
+                        <div className="postTopLeft">Majors:</div>
+                            <div className="postMajorsTags">
+                                {post.Majors.map((major, index) => (
+                                    <span key={index} className="postMajorTag">{major}</span>
+                                ))}
+                            </div>
+                        <div className="postTopLeft">Ask me about:</div>
+                            <div className="postMajorsTags">
+                                {post.Tags.map((tag, index) => (
+                                    <span key={index} className="postMajorTag">{tag}</span>
+                                ))}
+                            </div>
+                        <div className="postTopLeft">Bio:</div>
+                            <span className="postText">{post.Bio}</span>
                     </div>
                     <div className="postBottom">
-                        <div className="postBottomLeft">
-                            {/* Any content for postBottomLeft */}
-                        </div>
+                        <div className="postBottomLeft"></div>
+                            <span className="postCreateDate">Member since: {format_time(post.created_date, look_for)}</span>
                     </div>
                 </div>
             </div>
@@ -78,7 +89,7 @@ function format_time(timestamp, look_for) {
 
     let formattedDate;
     if (look_for === "users")
-        formattedDate = `${year}-${month}-${day} ${hours}`;
+        formattedDate = `${year}-${month}-${day}`;
     else
     formattedDate = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 

@@ -380,5 +380,16 @@ router.post("/add-post-comment", async (req, res) => {
   }
 })
 
+router.post("/get-user-info2", async (req, res) => {
+  const {user} = req.body;
+
+  try {
+    const userInfo = await getUserInfo(user);
+    res.status(200).json({ success: true, message: "error getting messages", value: userInfo });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+});
+
 
 export default router;

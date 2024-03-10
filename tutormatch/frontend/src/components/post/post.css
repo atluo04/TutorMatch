@@ -25,16 +25,18 @@
 }
 
 .postProfileImg {
-    width: 32px;
-    height: 32px;
+    width: 50px;
+    height: 50px;
     border-radius: 50%;
     object-fit: cover;
+    cursor: pointer;
 }
 
 .postUsername {
     font-size: 15px;
     font-weight: 500;
     margin: 0 10px;
+    cursor: pointer;
 }
 
 .postDate {
@@ -79,3 +81,27 @@
     border-bottom: 1px dashed gray;
     font-size: 15px;
 }
+
+.postCreateDate {
+    font-size: 15px;
+}
+
+.postMajorsList {
+    list-style-type: none; /* Removes the default list bullet */
+    padding: 0;
+  }
+  
+  
+  .postMajorsTags {
+    display: flex; /* Align tags in a row */
+    flex-wrap: wrap; /* Wrap to next line if not enough space */
+    gap: 5px; /* Spacing between tags */
+  }
+  
+  .postMajorTag {
+    background-color: #a75be0; /* Bootstrap primary blue */
+    color: white; /* White text */
+    padding: 5px 10px; /* Padding inside each tag */
+    border-radius: 15px; /* Rounded corners for tag look */
+    font-size: 0.8em; /* Smaller font size */
+  }

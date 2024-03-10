@@ -15,6 +15,12 @@ function Card({userId, onClose}) {
     const [comments, setComments] = useState("find");
     const [image, setImage] = useState("https://i.pinimg.com/236x/39/a1/eb/39a1eb1485516800d84981a72840d60e.jpg")
     const [newComment, setNewComment] = useState([]);
+    const [email, setEmail] = useState("");
+    const [phone, setPhone] = useState("");
+    const [year, setYear] = useState("");
+    const [tags, setTags] = useState("");
+    const [create_date, setCreate_date] = useState("");
+    const [Gender, setGender] = useState("");
     const { uid, setUid } = useUser();
     const [error, setError] = useState(null);
     let navigate = useNavigate();
@@ -216,7 +222,7 @@ function Card({userId, onClose}) {
                 </div>
             </div>
             <div className='lower-container'>
-                <h3> {name} </h3>
+                <h2> {name} </h2>
                 <h4> Major: {Array.isArray(major) && major.map((item) => `${item}\n`)} </h4>
                 <p style={{ textAlign: 'center', color: 'darkgrey' }}> {about} </p>
                 <button onClick={() => handleNewChat(uid, userId)}>Send a message</button>
