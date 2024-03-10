@@ -47,7 +47,11 @@ import {
   getUserInfo,
   findUserByEmail,
 } from "./chat.js";
-import { addPost } from "./post.js";
+import { 
+  addPost,
+  addPostComment,
+  getPostComments
+ } from "./post.js";
 
 const router = express.Router();
 const upload = multer({ storage: multer.memoryStorage() });
@@ -453,14 +457,24 @@ router.post("/get-post-by-id", async (req, res) => {
 });
 
 router.post("/add-post-comment", async (req, res) => {
-  const { uid, content, fromUid } = req.body;
+  const { target, commentContent, fromUser, parentId=null } = req.body;
   try {
-    await addPostComment(uid, content, fromUid);
+    await addPostComment(target, commentContent, fromUser, parentId);
     return res.status(200).json({ success: true });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
 });
+
+router.post("/get-post-comments", async(req, res) => {
+  const { target } = req.body;
+  try {
+    const fetchedComments = await getPostComments(target);
+    res.status(200).json({ success: true, value: fetchedComments} );
+  } catch(error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+})
 
 router.post("/get-courses", async (req, res) => {
   const { uid } = req.body;
