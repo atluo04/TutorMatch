@@ -201,28 +201,37 @@ const Post = () => {
         </div>
         <div className="commentWrapper">
           <h4>Comments</h4>
-          <input placeholder="Add a new comment" className="commentInput" onChange={(e) => {setComment(e.target.value)}} value={comment}></input>
-          <div className="commentSubmitButton" onClick={handleCommentSubmit}>Submit</div>
+          <textarea
+            placeholder="Add a new comment"
+            className="commentInput"
+            onChange={(e) => {
+              setComment(e.target.value);
+            }}
+            value={comment}
+          ></textarea>
+          <div className="commentSubmitButton" onClick={handleCommentSubmit}>
+            Submit
+          </div>
         </div>
         <div className="commentsContainer">
           {comments.length > 0 ? (
             comments.map((comment) => (
               <div key={comment.id} className="comment">
-                <p>{comment.content}</p>
                 {comment.userInfo ? (
-                <div className="commenterInfo">
-                <img src={comment.userInfo.image} alt="Commenter" />
-                  By: {comment.userInfo.name}
-                </div>
-            ) : (
-            <span>Loading commenter info...</span>
+                  <div className="commenterInfo">
+                    <img src={comment.userInfo.image} alt="Commenter" />
+                    By: {comment.userInfo.name}
+                    <div className="commentContent">{comment.content}</div>
+                  </div>
+                ) : (
+                  <span>Loading commenter info...</span>
+                )}
+              </div>
+            ))
+          ) : (
+            <div className="noComments">No comments yet.</div>
           )}
         </div>
-      ))
-    ) : (
-      <div className="noComments">No comments yet.</div>
-    )}
-    </div>
       </div>
     </div>
   );
