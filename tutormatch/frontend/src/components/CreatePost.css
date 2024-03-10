@@ -1,7 +1,7 @@
 /* Style for the form container */
 .form-container {
   width: 100%; /* Set a percentage width */
-  max-width: 600px; /* Set a maximum width */
+  height: 100%;
   margin: 0 auto;
   padding: 20px;
   border: 1px solid #ccc;
@@ -15,7 +15,7 @@
 
 /* Style for form content editor */
 .form-content-editor .ql-editor {
-  min-height: 300px; /* Adjust the height as needed */
+  min-height: 250px; /* Adjust the height as needed */
   margin-bottom: 20px;
 }
 
@@ -64,7 +64,8 @@
   cursor: pointer;
   transition: background-color 0.3s;
   align-self: flex-end;
-  margin-top: 20px;
+  margin-top: 0px;
+  margin-right: 20px;
 }
 
 .form-submit-button:hover {
@@ -76,5 +77,4 @@
 .error-message {
   color: red;
   font-size: 14px;
-  margin-top: 5px;
 }

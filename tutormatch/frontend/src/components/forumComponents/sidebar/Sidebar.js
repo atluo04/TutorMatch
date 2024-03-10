@@ -1,48 +1,123 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "./sidebar.css";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import ChatIcon from "@mui/icons-material/Chat";
 import PersonIcon from "@mui/icons-material/Person";
+import { Link } from "react-router-dom";
+import { useUser } from "../../../userContext";
+import { useForum } from "../forumContext";
 
-import {Link} from "react-router-dom";
+const Sidebar = ({ course }) => {
+  const { uid, setUid } = useUser();
+  const { showCreatePost, setShowCreatePost, setSelectedPost } = useForum();
 
-const Sidebar = () => {
-    return (
-        <div className="sidebar">
+  const [posts, setPosts] = useState([]);
+  const [userName, setUserName] = useState("");
+  const [profilePic, setProfilePic] = useState("");
 
-            <div className="sidebarWrapper">
+  const getPosts = async () => {
+    try {
+      const response = await fetch(
+        `${process.env.REACT_APP_SERVER_URL}/get-posts-by-course`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            course: course,
+          }),
+        }
+      );
 
-                    <ul className="sidebarList">
+      const data = await response.json();
 
-                          <li className="sidebarPersonContainer">
-                            <img className="sidebarPerson" src="assets/person/mert.jpg" alt="" />
-                            <Link to="/mertkaan" className="sidebarPersonName">Mert Kaan</Link>
-                          </li>
+      if (data.success) {
+        setPosts(data.value);
+      } else {
+        throw new Error("Error loading posts");
+      }
+    } catch (error) {
+      alert("Server error!");
+      console.log(error);
+    }
+  };
 
-                          <li className="sidebarListItem">
-                            <PersonIcon className="sidebarIcon"/>
-                            <span className="sidebarListItemText">Profile</span>
-                          </li>
+  const getUserInfo = async () => {
+    try {
+      const response = await fetch(
+        `${process.env.REACT_APP_SERVER_URL}/get-user-info`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            user: uid,
+          }),
+        }
+      );
 
-                          <li className="sidebarListItem">
-                            <ChatIcon className="sidebarIcon"/>
-                            <span className="sidebarListItemText">Messages</span>
-                          </li>
+      const data = await response.json();
 
-                          <li className="sidebarListItem">
-                            <NotificationsIcon className="sidebarIcon"/>
-                            <span className="sidebarListItemText">Notifications</span>
-                          </li>
-                    </ul>
+      if (data.success) {
+        console.log(data);
+        setUserName(data.value.name);
+        setProfilePic(data.value.image)
+      } else {
+        throw new Error("Error getting user information.");
+      }
+    } catch (error) {
+      alert("Server error!");
+      console.log(error);
+    }
+  };
 
-                    <button className="sidebarButton">Sign Out</button>
+  useEffect(() => {
+    getPosts();
+    getUserInfo();
+  }, [course]);
 
-                    <hr className="sidebarHr"></hr>
+  useEffect(() => {
+    getPosts();
+  },[showCreatePost]);
 
-            </div>
+  return (
+    <div className="sidebar">
+      <div className="sidebarWrapper">
+        <ul className="sidebarList">
+          <li className="sidebarPersonContainer">
+            <img
+              className="sidebarPerson"
+              src={profilePic} 
+              alt=""
+            />
+            <span className="sidebarPersonName">{userName}</span>
+          </li>
+          <div className="postsHeader">
+            <span className="recentPosts">Recent Posts</span>
+            <span className="newPost" onClick={() => setShowCreatePost(true)}>
+              + New
+            </span>
+          </div>
+          <hr className="postsHeaderLine"></hr>
+          <div className="postList">
+            {posts.map((post) => (
+              <li key={post.id} className="sidebarListItem" onClick={() => setSelectedPost(post.id)}>
+                <div>
+                  <h4 className="postTitle">{post.title}</h4>
+                  <p className="postDate">{post.date}</p>
+                  {/* Render other post data as needed */}
+                </div>
+              </li>
+            ))}
+          </div>
+        </ul>
 
-        </div>
-    )
-}
+        <hr className="sidebarHr"></hr>
+      </div>
+    </div>
+  );
+};
 
-export default Sidebar
+export default Sidebar;

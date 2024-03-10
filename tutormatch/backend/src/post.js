@@ -1,9 +1,9 @@
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { db, storage } from "./firebaseConfig.js";
-import { serverTimestamp } from "firebase/firestore";
-import { collection, addDoc } from "firebase/firestore";
+import { Timestamp, serverTimestamp } from "firebase/firestore";
+import { collection, addDoc, doc, query, orderBy, getDocs } from "firebase/firestore";
 
-const addNewComment = async (
+export const addPostComment = async (
   target,
   commentContent,
   fromUser,
@@ -11,6 +11,7 @@ const addNewComment = async (
 ) => {
   try {
     const postRef = doc(db, "posts", target);
+    console.log(postRef)
     const commentRef = await addDoc(collection(postRef, "comments"), {
       content: commentContent,
       from: fromUser,
@@ -24,6 +25,20 @@ const addNewComment = async (
     console.error(error.message);
   }
 };
+export const getPostComments = async (target) => {
+  try {
+    const commentRef = collection(db, "posts", target, "comments");
+    const order = query(commentRef, orderBy("timestamp", "desc"));
+    const querySnapshot = await getDocs(order);
+    const orderedComment = [];
+    querySnapshot.forEach((doc) => {
+      orderedComment.push({ id: doc.id, ...doc.data() });
+    });
+    return orderedComment;
+  } catch (error) {
+    console.error(error.message);
+  }
+};
 
 export const addPost = async (
   uid,
@@ -33,7 +48,7 @@ export const addPost = async (
   course
 ) => {
   let imageUrl = null;
-  if (postImage !== null) {
+  if (postImage) {
     const imageRef = ref(
       storage,
       "post_images/" + Date.now() + postImage.originalname

@@ -4,20 +4,23 @@ import Button from "react-bootstrap/Button";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import "./CreatePost.css";
-import { useNavigate } from "react-router-dom";
 import { useUser } from "../userContext";
+import { useForum } from "./forumComponents/forumContext";
 
 const CreatePost = () => {
-  const {uid, setUid} = useUser();
+  const { uid, setUid } = useUser();
+  const { course, setShowCreatePost } = useForum();
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [selectedImage, setSelectedImage] = useState(null);
-  const [course, setCourse] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-  const navigate = useNavigate();
 
   const handleFormSubmit = async (event) => {
     event.preventDefault();
+    if (!uid) {
+      alert("Please sign in.");
+      return;
+    }
     const err = checkValidPost();
     if (err !== null) {
       setErrorMessage(err);
@@ -39,12 +42,13 @@ const CreatePost = () => {
         }
       );
 
-
       const data = await response.json();
 
       if (data.success) {
-        console.log("Post submitted successfully.")
+        setShowCreatePost(false);
+        console.log("Post submitted successfully.");
       } else {
+        console.log(data.message);
         setErrorMessage("Problem submitting post.");
       }
     } catch (error) {
@@ -104,6 +108,9 @@ const CreatePost = () => {
         <Button className="form-submit-button" variant="primary" type="submit">
           Create Post
         </Button>
+        <Button className="form-submit-button" variant="primary" onClick={() => setShowCreatePost(false)}>
+          Cancel
+        </Button>
       </Form>
     </div>
   );
@@ -114,7 +121,7 @@ export default CreatePost;
 const quillModules = {
   toolbar: {
     container: [
-      [{ header: "1" }, { header: "2" }, { font: [] }],
+      [{ header: "1" }, { header: "2" }, /*{ font: [] }*/],   //removing fonts for now
       [{ size: [] }],
       ["bold", "italic", "underline", "strike", "blockquote"],
       [{ list: "ordered" }, { list: "bullet" }],
