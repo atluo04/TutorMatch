@@ -17,7 +17,7 @@ import {
 import { getdata, update_profile, data } from "./user.js";
 import { addNewComment, deleteComment, getCommentsByLikes, increaseLike } from "./comment.js";
 import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
-import { createNewChat, sendMessage, receiveMessage, getConversations, getMessages, storeFile, getUserInfo, findUserByEmail } from "./chat.js";
+import { createNewChat, sendMessage, receiveMessage, getConversations, getMessages, storeFile, getUserInfo, findUserByEmail, updateLastOpen } from "./chat.js";
 import { addPost } from "./post.js";
 
 
@@ -368,7 +368,7 @@ router.post("/create-post", upload.single('image'), async(req, res) =>{
   } catch(error) {
     res.status(500).json({success: false, message: error.message})
   }
-})
+});
 
 
 router.post("/add-post-comment", async (req, res) => {
@@ -394,6 +394,17 @@ router.post("/get-user-info2", async (req, res) => {
     res.status(500).json({ success: false, message: error.message });
   }
 });
+
+router.post("/update-last-open", async (req, res) => {
+  const {conversationId, userId} = req.body;
+  try {
+    await updateLastOpen(conversationId, userId);
+    return res.status(200).json({success: true})
+  } catch(error){
+    res.status(500).json({success: false, message: error.message});
+  }
+})
+
 
 
 export default router;

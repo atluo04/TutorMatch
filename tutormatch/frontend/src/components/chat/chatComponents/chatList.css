@@ -191,6 +191,16 @@
     border-radius: 50%;
     border: 2px solid #fff;
 }
+.unread-dot {
+    width: 10px;
+    height: 10px;
+    background-color: rgb(211, 10, 10);
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+  }
 
 .isOnline.active {
     background-color: tomato;
