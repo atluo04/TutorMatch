@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import "./post.css";
+import "./post_home.css";
 
 
 const Post = ({post, look_for, onAvatarClick}) => {

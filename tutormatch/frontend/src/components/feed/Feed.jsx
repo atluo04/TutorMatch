@@ -1,6 +1,6 @@
 import React from "react";
 import "./feed.css";
-import Post from "../post/Post.jsx"
+import Post from "../post/Post_home.jsx"
 import "../../html/HomeStyles.css"
 
 const Feed = ({searchResults, look_for, onAvatarClick}) => {
