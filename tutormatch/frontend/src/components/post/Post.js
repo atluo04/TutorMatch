@@ -1,87 +1,131 @@
-import React, {useState} from "react";
+import React, { useEffect, useState } from "react";
 import "./post.css";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
+import { useForum } from "../forumComponents/forumContext";
+import DOMPurify from 'dompurify';
 
-const Users = [ //temporary data
-  {
-    id: 1,
-    profilePicture: "assets/person/mert.jpg",
-    username: "Mert Kaan",
-  },
-  {
-    id: 2,
-    profilePicture: "assets/person/moriarty.jpg",
-    username: "James Moriarty",
-  },
-  {
-    id: 3,
-    profilePicture: "assets/person/patrick.jpg",
-    username: "Patrick Bateman",
-  },
-  {
-    id: 4,
-    profilePicture: "assets/person/tyler.jpg",
-    username: "Tyler Durden",
-  },
-  {
-    id: 5,
-    profilePicture: "assets/person/kayzer.jpg",
-    username: "Kayzer Söze",
-  },
-];
+const Post = () => {
+  const { selectedPost } = useForum();
+  const [post, setPost] = useState([]);
+  const [poster, setPoster] = useState("");
+  const [comment, setComment] = useState("");
 
-const Post = ({post}) => {
-    const [like, setLike] = useState(post.like);
-    const [isLiked, setIsLiked] = useState(false);
+  const getPost = async () => {
+    try {
+      const response = await fetch(
+        `${process.env.REACT_APP_SERVER_URL}/get-post-by-id`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            postId: selectedPost,
+          }),
+        }
+      );
 
-    const likeHandler = () => {
-        setLike(isLiked ? like-1 : like+1)
-        setIsLiked(!isLiked)
-    };
+      const data = await response.json();
 
-    return (
-         <div className="post">
+      if (data.success) {
+        setPost(data.value);
+        await getUser(data.value.poster);
+      } else {
+        throw new Error("Error getting post information.");
+      }
+    } catch (error) {
+      alert("Server error!");
+      console.log(error);
+    }
+  };
 
-              <div className="postWrapper">
-                 
-                    <div className="postTop">
+  const getUser = async (userId) => {
+    try {
+      const response = await fetch(
+        `${process.env.REACT_APP_SERVER_URL}/get-user-info`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            user: userId,
+          }),
+        }
+      );
 
-                          <div className="postTopLeft">
-                                <img className="postProfileImg" src={Users.filter((u) => u.id === post?.userId)[0].profilePicture} alt=""/>
-                                <span className="postUsername">{Users.filter((u) => u.id === post?.userId)[0].username}</span>
-                                <span className="postDate">{post.date}</span>
-                          </div>
+      const data = await response.json();
 
-                          <div className="postTopRight">
-                                <MoreVertIcon/>
-                          </div>
+      if (data.success) {
+        setPoster(data.value.name);
+      } else {
+        throw new Error("Error getting poster user information.");
+      }
+    } catch (error) {
+      alert("Server error!");
+      console.log(error);
+    }
+  };
 
-                    </div>
+  useEffect(() => {
+    getPost();
+  }, [selectedPost]);
 
-                    <div className="postCenter">
-                         <span className="postText">{post?.desc}</span>
-                         <img className="postImg" src={post.photo} alt="" />
-                    </div>
+  const sanitizeHTML = (html) => {
+    if(html){
+      const cleanedHtmlContent = html.replace(/^"(.*)"$/, "$1");
+      return DOMPurify.sanitize(cleanedHtmlContent);
+    }
+  };
 
-                    <div className="postBottom">
+  const processImageUrl = (url) => {
+    if(url){
+      return url.replace(/^"(.*)"$/, "$1");
+    }
+  }
 
-                        <div className="postBottomLeft">
-                            <img className="likeIcon" src="/assets/like.png" onClick={likeHandler} alt=""/>
-                            <img className="likeIcon" src="/assets/heart.png" onClick={likeHandler} alt=""/>
-                            <span className="postLikeCounter">{like} people liked this</span>
-                        </div>
+  const handleCommentSubmit = async () => {
+    /*
+    BACKEND STUFF FOR SUBMITTING COMMENTS 
+    */
+  }
 
-                        <div className="postBottomRight">
-                            <span className="postCommentText">{post.comment} comments</span>
-                        </div>
+  const getComments = async() =>{
+    try {
+      //ROUTE STUFF FOR GETTING COMMENTS
+    } catch (error) {
+      alert("Server error!");
+      console.log(error);
+    }
+  }
 
-                    </div>
-
-              </div>
-
-         </div>
-    )
-
+  return (
+    <div className="post">
+      <div className="postWrapper">
+        <div className="postInformation">
+          <h2>{post.title}</h2>
+          <div className="posterInformation">
+            By: {poster} at {post.date}
+          </div>
+        </div>
+        <div className="postContent">
+          <div
+            dangerouslySetInnerHTML={{ __html: sanitizeHTML(post.content) }}
+          />
+          {post.image && (
+            <div className="postImage">
+              <img src={processImageUrl(post.image)} alt={"Post Image"} />
+            </div>
+          )}
+        </div>
+        <div className="commentWrapper">
+          <h4>Comments</h4>
+          <input placeholder="Add a new comment" className="commentInput" onChange={(e) => {setComment(e.target.value)}}></input>
+          <div className="commentSubmitButton" onClick={handleCommentSubmit}>Submit</div>
+        </div>
+      </div>
+    </div>
+  );
 };
 
-export default Post
+export default Post;

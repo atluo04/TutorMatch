@@ -33,7 +33,7 @@ export const addPost = async (
   course
 ) => {
   let imageUrl = null;
-  if (postImage !== null) {
+  if (postImage) {
     const imageRef = ref(
       storage,
       "post_images/" + Date.now() + postImage.originalname

@@ -171,3 +171,31 @@ select{
     font-size: 15px;
     text-align: center;
 }
+
+.nav-dropdown:hover .dropdown-menu {
+    display: block;
+}
+
+.dropdown-menu {
+    list-style: none;
+    display: none;
+    position: absolute;
+    margin-top: 8px;
+    background-color: transparent;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+    z-index: 1;
+}
+
+.dropdown-menu li {
+    padding: 5px;
+}
+
+.dropdown-menu li:hover {
+    background-color: transparent;
+}
+
+.dropdown-link {
+    margin: 0px;
+    width: 100%;
+}

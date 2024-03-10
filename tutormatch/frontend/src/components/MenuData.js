@@ -12,10 +12,11 @@ export const MenuData = [
     icon: "fa-solid fa-user",
   },
   {
-    title: "Post",
-    url: "/post",
+    title: "Courses",
+    url: "/forum",
     cName: "nav-links",
     icon: "fa-solid fa-pen",
+    dropdown: true,
   },
   {
     title: "Mentor",

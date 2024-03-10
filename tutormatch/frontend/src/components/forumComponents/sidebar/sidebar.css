@@ -1,7 +1,7 @@
 .sidebar {
     flex: 3;
     height: calc(100vh - 50px); 
-    overflow-y: scroll;
+    max-width: 350px;
 }
 
 ::-webkit-scrollbar {
@@ -21,9 +21,12 @@
 }
 
 .sidebarList {
-    padding: 0;
+    padding: 8px;
     margin: 0;
+    height: 85vh;
     list-style: none;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
 }
 
 .sidebarPersonContainer {
@@ -46,25 +49,77 @@
     text-decoration: none;
 }
 
+.postList{
+    overflow-y: scroll;
+    width: 100%;
+    height: 450px;
+}
+
 .sidebarListItem {
     display: flex;
     align-items: center;
-    margin-bottom: 20px;
+    margin:0px;
+    padding: 10px;
+    border: 1px solid darkgray;
+}
+
+.sidebarListItem:hover {
+    background-color: #e0e0e0;
 }
 
 .sidebarIcon {
     margin-right: 15px;
 }
 
-.sidebarButton {
-    width: 175px;
-    border: none;
-    padding: 10px;
-    border-radius: 5px;
-    font-weight: 600;
+.sidebarHr {
+    margin: 20px 0;
+}
+
+.postsHeader{
+    width: 100%;
+    font-size: 20px;
+    font-weight: bold;
+    padding-left: 0px;
+    color: #1877F2;
+    margin-bottom: 5px;
+    overflow: hidden;
+}
+
+.newPost {
+    font-size: 15px;
+    margin-left: auto;
+    color: white;
+    padding:7px;
+    border-radius: 8px;
+    border: 1px solid darkgray;
+    background-color: #1877F2;
+    float: right;
+}
+
+.newPost:hover{
+    background-color: rgb(80, 80, 238);
     cursor: pointer;
 }
 
-.sidebarHr {
-    margin: 20px 0;
+.recentPosts{
+    position: relative;
+    top: 5px;
+}
+
+.postsHeaderLine{
+    margin-bottom: 10px;
+    border: 2px solid;
+    color: #1877F2;
+    border-radius: 2px;
+}
+
+.postTitle{
+    margin: 3px;
+    font-size: 16px;
+    
+}
+
+.postDate{
+    font-size: 12px;
+    align-content: right;
 }
