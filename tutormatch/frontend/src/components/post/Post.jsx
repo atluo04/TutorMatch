@@ -50,15 +50,23 @@ const Post = ({post, look_for, onAvatarClick}) => {
                     <div className="postCenter">
                         <div className="postTopLeft">Majors:</div>
                             <div className="postMajorsTags">
-                                {post.Majors.map((major, index) => (
-                                    <span key={index} className="postMajorTag">{major}</span>
-                                ))}
+                                {post.Majors ? (
+                                    post.Majors.map((major, index) => (
+                                        <span key={index} className="postMajorTag">{major}</span>
+                                    ))
+                                ) : (
+                                    <span className="postMajorTag">No majors listed</span>
+                                )}
                             </div>
                         <div className="postTopLeft">Ask me about:</div>
                             <div className="postMajorsTags">
-                                {post.Tags.map((tag, index) => (
-                                    <span key={index} className="postMajorTag">{tag}</span>
-                                ))}
+                            {post.Tags ? (
+                                post.Tags.map((tag, index) => (
+                                <   span key={index} className="postTag">{tag}</span>
+                                ))
+                            ) : (
+                                <span className="postTag">No tags available</span>
+                            )}
                             </div>
                         <div className="postTopLeft">Bio:</div>
                             <span className="postText">{post.Bio}</span>

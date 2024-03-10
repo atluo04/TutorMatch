@@ -12,6 +12,7 @@ import {
 import {
   doc,
   setDoc,
+  getDoc,
 } from "firebase/firestore";
 import { getdata, update_profile, data } from "./user.js";
 import { addNewComment, deleteComment, getCommentsByLikes, increaseLike } from "./comment.js";
@@ -384,8 +385,11 @@ router.post("/get-user-info2", async (req, res) => {
   const {user} = req.body;
 
   try {
-    const userInfo = await getUserInfo(user);
-    res.status(200).json({ success: true, message: "error getting messages", value: userInfo });
+    // const userInfo = await getUserInfo(user);
+    // const docRef = doc(db, "users", uid);
+    const docSnap = await getDoc(doc(db, "users", user));
+    const user_info = docSnap.data();
+    res.status(200).json({ success: true, message: "User information retrieved successfully", value: user_info });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
