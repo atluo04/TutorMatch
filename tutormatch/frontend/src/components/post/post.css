@@ -1,81 +1,85 @@
 .post{
-
     width: 100%;
     border-radius: 10px;
     -webkit-box-shadow: 0px 0px 16px -8px rgba(0,0,0,0.68); 
     box-shadow: 0px 0px 16px -8px rgba(0,0,0,0.68);   
-    margin: 30px 0;
+    margin: 5px 0;
     background-color: white;
-
+    height: 97%;
 }
 
 .postWrapper {
     padding: 10px; 
+    margin:10px;
+    height:100%;
+    overflow-y: scroll;
 }
 
-.postTop {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+.posterInformation{
+    margin-top:10px;
+    color:rgb(114, 114, 114);
 }
 
-.postTopLeft {
-    display: flex;
-    align-items: center;
-}
-
-.postProfileImg {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    object-fit: cover;
-}
-
-.postUsername {
-    font-size: 15px;
-    font-weight: 500;
-    margin: 0 10px;
-}
-
-.postDate {
-    font-size: 12px;
-}
-
-.postCenter {
-    margin: 20px 0;
-}
-
-.postImg {
-    margin-top: 20px;
+.postContent{
+    margin-top:10px;
     width: 100%;
-    max-height: 500px;
-    object-fit: cover;
+    border: 1px solid darkgray;
+    padding: 8px;
+    border-radius: 8px;
+    overflow-y: scroll;
 }
 
-.postBottom {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+.postContent ol,
+.postContent ul {
+    margin: 0;
+    padding: 0;
 }
 
-.postBottomLeft {
-    display: flex;
-    align-items: center;
+.postContent li {
+    margin-left: 1.5em;
 }
 
-.likeIcon {
-    width: 24px;
-    height: 24px;
-    margin-right: 5px;
-    cursor: pointer;
+.postContent blockquote{
+    border-left: 2px solid #aeadad;
+    margin: 0 0 20px;
+    padding-left: 10px;
 }
 
-.postLikeCounter {
+.postImage img{
+    max-width:100%;
+    border:none;
+    margin-top: 10px;
+}
+
+.commentWrapper{
+    margin-top: 10px;
+    background-color:#f0f0f0;
+    border-radius: 10px;
+    padding: 10px;
+    -webkit-box-shadow: 0px 0px 16px -8px rgba(0, 0, 0, 0.68);
+    box-shadow: 0px 0px 16px -8px rgba(0, 0, 0, 0.68);
+}
+
+.commentInput{
+    margin-top:5px;
+    width: 100%;
+    padding: 5px;
+}
+
+.commentSubmitButton{
+    display: inline-block;
     font-size: 15px;
+    font-weight: bold;
+    margin-left: auto;
+    margin-top: 5px;
+    color: white;
+    padding: 7px;
+    border-radius: 8px;
+    border: 1px solid darkgray;
+    background-color: #1877F2;
 }
 
-.postCommentText {
+.commentSubmitButton:hover{
     cursor: pointer;
-    border-bottom: 1px dashed gray;
-    font-size: 15px;
+    background-color: rgb(80, 80, 238);
 }

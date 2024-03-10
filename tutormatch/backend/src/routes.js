@@ -273,13 +273,11 @@ router.post("/profile-setting/password", async (req, res) => {
   } catch (error) {
     // Handle errors
     console.error("Failed to update password:", error);
-    res
-      .status(500)
-      .json({
-        success: false,
-        message: "Failed to update password",
-        error: error.message,
-      });
+    res.status(500).json({
+      success: false,
+      message: "Failed to update password",
+      error: error.message,
+    });
   }
 });
 
@@ -307,13 +305,11 @@ router.post("/create-new-chat", async (req, res) => {
     if (conversationId) {
       res.status(200).json({ success: true, value: conversationId });
     } else {
-      res
-        .status(200)
-        .json({
-          success: true,
-          message: "conversation exist",
-          value: conversationId,
-        });
+      res.status(200).json({
+        success: true,
+        message: "conversation exist",
+        value: conversationId,
+      });
     }
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
@@ -342,13 +338,11 @@ router.post("/get-conversations", async (req, res) => {
 
   try {
     const conversations = await getConversations(user);
-    res
-      .status(200)
-      .json({
-        success: true,
-        message: "Conversations found",
-        value: conversations,
-      });
+    res.status(200).json({
+      success: true,
+      message: "Conversations found",
+      value: conversations,
+    });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
@@ -376,13 +370,11 @@ router.post(
     console.log(file, conversationId, user);
     try {
       const fileStored = await storeFile(conversationId, file, user);
-      res
-        .status(200)
-        .json({
-          success: true,
-          message: "error storing files",
-          value: fileStored,
-        });
+      res.status(200).json({
+        success: true,
+        message: "error storing files",
+        value: fileStored,
+      });
     } catch (error) {
       res.status(500).json({ success: false, message: error.message });
     }
@@ -394,12 +386,10 @@ router.post("/get-user-info", async (req, res) => {
 
   try {
     const userInfo = await getUserInfo(user);
-    res
-      .status(200)
-      .json({
-        success: true,
-        value: userInfo,
-      });
+    res.status(200).json({
+      success: true,
+      value: userInfo,
+    });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
@@ -422,12 +412,10 @@ router.post("/receive-messages", async (req, res) => {
   try {
     const { newMessages, lastTimestamp: updatedTimestamp } =
       await receiveMessage(conversationId, lastTimestamp);
-    res
-      .status(200)
-      .json({
-        success: true,
-        value: { newMessages, lastTimestamp: updatedTimestamp },
-      });
+    res.status(200).json({
+      success: true,
+      value: { newMessages, lastTimestamp: updatedTimestamp },
+    });
   } catch (error) {
     console.error("Error receiving messages:", error);
     res.status(500).json({ success: false, message: error.message });
@@ -440,6 +428,25 @@ router.post("/create-post", upload.single("image"), async (req, res) => {
   try {
     const postId = await addPost(uid, title, content, image, course);
     res.status(200).json({ success: true, value: postId });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+});
+
+router.post("/get-post-by-id", async (req, res) => {
+  const { postId } = req.body;
+  try {
+    const docRef = doc(db, "posts", postId);
+    const docSnap =  await getDoc(docRef);
+    const data = docSnap.data();
+    const post = {
+      title: data.title,
+      poster: data.userId,
+      date: data.date.toDate().toLocaleString(),
+      content: data.content,
+      image: data.image,
+    }
+    res.status(200).json({success: true, value: post});
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
@@ -485,7 +492,7 @@ router.post("/get-posts-by-course", async (req, res) => {
       posts.push({
         id: doc.id,
         title: doc.data().title,
-        date: doc.data().date.toDate().toLocaleString(),  
+        date: doc.data().date.toDate().toLocaleString(),
       });
     });
     res.status(200).json({ success: true, value: posts });

@@ -19,6 +19,7 @@ const CreatePost = () => {
     event.preventDefault();
     if (!uid) {
       alert("Please sign in.");
+      return;
     }
     const err = checkValidPost();
     if (err !== null) {
@@ -120,7 +121,7 @@ export default CreatePost;
 const quillModules = {
   toolbar: {
     container: [
-      [{ header: "1" }, { header: "2" }, { font: [] }],
+      [{ header: "1" }, { header: "2" }, /*{ font: [] }*/],   //removing fonts for now
       [{ size: [] }],
       ["bold", "italic", "underline", "strike", "blockquote"],
       [{ list: "ordered" }, { list: "bullet" }],

@@ -13,6 +13,7 @@ const Sidebar = ({ course }) => {
 
   const [posts, setPosts] = useState([]);
   const [userName, setUserName] = useState("");
+  const [profilePic, setProfilePic] = useState("");
 
   const getPosts = async () => {
     try {
@@ -62,6 +63,7 @@ const Sidebar = ({ course }) => {
       if (data.success) {
         console.log(data);
         setUserName(data.value.name);
+        setProfilePic(data.value.image)
       } else {
         throw new Error("Error getting user information.");
       }
@@ -78,7 +80,6 @@ const Sidebar = ({ course }) => {
 
   useEffect(() => {
     getPosts();
-    getUserInfo();
   },[showCreatePost]);
 
   return (
@@ -88,7 +89,7 @@ const Sidebar = ({ course }) => {
           <li className="sidebarPersonContainer">
             <img
               className="sidebarPerson"
-              src="assets/person/mert.jpg" //edit to get profile image from database
+              src={profilePic} 
               alt=""
             />
             <span className="sidebarPersonName">{userName}</span>
@@ -102,7 +103,7 @@ const Sidebar = ({ course }) => {
           <hr className="postsHeaderLine"></hr>
           <div className="postList">
             {posts.map((post) => (
-              <li key={post.id} className="sidebarListItem">
+              <li key={post.id} className="sidebarListItem" onClick={() => setSelectedPost(post.id)}>
                 <div>
                   <h4 className="postTitle">{post.title}</h4>
                   <p className="postDate">{post.date}</p>

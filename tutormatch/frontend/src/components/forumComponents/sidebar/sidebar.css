@@ -1,7 +1,6 @@
 .sidebar {
     flex: 3;
     height: calc(100vh - 50px); 
-    overflow-y: scroll;
     max-width: 350px;
 }
 
@@ -24,6 +23,7 @@
 .sidebarList {
     padding: 8px;
     margin: 0;
+    height: 85vh;
     list-style: none;
     border: 1px solid #e0e0e0;
     border-radius: 10px;
