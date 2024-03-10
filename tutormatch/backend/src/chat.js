@@ -40,7 +40,7 @@ const createNewChat = async (userId, targetId) => {
         latestMessage: null,
         status: "active",
         creater: users[0],
-        unread: 0
+        lastOpenTimes: {userId: null, targetId: null}
     }
     try {
         const conversationRef = await addDoc(conversationsRef, conversationData);
@@ -82,6 +82,7 @@ const sendMessage = async (conversationId, message, user) => {
         }   
 }
 const updateLastOpen = async (conversationId, userId) => {
+    console.log("opened", conversationId, userId)
     try {
         const conversationRef = doc(db, 'conversations', conversationId);
         const conversationSnapshot = await getDoc(conversationRef);
@@ -93,7 +94,8 @@ const updateLastOpen = async (conversationId, userId) => {
             };
             await updateDoc(conversationRef, {
                 lastOpenTimes: updatedLastOpenTimes
-            });
+            })
+            console.log(updatedLastOpenTimes, "updated");
         }
         else {console.log("error updating last unread")};
     }   catch(error) {
@@ -103,7 +105,7 @@ const updateLastOpen = async (conversationId, userId) => {
 
 const receiveMessage = async (conversationId, lastTimestamp) => {
     try {
-        console.log(conversationId,"In receiveMessage")
+        //console.log(conversationId,"In receiveMessage")
         const messagesRef = collection(db, 'conversations', conversationId, 'messages');
         let order = query(messagesRef, orderBy('timestamp'));
         if (lastTimestamp) {
@@ -115,7 +117,7 @@ const receiveMessage = async (conversationId, lastTimestamp) => {
         querySnapshot.forEach((doc) => {
             const newMessage = doc.data();
             const timestamp = newMessage.timestamp.toDate();
-            console.log(newMessages)
+            //console.log(newMessages)
             newMessages.push({ ...newMessage, timestamp: timestamp, id: doc.id });
         });
         let updatedTimestamp = null;
@@ -143,10 +145,8 @@ const getConversations = async (user, conversationId) => {
             const lastMessage = conversationData.latestMessage || null;
             const lastOpenTimes = conversationData.lastOpenTimes || {};
             const userLastOpenTime = lastOpenTimes[user] || 0;
-            const hasNewMessages = lastMessage && lastMessage.timestamp > userLastOpenTime && doc.id != conversationId;
-            console.log(hasNewMessages, userLastOpenTime, lastMessage, "abcd")
+            const hasNewMessages = lastMessage && lastMessage.timestamp > userLastOpenTime && doc.id != conversationId && lastMessage.sender != user;
             conversations.push({ id: doc.id, ...conversationData, hasNewMessages: hasNewMessages });
-            console.log(hasNewMessages, "wharraifjoafw")
           });
         return conversations;
       } catch (error) {

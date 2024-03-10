@@ -21,14 +21,14 @@ export default function ChatBody() {
     setConversationId(conversationId);
   };
 
-  async function fetchConversations(userId) {
+  async function fetchConversations(userId, conversationId) {
     try { 
       const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/get-conversations`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({user: userId}),
+        body: JSON.stringify({user: userId, conversationId: conversationId}),
       });
   
       if (!response.ok) {
@@ -43,7 +43,8 @@ export default function ChatBody() {
         const otherParticipantUid = conversation.participants.find(uid => uid !== userId);
         const result2 = await getUserInfo(otherParticipantUid);
         const otherParticipantInfo = result2.value;
-        
+        const hasNewMessages = conversation.hasNewMessages;
+        console.log(hasNewMessages, 'ababababababa')
         return {
           image: otherParticipantInfo.image,
           id: conversation.id,
@@ -51,12 +52,26 @@ export default function ChatBody() {
           active: false,
           isOnline: otherParticipantInfo.isOnline,
           conversationId: conversation.id,
+          unread: hasNewMessages,
         };
       }));
       setConversations(conversationsWithDetails);
       
     } catch (error) {
       console.error("Error fetching conversations:", error.message);
+    }
+  }
+  
+  async function updateLastOpen(conversationId, userId) {
+    const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/update-last-open`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ conversationId: conversationId, userId: userId }),
+    });
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
     }
   }
 
@@ -140,10 +155,11 @@ export default function ChatBody() {
         await fetchConversations(uid);
         if (location.state && location.state.activeId) {
           setConversationId(location.state.activeId);
+          updateLastOpen(location.state.activeId, uid);
         }
       };
       handleOutsideChat();
-    const intervalId = setInterval(() => fetchConversations(uid), 60000);
+    const intervalId = setInterval(() => fetchConversations(uid), 6000);
     return () => clearInterval(intervalId);
   }, [uid, location.state?.activeId]);
  
@@ -155,7 +171,9 @@ export default function ChatBody() {
           selectConversation={selectConversation}
           createChat={handleCreateChat}
           getTargetUser={findUserByEmail}
-          userId={uid}/>
+          updateLastOpen={updateLastOpen}
+          userId={uid}
+          chatId={currentConversationId}/>
         <ChatContent
           conversationId={currentConversationId}
           conversations={conversations}

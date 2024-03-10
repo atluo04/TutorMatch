@@ -36,7 +36,8 @@ export default class ChatList extends Component {
               id: id,
               name: this.state.targetUserInfo.name,
               active: true,
-              isOnline: false
+              isOnline: false,
+              unread: true,
             }
           ],
           targetUserInfo: null,
@@ -57,9 +58,11 @@ export default class ChatList extends Component {
       targetEmail: '',
       currentUser: this.props.userId ? this.props.userId : null,
       addDisabled: false
-    };}
+    };
+  }
   
   componentDidUpdate(prevProps) {
+    console.log('componentDidUpdate', this.props.chatId, prevProps.chatId)
     if (prevProps.conversations != this.props.conversations) {
       console.log("should not update")
       this.setState({
@@ -69,6 +72,9 @@ export default class ChatList extends Component {
       });
     }
     if (prevProps.chatId != this.props.chatId) {
+      console.log("updated, true")
+      this.props.updateLastOpen(prevProps.chatId, prevProps.userId)
+      this.props.updateLastOpen(this.props.chatId, this.props.userId)
       this.setActiveChat(this.props.chatId);
     }
   }
@@ -122,6 +128,8 @@ export default class ChatList extends Component {
           active={this.state.activeId === item.id ? "active" : ""}
           isOnline={item.isOnline ? "active" : ""}
           image={item.image}
+          unread={item.unread}
+
           onClick={() => this.setActiveChat(item.id)}
               />
             );
