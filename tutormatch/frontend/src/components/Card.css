@@ -21,10 +21,6 @@
     transform: translate(190px, 88px);
 }
 
-img{
-    border: 2px solid #009999;
-}
-
 .lower-container{
     margin-top: 50px;
     height: 200px;

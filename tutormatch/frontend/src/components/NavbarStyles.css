@@ -46,10 +46,12 @@
     cursor: pointer;
     width: 80px;
     font-size: 15px;
+    margin-bottom: 10px;
 }
   
 .search-bar button:hover {
     background-color: #777;
+    transform: scale(1.1);
 }
 
 .fa-react {
@@ -72,10 +74,6 @@
     color: #fff;
     padding: 0.7rem 1rem;
     white-space: nowrap;
-}
-
-.nav-links i {
-    padding-right: 10px;
 }
 
 .nav-links:hover {
