@@ -2,32 +2,32 @@ import React, {useState} from "react";
 import "./post_home.css";
 
 
-const Post = ({post, look_for, onAvatarClick}) => {
+const Post_home = ({post, look_for, onAvatarClick}) => {
     return (
         <>
             {look_for === 'posts' && (
-                <div className="post">
-                    <div className="postWrapper">
-                        <div className="postTop">
-                            <div className="postTopLeft">
-                                <img className="postProfileImg" src={post.profile_pic} alt="" onClick={() => onAvatarClick(post.objectID)}/>
-                                <span className="postUsername">{post.Fullname}</span>
-                                <span className="postDate">{format_time(post.date, look_for)}</span>
+                <div className="post_h">
+                    <div className="postWrapper_h">
+                        <div className="postTop_h">
+                            <div className="postTopLeft_h">
+                                <img className="postProfileImg_h" src={post.profile_pic} alt="" onClick={() => onAvatarClick(post.objectID)}/>
+                                <span className="postUsername_h">{post.Fullname}</span>
+                                <span className="postDate_h">{format_time(post.date, look_for)}</span>
                             </div>
-                            <div className="postTopRight">
+                            <div className="postTopRight_h">
                                 {/* Any content for postTopRight */}
                             </div>
                         </div>
-                        <div className="postCenter">
-                            <span className="postText">{post.content}</span>
-                            <img className="postImg" src="" alt="" />
+                        <div className="postCenter_h">
+                            <span className="postText_h">{post.content}</span>
+                            <img className="postImg_h" src="" alt="" />
                         </div>
-                        <div className="postBottom">
-                            <div className="postBottomLeft">
+                        <div className="postBottom_h">
+                            <div className="postBottomLeft_h">
                                 {/* Any content for postBottomLeft */}
                             </div>
-                            <div className="postBottomRight">
-                                <span className="postCommentText">{post.comment} comments</span>
+                            <div className="postBottomRight_h">
+                                <span className="postCommentText_h">{post.comment} comments</span>
                             </div>
                         </div>
                     </div>
@@ -35,45 +35,45 @@ const Post = ({post, look_for, onAvatarClick}) => {
             )}
 
             {look_for === 'users' && (
-                <div className="post">
-                <div className="postWrapper">
-                    <div className="postTop">
-                        <div className="postTopLeft">
-                            <img className="postProfileImg" src={post.profile_pic} alt=""  onClick={() => onAvatarClick(post.objectID)}/>
-                            <span className="postUsername"  onClick={() => onAvatarClick(post.objectID)}>{post.Fullname}</span>
+                <div className="post_h">
+                <div className="postWrapper_h">
+                    <div className="postTop_h">
+                        <div className="postTopLeft_h">
+                            <img className="postProfileImg_h" src={post.profile_pic} alt=""  onClick={() => onAvatarClick(post.objectID)}/>
+                            <span className="postUsername_h"  onClick={() => onAvatarClick(post.objectID)}>{post.Fullname}</span>
                             {/* <span className="postDate">{format_time(post.Birthday, look_for)}</span> */}
                         </div>
-                        <div className="postTopRight">
-                            <span className="postText">{post.Year}</span>
+                        <div className="postTopRight_h">
+                            <span className="postText_h">{post.Year}</span>
                         </div>
                     </div>
-                    <div className="postCenter">
-                        <div className="postTopLeft">Majors:</div>
-                            <div className="postMajorsTags">
+                    <div className="postCenter_h">
+                        <div className="postTopLeft_h">Majors:</div>
+                            <div className="postMajorsTags_h">
                                 {post.Majors ? (
                                     post.Majors.map((major, index) => (
-                                        <span key={index} className="postMajorTag">{major}</span>
+                                        <span key={index} className="postMajorTag_h">{major}</span>
                                     ))
                                 ) : (
-                                    <span className="postMajorTag">No majors listed</span>
+                                    <span className="postMajorTag_h">No majors listed</span>
                                 )}
                             </div>
-                        <div className="postTopLeft">Ask me about:</div>
-                            <div className="postMajorsTags">
+                        <div className="postTopLeft_h">Ask me about:</div>
+                            <div className="postMajorsTags_h">
                             {post.Tags ? (
                                 post.Tags.map((tag, index) => (
-                                <   span key={index} className="postTag">{tag}</span>
+                                <   span key={index} className="postTag_h">{tag}</span>
                                 ))
                             ) : (
-                                <span className="postTag">No tags available</span>
+                                <span className="postTag_h">No tags available</span>
                             )}
                             </div>
-                        <div className="postTopLeft">Bio:</div>
-                            <span className="postText">{post.Bio}</span>
+                        <div className="postTopLeft_h">Bio:</div>
+                            <span className="postText_h">{post.Bio}</span>
                     </div>
-                    <div className="postBottom">
-                        <div className="postBottomLeft"></div>
-                            <span className="postCreateDate">Member since: {format_time(post.created_date, look_for)}</span>
+                    <div className="postBottom_h">
+                        <div className="postBottomLeft_h"></div>
+                            <span className="postCreateDate_h">Member since: {format_time(post.created_date, look_for)}</span>
                     </div>
                 </div>
             </div>
@@ -106,4 +106,4 @@ function format_time(timestamp, look_for) {
 
 
 
-export default Post
+export default Post_home

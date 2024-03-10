@@ -1,4 +1,4 @@
-.post{
+.post_h{
 
     width: 800px;
     border-radius: 10px;
@@ -9,22 +9,22 @@
 
 }
 
-.postWrapper {
+.postWrapper_h {
     padding: 100px; 
 }
 
-.postTop {
+.postTop_h {
     display: flex;
     align-items: center;
     justify-content: space-between;
 }
 
-.postTopLeft {
+.postTopLeft_h {
     display: flex;
     align-items: center;
 }
 
-.postProfileImg {
+.postProfileImg_h {
     width: 50px;
     height: 50px;
     border-radius: 50%;
@@ -32,73 +32,73 @@
     cursor: pointer;
 }
 
-.postUsername {
+.postUsername_h {
     font-size: 15px;
     font-weight: 500;
     margin: 0 10px;
     cursor: pointer;
 }
 
-.postDate {
+.postDate_h {
     font-size: 12px;
 }
 
-.postCenter {
+.postCenter_h {
     margin: 20px 0;
 }
 
-.postImg {
+.postImg_h {
     margin-top: 20px;
     width: 100%;
     max-height: 500px;
     object-fit: cover;
 }
 
-.postBottom {
+.postBottom_h {
     display: flex;
     align-items: center;
     justify-content: space-between;
 }
 
-.postBottomLeft {
+.postBottomLeft_h {
     display: flex;
     align-items: center;
 }
 
-.likeIcon {
+.likeIcon_h {
     width: 24px;
     height: 24px;
     margin-right: 5px;
     cursor: pointer;
 }
 
-.postLikeCounter {
+.postLikeCounter_h {
     font-size: 15px;
 }
 
-.postCommentText {
+.postCommentText_h {
     cursor: pointer;
     border-bottom: 1px dashed gray;
     font-size: 15px;
 }
 
-.postCreateDate {
+.postCreateDate_h {
     font-size: 15px;
 }
 
-.postMajorsList {
+.postMajorsList_h {
     list-style-type: none; /* Removes the default list bullet */
     padding: 0;
   }
   
   
-  .postMajorsTags {
+  .postMajorsTags_h {
     display: flex; /* Align tags in a row */
     flex-wrap: wrap; /* Wrap to next line if not enough space */
     gap: 5px; /* Spacing between tags */
   }
   
-  .postMajorTag {
+  .postMajorTag_h {
     background-color: #a75be0; /* Bootstrap primary blue */
     color: white; /* White text */
     padding: 5px 10px; /* Padding inside each tag */

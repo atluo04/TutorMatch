@@ -1,8 +1,8 @@
-.feed {
+.feedhome {
     flex: 5.5;
 }
 
-.feedWrapper {
+.feedhomeWrapper {
     padding: 20px;
     margin-top: 20px;
     position: relative;
