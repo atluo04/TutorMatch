@@ -1,10 +1,26 @@
 body {
-    background: #f5f5f5;
+    background: #f8f8f8;
     margin-top: 20px;
 }
 
+.logo_pro {
+    color: #3f96c1; /* Text color */
+    cursor: pointer; /* Cursor style */
+    margin-left: 15px; /* Adjusted margin for spacing */
+    margin-top: 30px; /* Adjusted margin for spacing */
+    font-size: 33px; /* Adjusted font size */
+    font-weight: bold; /* Bold font weight */
+    position: absolute; /* Positioning */
+    top: 0; /* Align to the top */
+    left: 0; /* Align to the left */
+  }
+
+.bg-blue {
+    background: linear-gradient(0deg, rgba(34,193,195,1) 0%, rgba(108,45,253,1) 100%);
+}
+
 .ui-w-80 {
-    width : 80px !important;
+    width : 200px !important;
     height: auto;
 }
 

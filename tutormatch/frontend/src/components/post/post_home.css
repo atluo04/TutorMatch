@@ -25,10 +25,11 @@
 }
 
 .postProfileImg_h {
-    width: 50px;
-    height: 50px;
+    width: 55px;
+    height: 55px;
     border-radius: 50%;
     object-fit: cover;
+    border: 3px solid rgb(225, 225, 97);
     cursor: pointer;
 }
 
@@ -56,8 +57,20 @@
 
 .postBottom_h {
     display: flex;
-    align-items: center;
     justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border-top: 1px solid #eee; /* subtle line to separate from post content */
+  }
+
+.postTitle_h {
+    text-align: left; 
+    margin-bottom: 20px; 
+    font-size: 24px;
+    font-weight: bold; 
+    color: #333; 
+    padding-bottom: 10px; /* Adds padding below the title, above the line */
+    border-bottom: 2px solid #ccc;
 }
 
 .postBottomLeft_h {
@@ -106,4 +119,53 @@
     padding: 5px 10px; /* Padding inside each tag */
     border-radius: 15px; /* Rounded corners for tag look */
     font-size: 0.8em; /* Smaller font size */
+  }
+
+  .contentContainer {
+    text-align: left; 
+  }
+  
+  .contentContainer h1,
+  .contentContainer blockquote,
+  .contentContainer ol,
+  .contentContainer ul,
+  .contentContainer p {
+    margin-bottom: 23px; 
+  }
+
+  .commentsContainer_h {
+    width: 100%;
+  }
+  
+  .comment_h {
+    background-color: #f9f9f9;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 10px; /* space between comments */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* soft shadow for depth */
+  }
+  
+  .commenterInfo_h {
+    display: flex;
+    align-items: center;
+  }
+  
+  .commenterInfo_h img {
+    border-radius: 50%; /* circular profile images */
+    width: 40px;
+    height: 40px;
+    margin-right: 10px; /* space between image and name */
+    object-fit: cover;
+    cursor: pointer;
+  }
+  
+  .commentContent_h {
+    margin-left: 10px; /* space between name and comment text */
+    line-height: 1.5;
+  }
+  
+  .noComments {
+    text-align: center;
+    padding: 20px;
+    font-style: italic;
   }
