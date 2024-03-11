@@ -107,7 +107,7 @@
     color: #222;
 }
 
-@media screen and (max-width: 850px) {
+@media screen and (max-width: 1600px) {
     .NavbarItems {
         z-index: 99;
     }
