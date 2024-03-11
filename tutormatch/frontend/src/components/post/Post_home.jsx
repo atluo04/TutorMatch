@@ -1,10 +1,13 @@
 import React, {useState, useEffect} from "react";
 import DOMPurify from 'dompurify';
 import "./post_home.css";
+import { useNavigate } from "react-router-dom";
 
 
 const Post_home = ({post, look_for, onAvatarClick}) => {
     const [user_data, setData] = useState(null);
+    const [comments, setComments] = useState([]);
+    const navigate = useNavigate();
 
     async function setUserInfo(userId) {
         try {
@@ -21,7 +24,7 @@ const Post_home = ({post, look_for, onAvatarClick}) => {
             }
             const data = await response.json();
             if (data.success) {
-                console.log(post.date )
+                //console.log(post.date )
                 setData(data.value)}
             else {
                 throw new Error("Error fetching userInfo.");
@@ -33,11 +36,7 @@ const Post_home = ({post, look_for, onAvatarClick}) => {
         }
     }
     
-    useEffect(() => {
-        console.log(post.userId)
-        if(post.userId) {
-            setUserInfo(post.userId);}
-      }, [post.userId]);
+    
 
 
     const sanitizeHTML = (html) => {
@@ -46,6 +45,73 @@ const Post_home = ({post, look_for, onAvatarClick}) => {
           return DOMPurify.sanitize(cleanedHtmlContent);
         }
     };
+
+
+
+    async function getComments(selectedPost){
+        try {
+          //ROUTE STUFF FOR GETTING COMMENTS
+          const response = await fetch(
+            `${process.env.REACT_APP_SERVER_URL}/get-post-comments`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                target: selectedPost, 
+              }),
+            }
+          );
+      
+          const data = await response.json();
+      
+          if (!response.ok) {
+            throw new Error(data.message || "Failed to fetch comments.");
+          }
+      
+          if (data.success && data.value) {
+            let userInfo = {};
+            const commentsWithInfo = await Promise.all(
+              data.value.map(async(comment) => {
+                console.log(comment.from, 'ad')
+                if (!userInfo[comment.from]) {
+                  const userResponse = await fetch(`${process.env.REACT_APP_SERVER_URL}/get-user-info`, {
+                    method: "POST",
+                    headers: {
+                      "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ user: comment.from }),
+                  });
+                const userData = await userResponse.json();
+                if (userData.success) {
+                  userInfo[comment.from] = userData.value; 
+                } else {
+                  console.error("Error getting information");
+                }
+              }
+              return {
+                ...comment,
+                userInfo: userInfo[comment.from]
+              };
+            }));
+            setComments(commentsWithInfo);
+          } else {
+            throw new Error(data.message || "Failed to fetch comments.");
+          }
+    
+        } catch (error) {
+          alert("Server error!");
+          console.log(error);
+        }
+      }
+
+      useEffect(() => {
+        console.log(post.userId)
+        if(post.userId && post.objectID) {
+            setUserInfo(post.userId);}
+            getComments(post.objectID)
+      }, [post.userId, post.objectID]);
 
     return (
         <>
@@ -59,7 +125,7 @@ const Post_home = ({post, look_for, onAvatarClick}) => {
                                 <span className="postDate_h">{format_time_for_post(post.date)}</span>
                             </div>
                             <div className="postTopRight_h">
-                                <span className="postText_h">{post.course}</span>
+                                <span className="postText_h" style={{ cursor: 'pointer' }} onClick={() => navigate(`/forum/${post.course}`)}>{post.course}</span>
                             </div>
                         </div>
                         <div className="postCenter_h">
@@ -75,8 +141,26 @@ const Post_home = ({post, look_for, onAvatarClick}) => {
                             <div className="postBottomLeft_h">
                                 {/* Any content for postBottomLeft */}
                             </div>
-                            <div className="postBottomRight_h">
-                                <span className="postCommentText_h">{post.comment} comments</span>
+                            <div className="commentsContainer_h">
+                                {comments.length > 0 ? (
+                                    comments.map((comment) => (
+                                        <div key={comment.id} className="comment_h">
+                                            {comment.userInfo ? (
+                                                <div className="commenterInfo_h">
+                                                    <img src={comment.userInfo.image} alt="Commenter" onClick={() => onAvatarClick(comment.from)} />
+                                                    <span onClick={() => onAvatarClick(comment.from)} style={{ cursor: 'pointer' }}>
+                                                        {comment.userInfo.name}:
+                                                    </span>
+                                                    <div className="commentContent_h">{comment.content}</div>
+                                                </div>
+                                            ) : (
+                                                <span>Loading commenter info...</span>
+                                            )}
+                                        </div>
+                                    ))
+                                ) : (
+                                    <div className="noComments">No comments yet.</div>
+                                )}
                             </div>
                         </div>
                     </div>
@@ -122,7 +206,7 @@ const Post_home = ({post, look_for, onAvatarClick}) => {
                     </div>
                     <div className="postBottom_h">
                         <div className="postBottomLeft_h"></div>
-                            <span className="postCreateDate_h">Member since: {format_time(post.created_date, look_for)}</span>
+                            <span className="postCreateDate_h">Member since: {format_time_for_post(post.created_date)}</span>
                     </div>
                 </div>
             </div>

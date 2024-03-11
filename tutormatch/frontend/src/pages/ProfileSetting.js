@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { NavLink, Outlet } from "react-router-dom";
 import { motion } from 'framer-motion'
 import { useUser } from "../userContext";
+import { useNavigate } from "react-router-dom";
 
 
 function Main() {
@@ -126,7 +127,8 @@ function Main() {
               <img
                 src={picUrl}
                 alt=""
-                className="d-block ui-w-80"/>
+                className="d-block ui-w-80"
+                />
                 <div className="media-body ml-4">
                   <label className="btn btn-outline-primary">
                     Upload new photo
@@ -167,10 +169,10 @@ function Main() {
                             style={{ width: '150px' }}
                           >
                             <option value="none" disabled hidden>year</option>
-                            <option value="freshman">Freshman</option>
-                            <option value="sophomore">Sophomore</option>
-                            <option value="junior">Junior</option>
-                            <option value="senior">Senior</option>
+                            <option value="Freshman">Freshman</option>
+                            <option value="Sophomore">Sophomore</option>
+                            <option value="Junior">Junior</option>
+                            <option value="Senior">Senior</option>
                           </select>
                         </div>
                         <div className="form-group">
@@ -665,6 +667,7 @@ function Notification() {
 
 
 function ProfileSettingPage () {
+  const navigate = useNavigate();
 
     return(
         <>
@@ -681,8 +684,11 @@ function ProfileSettingPage () {
           href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css"
           rel="stylesheet"
         />
-        <div className="container light-style flex-grow-1 container-p-y">
-          <h4 className="font-weight-bold py-3 mb-4">Profile settings</h4>
+        <div className="bg-blue">
+        <div className="container light-style flex-grow-1 container-p-y min-vh-100">
+          <div className="text-center">
+            <h4 className="font-weight-bold py-3 mb-4">Profile settings</h4>
+          </div>
           <div className="card overflow-hidden">
             <div className="row no-gutters row-bordered row-border-light">
               <div className="col-md-3 pt-0">
@@ -719,7 +725,12 @@ function ProfileSettingPage () {
               </div>
             </div>
           </div>
-
+          <div className="mt-3">
+            <span className="logo_pro" onClick={() => navigate(`/home`)}>
+              TutorMatch
+            </span>
+        </div>
+        </div>
         </div>
       </>);
     }
