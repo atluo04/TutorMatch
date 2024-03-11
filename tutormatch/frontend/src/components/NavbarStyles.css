@@ -107,7 +107,7 @@
     color: #222;
 }
 
-@media screen and (max-width: 850px) {
+@media screen and (max-width: 1600px) {
     .NavbarItems {
         z-index: 99;
     }
@@ -124,7 +124,7 @@
         height: auto;
         position: absolute;
         top: 0;
-        left: -110%;
+        right: -110%;
         align-items: stretch;
         padding: 80px 0 30px 0;
         margin: 0;
@@ -133,7 +133,8 @@
     }
 
     .nav-menu.active {
-        left: 0%;
+        left: 80%;
+        width: 300px;
     }
 
     .nav-links {
@@ -161,8 +162,18 @@
         width: 80%;
         margin: auto;
     }
-    
-    
+
+    .dropdown-menu {
+        list-style: none;
+        display: none;
+        position: absolute;
+        background-color: transparent;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        border-radius: 5px;
+        z-index: 1;
+        margin-left: 80px;
+        margin-top: -10px !important;
+    }
 }
 
 select{
