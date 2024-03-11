@@ -191,11 +191,21 @@ const Post_home = ({post, look_for, onAvatarClick}) => {
                                     <span className="postMajorTag_h">No majors listed</span>
                                 )}
                             </div>
+                        <div className="postTopLeft_h">Courses:</div>
+                            <div className="postMajorsTags_h">
+                                {post.Courses ? (
+                                    post.Courses.map((course, index) => (
+                                        <span key={index} className="postMajorTag_h">{course}</span>
+                                    ))
+                                ) : (
+                                    <span className="postMajorTag_h">No Courses listed</span>
+                                )}
+                            </div>
                         <div className="postTopLeft_h">Ask me about:</div>
                             <div className="postMajorsTags_h">
                             {post.Tags ? (
                                 post.Tags.map((tag, index) => (
-                                <   span key={index} className="postTag_h">{tag}</span>
+                                <   span key={index} className="postMajorTag_h">{tag}</span>
                                 ))
                             ) : (
                                 <span className="postTag_h">No tags available</span>
