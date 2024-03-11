@@ -564,6 +564,7 @@ function Schedule() {
                       <td>{" "}<textarea className="schedule" rows={3} cols={11} style={{ resize: "none" }} defaultValue={" "} /> {" "} </td>
                       <td>{" "}<textarea className="schedule" rows={3} cols={11} style={{ resize: "none" }} defaultValue={" "} /> {" "} </td>
                       <td>{" "}<textarea className="schedule" rows={3} cols={11} style={{ resize: "none" }} defaultValue={" "} /> {" "} </td>
+                      <td>{" "}<textarea className="schedule" rows={3} cols={11} style={{ resize: "none" }} defaultValue={" "} /> {" "} </td>
                   </tr>
                   <tr>
                       <td>8:00pm</td>
@@ -709,7 +710,7 @@ function ProfileSettingPage () {
                     to="/profile-setting/notification"
                     className="list-group-item list-group-item-action"
                     activeclassname = "list-group-item list-group-item-action active"> Notification </NavLink>
-                    </nav>
+                </nav>
                 </div>
               </div> 
               <div className="col-md-9">

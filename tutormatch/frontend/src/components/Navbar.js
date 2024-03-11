@@ -98,7 +98,7 @@ function Navbar({ setResults, setLook_for }) {
   return (
     <nav className="NavbarItems">
       <h1 className="logo">
-        TutorMatch <i className="fab fa-react"></i>
+        TutorMatch
       </h1>
       <div className="search-bar">
         <input
@@ -119,7 +119,6 @@ function Navbar({ setResults, setLook_for }) {
         </select>
         <button type="submit" onClick={handleSearch}>
           Search
-          <i className="fas fa-search"></i>
         </button>
       </div>
       <div className="menu-icons" onClick={handleClick}>

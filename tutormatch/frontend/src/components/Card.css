@@ -62,7 +62,8 @@
 }
 
 button{
-    margin-top: 10;
+    margin-top: 10px;
+    margin-bottom: 20px;
     color: black;
     font-weight: bold;
     margin-top: 10px;
@@ -82,7 +83,7 @@ button{
 
 button:hover{
     background-image: linear-gradient(to left, #00CCCC, #6666FF);
-    transform: scale(1.2);
+    transform: scale(1.1);
     border: none;
     color: white;
 }
