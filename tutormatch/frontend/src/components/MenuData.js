@@ -7,7 +7,7 @@ export const MenuData = [
   },
   {
     title: "Profile",
-    url: "/profile",
+    url: "/profile-setting/main",
     cName: "nav-links",
     icon: "fa-solid fa-user",
   },

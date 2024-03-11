@@ -12,9 +12,9 @@ function Card({userId, onClose}) {
     const [name, setName] = useState('Name');
     const [major, setMajor] = useState([]);
     const [about, setAbout] = useState("ok");
-    const [comments, setComments] = useState("find");
+    const [comments, setComments] = useState([]);
     const [image, setImage] = useState("https://i.pinimg.com/236x/39/a1/eb/39a1eb1485516800d84981a72840d60e.jpg")
-    const [newComment, setNewComment] = useState([]);
+    const [newComment, setNewComment] = useState("");
     const [email, setEmail] = useState("");
     const [course, setCourse] = useState([]);
     const [phone, setPhone] = useState("");
@@ -280,7 +280,19 @@ function Card({userId, onClose}) {
                 <p>Courses: {Array.isArray(course) ? course.join(', ') : course}</p>
             </div>
             <div className='comments-container'>
-                {/* Comments display and interaction code */}
+              {Array.isArray(comments)&& comments.length > 0 ? (
+              <ul className='comment-text'>
+                {comments.map((comment) => (
+                  <li key={comment.id}>
+                  {comment.content} <FontAwesomeIcon icon={faThumbsUp} className="like-icon"/> {comment.likes}
+                <button onClick={() => handleLikes(comment.id)}>Like</button>
+                {/*<button onClick={() => handleDelete(comment.id)}>Delete</button>*/}
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p>No comments found.</p>
+          )}
             </div>
             <div className='interaction-container'>
                 <button onClick={() => handleNewChat(uid, userId)}>Send a message</button>

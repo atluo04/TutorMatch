@@ -1,6 +1,7 @@
 .Card {
     width: 650px;
     min-height: 800px;
+    max-height: 900px;
     background: white;
     border-radius: 10px;
     box-shadow: 0px 1px 10px 1px rgba(0, 0, 0, 0.1);
@@ -8,6 +9,7 @@
     margin: 20px;
     padding: 20px;
     box-sizing: border-box;
+    overflow: auto;
 }
 
 .upper-container {
