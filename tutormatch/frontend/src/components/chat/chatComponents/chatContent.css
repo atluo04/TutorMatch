@@ -1,7 +1,7 @@
 .main__chatcontent {
     flex-grow: 1;
-    padding: 20px 40px;
-    max-width: 63%;
+    padding: 20px 20px;
+    max-width: 55%;
     border-right: 1px solid #ebe7fb;
 }
 
@@ -31,8 +31,9 @@
 }
 
 .content__body {
-    max-height: calc(100vh - calc(100vh / 2));
-    overflow: auto;
+    max-height: 650px;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .chat__item {
@@ -95,7 +96,7 @@
 }
 
 .chat__msg {
-    user-select: none;
+    user-select: auto;
 }
   
 .chat__item.other {
@@ -129,6 +130,9 @@
     justify-content: space-between;
     padding: 10px;
     border-radius: 8px;
+    position: fixed;
+    bottom: 90px;
+    width: 850px;
 }
 
 .sendNewMessage button {

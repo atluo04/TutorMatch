@@ -34,7 +34,7 @@
     border: 2px solid #ccc;
     border-radius: 5px;
     margin-right: 10px;
-    width: 400px; /* Adjust the width as needed */
+    width: 300px; /* Adjust the width as needed */
     font-size: 16px; /* Adjust the font size as needed */
 }
   
@@ -73,7 +73,7 @@
 .nav-links {
     text-decoration: none;
     color: #fff;
-    padding: 0.7rem 1rem;
+    padding: 0.7rem 1.4rem;
     white-space: nowrap;
 }
 
@@ -81,6 +81,10 @@
     background: rgb(80, 80, 238);
     border-radius: 4px;
     transition: all 0.2s ease-in-out;
+}
+
+.nav-links i {
+    padding-right: 10px;
 }
 
 .fa-bars,

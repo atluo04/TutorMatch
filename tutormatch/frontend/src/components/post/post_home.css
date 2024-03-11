@@ -10,7 +10,7 @@
 }
 
 .postWrapper_h {
-    padding: 100px; 
+    padding: 30px; 
 }
 
 .postTop_h {
@@ -96,6 +96,8 @@
     display: flex; /* Align tags in a row */
     flex-wrap: wrap; /* Wrap to next line if not enough space */
     gap: 5px; /* Spacing between tags */
+    margin-top: 5px;
+    margin-bottom: 5px;
   }
   
   .postMajorTag_h {

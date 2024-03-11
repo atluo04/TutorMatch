@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import Avatar from "./Avatar";
 import Modal from "react-modal"
+import "./chatContent.css";
 
 const customStyles = {
   content: {
@@ -29,7 +30,7 @@ export default class ChatItem extends Component {
      if (type === "image") {
       return (
       <>
-      <img src={msg} alt="Image" onClick={this.handleClickImage} style={{ maxWidth: '100px', maxHeight: '100px', cursor: 'pointer' }} />;
+      <img src={msg} alt="Image" onClick={this.handleClickImage} style={{ maxWidth: '100px', maxHeight: '100px', cursor: 'pointer' }} />
         <Modal
           isOpen = {this.state.modal}
           contentLabel = "Image Preview"

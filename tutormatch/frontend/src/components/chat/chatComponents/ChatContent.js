@@ -259,9 +259,6 @@ export default class ChatContent extends Component {
 
           <div className="blocks">
             <div className="settings">
-              <button className="btn-nobg">
-                <i className="fa fa-cog"></i>
-              </button>
             </div>
           </div>
         </div>

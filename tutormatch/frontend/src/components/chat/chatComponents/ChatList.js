@@ -85,9 +85,6 @@ export default class ChatList extends Component {
       <div className="main__chatlist">
         <div className="chatlist__heading">
           <h2>Chats</h2>
-          <button className="btn-nobg">
-            <i className="fa fa-ellipsis-h"></i>
-          </button>
           <br /> 
           <Link to="/home" className="home-button" style={{ padding: '6px', backgroundColor: '#3f3aa5', color: 'white', borderRadius: '5px', textDecoration: 'none' }}>Home</Link>
         </div>
