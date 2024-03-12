@@ -20,7 +20,7 @@ function PasswordEmailInput({ handleInput, isPassword, placeHolderText }) {
         />
         {isPassword && (
           <span className="toggle-icon" onClick={togglePasswordVisibility}>
-            {isPasswordVisible ? <VisibilityOffIcon /> : <VisibilityIcon />}
+            {isPasswordVisible ? <VisibilityIcon /> : <VisibilityOffIcon />}
           </span>
         )}
       </div>
