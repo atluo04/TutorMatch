@@ -15,7 +15,7 @@ function RegistrationPage() {
 
   const handleRegistration = async () => {
     if (process.env.REACT_APP_NODE_ENV !== "development") {
-      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      const emailPattern = /^[^\s@]+@[^\s@]+ucla.edu+$/;
       if (!emailPattern.test(email)) {
         setError("Invalid Email");
         console.log("Invalid Email");

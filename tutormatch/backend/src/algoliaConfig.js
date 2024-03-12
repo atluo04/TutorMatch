@@ -1,22 +1,25 @@
-import algoliasearch from 'algoliasearch';
+import algoliasearch from "algoliasearch";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const algoliaConfig = {
-    posts: {
-      appId: 'R7E5FEZGEQ',
-      apiKey: 'dcb1af4231269f44fbfd224af6268aae',
-      indexName: 'posts',
-    },
-    users: {
-      appId: 'R7E5FEZGEQ',
-      apiKey: '79b541af3529de1e1cb84f5df6d08c27',
-      indexName: 'users',
-    },
-  };
+  posts: {
+    appId: process.env.ALGOLIA_APP_ID,
+    apiKey: process.env.ALGOLIA_POST_API_KEY,
+    indexName: "posts",
+  },
+  users: {
+    appId: process.env.ALGOLIA_APP_ID,
+    apiKey: process.env.ALGOLIA_USER_API_KEY,
+    indexName: "users",
+  },
+};
 
-  const createAlgoliaClient = (indexName) => {
-    const { appId, apiKey } = algoliaConfig[indexName];
-    const algoliaClient = algoliasearch(appId, apiKey);
-    return algoliaClient.initIndex(algoliaConfig[indexName].indexName);
-  };
-  
-  export { createAlgoliaClient };
+const createAlgoliaClient = (indexName) => {
+  const { appId, apiKey } = algoliaConfig[indexName];
+  const algoliaClient = algoliasearch(appId, apiKey);
+  return algoliaClient.initIndex(algoliaConfig[indexName].indexName);
+};
+
+export { createAlgoliaClient };
