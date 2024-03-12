@@ -12,6 +12,17 @@
     justify-content: space-between;
     align-items: center;
 }
+.delete-chat-btn {
+    display: flex;
+    background-color: transparent;
+    border: none;
+    box-shadow: none;
+    font-size: 18px;
+    cursor: pointer;
+    padding: 10px;
+    color: #dad9dd;
+    outline: none;
+}
 
 .btn-nobg {
     background-color: transparent;

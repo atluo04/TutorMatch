@@ -130,6 +130,25 @@ export default function ChatBody() {
       }
   }
 
+  async function deleteConversation(conversationId) {
+    const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/delete-conversation`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ conversationId: conversationId })
+    },
+  );
+  if (!response.ok) {
+    throw new Error('Network response was not ok');
+  }
+  const data = await response.json();
+  if (data.value == false) {
+    alert("Error deleting the chat!");
+  } 
+
+  }
+
   async function getUserInfo(userId) {
     const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/get-user-info`, {
         method: 'POST',
@@ -158,7 +177,7 @@ export default function ChatBody() {
         }
       };
       handleOutsideChat();
-    const intervalId = setInterval(() => fetchConversations(uid), 6000);
+    const intervalId = setInterval(() => fetchConversations(uid), 3000);
     return () => clearInterval(intervalId);
   }, [uid, location.state?.activeId]);
  
@@ -171,6 +190,7 @@ export default function ChatBody() {
           createChat={handleCreateChat}
           getTargetUser={findUserByEmail}
           updateLastOpen={updateLastOpen}
+          deleteConversation={deleteConversation}
           userId={uid}
           chatId={currentConversationId}/>
         <ChatContent

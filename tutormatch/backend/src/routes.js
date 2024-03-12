@@ -46,6 +46,7 @@ import {
   getUserInfo,
   findUserByEmail,
   updateLastOpen,
+  deleteConversation
 } from "./chat.js";
 import { 
   addPost,
@@ -333,6 +334,23 @@ router.post("/send-messages", async (req, res) => {
       res
         .status(200)
         .json({ success: true, message: "error sending message", value: sent });
+    }
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+});
+
+router.post("/delete-conversation", async (req, res) => {
+  const { conversationId } = req.body;
+
+  try {
+    const deleted = await deleteConversation(conversationId);
+    if (deleted) {
+      res.status(200).json({ success: true, value: deleted });
+    } else {
+      res
+        .status(200)
+        .json({ success: true, message: "error deleting message", value: deleted });
     }
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });

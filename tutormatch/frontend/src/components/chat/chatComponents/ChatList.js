@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import { Link } from 'react-router-dom'
 import "./chatList.css";
 import ChatListItems from "./ChatListItems";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTimes } from '@fortawesome/free-solid-svg-icons';
 
 export default class ChatList extends Component {
   
@@ -84,7 +86,7 @@ export default class ChatList extends Component {
   
       <div className="main__chatlist">
         <div className="chatlist__heading">
-          <h2>Chats</h2>
+          <h2 style={{ color: '#5A4DB3', fontSize: '30px' }}>TutorMatch</h2>
           <br /> 
           <Link to="/home" className="home-button" style={{ padding: '6px', backgroundColor: '#3f3aa5', color: 'white', borderRadius: '5px', textDecoration: 'none' }}>Home</Link>
         </div>
@@ -118,6 +120,7 @@ export default class ChatList extends Component {
         <div className="chatlist__items">
           {Array.isArray(this.state.allChats) && this.state.allChats.length > 0 && this.state.allChats.map((item, index) => {
         return (
+        <div key={item.id} className="chatlist-item-wrapper">
         <ChatListItems
           name={item.name}
           key={item.id}
@@ -126,9 +129,11 @@ export default class ChatList extends Component {
           isOnline={item.isOnline ? "active" : ""}
           image={item.image}
           unread={item.unread}
-
           onClick={() => this.setActiveChat(item.id)}
               />
+          <button className="delete-chat-btn"
+          onClick={() => this.props.deleteConversation(item.id)}> <FontAwesomeIcon icon={faTimes} /> </button>
+        </div>
             );
           })}
         </div>

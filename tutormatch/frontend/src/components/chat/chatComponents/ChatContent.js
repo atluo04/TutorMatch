@@ -86,7 +86,7 @@ export default class ChatContent extends Component {
               handleAdd(message);
             });
   
-          this.timer = setTimeout(() => this.receiveMessage(conversationId, handleAdd, userId, newLastTimestamp), 5000);
+          this.timer = setTimeout(() => this.receiveMessage(conversationId, handleAdd, userId, newLastTimestamp), 2000);
       } catch (error) {
           console.error("Error receiving messages:", error);
       }

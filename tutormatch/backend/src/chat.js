@@ -1,5 +1,5 @@
 import { db, storage } from "./firebaseConfig.js";
-import { collection, addDoc, getDocs, Timestamp, updateDoc, orderBy, doc, query, getDoc, where } from "firebase/firestore";
+import { collection, addDoc, getDocs, Timestamp, updateDoc, deleteDoc, orderBy, doc, query, getDoc, where } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 
 const createNewChat = async (userId, targetId) => {
@@ -53,6 +53,18 @@ const createNewChat = async (userId, targetId) => {
         return null;
     }
 }
+}
+
+const deleteConversation = async (conversationId) => {
+    const conversationRef = doc(db, "conversations", conversationId);
+    try {
+        await deleteDoc(conversationRef);
+        return true;
+    }
+    catch(error) {
+        console.log(error.message);
+        return false;
+    }
 }
 const sendMessage = async (conversationId, message, user) => {
     try {
@@ -328,5 +340,5 @@ const getUserInfo = async (user) => {
   }
 
 
-export { createNewChat, sendMessage, receiveMessage, getConversations, getMessages, storeFile,
+export { createNewChat, deleteConversation, sendMessage, receiveMessage, getConversations, getMessages, storeFile,
      getUserInfo, findUserByEmail, updateLastOpen }
