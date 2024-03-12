@@ -22,6 +22,7 @@
     color: #3c009d;
     font-size: 45px;
     font-weight: 700;
+    margin-top: 20px;
 }
 
 .underline{
@@ -173,3 +174,5 @@ body {
     background: #eaeaea;
     color: #676767;
 }
+
+
