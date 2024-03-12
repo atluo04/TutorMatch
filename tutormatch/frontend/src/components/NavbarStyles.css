@@ -153,6 +153,10 @@
         display: block;
     }
 
+    .menu-icons:hover{
+        cursor: pointer;
+    }
+
     .nav-links-mobile {
         padding: 1.5rem;
         display: block;

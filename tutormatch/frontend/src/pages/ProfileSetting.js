@@ -703,7 +703,7 @@ function ProfileSettingPage () {
                 <NavLink
                     to="/profile-setting/info"
                     className="list-group-item list-group-item-action"
-                    activeclassname = "list-group-item list-group-item-action active"> info </NavLink>
+                    activeclassname = "list-group-item list-group-item-action active"> Info </NavLink>
                 <NavLink
                     to="/profile-setting/password"
                     className="list-group-item list-group-item-action"
