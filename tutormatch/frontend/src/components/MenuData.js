@@ -19,12 +19,6 @@ export const MenuData = [
     dropdown: true,
   },
   {
-    title: "Mentor",
-    url: "#",
-    cName: "nav-links",
-    icon: "fa-solid fa-star",
-  },
-  {
     title: "Message",
     url: "/chat",
     cName: "nav-links",

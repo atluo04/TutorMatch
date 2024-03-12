@@ -49,7 +49,7 @@ useEffect(() => {
             Find tutors, share knowledge, and collaborate on coursework.<br></br>
             Use categorized posts for guidance and learning.<br></br>
             Use chat function for private communication and scheduling.<br></br>
-            Join TutorMatch to enhance your learning journey and contribute to UCLA's academic community.</p>
+            Join TutorMatch to enhance your learning journey and contribute to UCLA's academic community!</p>
             </div>
             </>
           )}
