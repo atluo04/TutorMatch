@@ -40,7 +40,18 @@ useEffect(() => {
         <Navbar setResults={setSearchResults} setLook_for={setLook_for}/>
         <div className="home">
           {searchResults.length === 0 && (
-            <h1>Try searching for something</h1>
+            <>
+            <h1 className="welcome">Ask anything to your classmates!</h1>
+            <br/>
+            <div className="explanation-container">
+            <p className="paragraph">Welcome to TutorMatch!<br></br><br></br>
+            Connect with UCLA students for academic support.<br></br>
+            Find tutors, share knowledge, and collaborate on coursework.<br></br>
+            Use categorized posts for guidance and learning.<br></br>
+            Use chat function for private communication and scheduling.<br></br>
+            Join TutorMatch to enhance your learning journey and contribute to UCLA's academic community.</p>
+            </div>
+            </>
           )}
           <Home searchResults={searchResults} look_for={look_for} onAvatarClick={handleAvatarClick}/>
         </div>

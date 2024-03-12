@@ -41,3 +41,26 @@
 .search-results-container {
     margin-top: 100px;
 }
+
+.welcome{
+    color: #fff;
+    font-size: 45px;
+    font-weight: 700;
+    margin-top: 0px;
+}
+
+.paragraph{
+    color: rgb(79, 4, 255);
+    font-size: 30px;
+    font-weight: 700;
+    line-height: 1.5;
+}   
+
+.explanation-container {
+    margin-top: 10px;
+    background-color: #f2f2f2;
+    opacity: 0.5;
+    padding: 50px;
+    border-radius: 8px;
+    max-width: 95%;
+}
