@@ -787,26 +787,26 @@ function ProfileSettingPage () {
 
     const validatePassword = (password, confirmPassword) => {
 // comment out below to enable password restriction
-      // const correctLength = /^.{8,16}$/;
-      // if (!correctLength.test(password)) {
-      //   return "Password must be between 8 and 16 characters long.";
-      // }
-      // const noWhiteSpace = /^S*$/;
-      // if (noWhiteSpace.test(password)) {
-      //   return "Password must not contain whitespace.";
-      // }
-      // const containsUppercase = /^(?=.*[A-Z]).*$/;
-      // if (!containsUppercase.test(password)) {
-      //   return "Password must contain at least 1 uppercase letter.";
-      // }
-      // const containsLowercase = /^(?=.*[a-z]).*$/;
-      // if (!containsLowercase.test(password)) {
-      //   return "Password must contain at least 1 lowercase letter.";
-      // }
-      // const containsSpecialChar = /^(?=.*[,.!@#$%^&*~:;'\"()-+=~`_\[\]\\/?|]).*$/;
-      // if (!containsSpecialChar.test(password)) {
-      //   return "Password must contain at least 1 special character.";
-      // }
+      const correctLength = /^.{8,16}$/;
+      if (!correctLength.test(password)) {
+        return "Password must be between 8 and 16 characters long.";
+      }
+      const noWhiteSpace = /^S*$/;
+      if (noWhiteSpace.test(password)) {
+        return "Password must not contain whitespace.";
+      }
+      const containsUppercase = /^(?=.*[A-Z]).*$/;
+      if (!containsUppercase.test(password)) {
+        return "Password must contain at least 1 uppercase letter.";
+      }
+      const containsLowercase = /^(?=.*[a-z]).*$/;
+      if (!containsLowercase.test(password)) {
+        return "Password must contain at least 1 lowercase letter.";
+      }
+      const containsSpecialChar = /^(?=.*[,.!@#$%^&*~:;'\"()-+=~`_\[\]\\/?|]).*$/;
+      if (!containsSpecialChar.test(password)) {
+        return "Password must contain at least 1 special character.";
+      }
       if (password != confirmPassword) {
         return "Passwords do not match.";
       }
