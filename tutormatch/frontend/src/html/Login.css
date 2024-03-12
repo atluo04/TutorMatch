@@ -42,17 +42,24 @@
 .input img{
     margin: 0px 30px;
 }
-
-.forgot-password , .sign-up{
+ .sign-up{
     padding-left: 62px;
     margin-top: 27px;
     color: #797979;
     font-size: 18px;
 }
 
-.forgot-password, .sign-up span{
+ .sign-up span{
     color: #4c00b4;
     cursor: pointer;
+}
+
+.errorMessage{
+    margin-top: 20px;
+    display: flex;
+    align-self: center;
+    color:red;
+    font-size: 18px;
 }
 
 .submit-container{
@@ -136,18 +143,6 @@ body {
     outline: none;
     color: #797979;
     font-size: 19px;
-}
-
-.forgot-password{
-    padding-left: 62px;
-    margin-top: 27px;
-    color: #797979;
-    font-size: 18px;
-}
-
-.forgot-password span{
-    color: #4c00b4;
-    cursor: pointer;
 }
 
 .submit-container{

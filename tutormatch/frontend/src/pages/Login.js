@@ -11,6 +11,7 @@ const LoginSignup = () => {
   const { uid, setUid } = useUser();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
   const handleSignIn = async () => {
@@ -37,7 +38,7 @@ const LoginSignup = () => {
         setUid(data.uid);
         navigate("/home");
       } else {
-        alert("Invalid username or password! Please try again.");
+        setError("Invalid username or password! Please try again.");
       }
     } catch (error) {
       alert("Server error!");
@@ -67,13 +68,11 @@ const LoginSignup = () => {
           />
         </div>
       </div>
-      <div className="forgot-password">
-        Lost Password? <span>Click Here!</span>
-      </div>
       <div className="sign-up">
         Not Registered?{" "}
         <span onClick={() => navigate("/register")}>Sign Up Here!</span>
       </div>
+      <div className="errorMessage">{error}</div>
       <div className="submit-container">
         <div className="submit" onClick={handleSignIn}>
           Login

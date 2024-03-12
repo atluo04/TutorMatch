@@ -2,6 +2,8 @@ import { useState } from "react";
 import { PasswordEmailInput } from "../components/PasswordEmailInput";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../userContext";
+import user_icon from "../assets/person.png";
+import password_icon from "../assets/password.png";
 import "../html/Registration.css"
 
 function RegistrationPage() {
@@ -94,12 +96,14 @@ function RegistrationPage() {
       </div>
       <div className="inputs">
         <div className="input">
+          <img src={user_icon} alt="" />
           <PasswordEmailInput
             placeHolderText={"Email"}
             handleInput={setEmail}
           />
         </div>
         <div className="input">
+          <img src={password_icon} alt="" />
           <PasswordEmailInput
             placeHolderText={"Password"}
             handleInput={setPassword}
@@ -107,6 +111,7 @@ function RegistrationPage() {
           />
         </div>
         <div className="input">
+          <img src={password_icon} alt="" />
           <PasswordEmailInput
             placeHolderText={"Confirm Password"}
             handleInput={setConfirmPassword}
