@@ -3,14 +3,19 @@
 ### Contribution
     Allen Luo         - atluo04@ucla.edu           Github#: atluo04, AllenL0706    
         - Firebase, express, class forum, authentication, startup script, Github control
+        
     Anne Hyunsun Joo  - annejoo0414@g.ucla.edu     Github#: AnneHyunsunJoo         
         - All HTML, CSS
+        
     Effie Wu          - effiewu0628@g.ucla.edu     Github#: Parixxx21              
         - Firebase, router, chat, comments
+        
     Jiwoo Jeong       - jiwoo315@ucla.edu          Github#: jiji123526             
         - All HTML, CSS
+        
     Tzuhao Wang       - twang129@ucla.edu          Github#: baby-ww                
         - Firebase, Algolia, profile setting, searching
+
 
 ### Introduction
  **TutorMarch** is an academic exchange platform designed specifically for UCLA students, with the aim of providing a more centralized and flexible academic support for students on campus. 
