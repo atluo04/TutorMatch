@@ -3,6 +3,7 @@
     padding: 20px 20px;
     max-width: 55%;
     border-right: 1px solid #ebe7fb;
+    --desired-width: 40%;
 }
 
 .content__header {
@@ -131,8 +132,11 @@
     padding: 10px;
     border-radius: 8px;
     position: fixed;
-    bottom: 90px;
-    width: 850px;
+    bottom: 40px;
+    width: var(--desired-width);
+    transform: translateX(-50%);
+    left: 56%;
+    max-width: 100%;
 }
 
 .sendNewMessage button {
