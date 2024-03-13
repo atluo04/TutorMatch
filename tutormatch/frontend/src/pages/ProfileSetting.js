@@ -10,18 +10,15 @@ function Main() {
   const {uid, setUid} = useUser();
   const [fullname, setfullname] = useState("");
   const [newname, setNewname] = useState("");
-  //const [major, setMajor] = useState("");
   const [newmajor, setNewmajor] = useState([]);
   const [pic_url, setPic_url] = useState("");
-  const [picUrl, setPicUrl] = useState(null); // State to store the URL of the selected image
+  const [picUrl, setPicUrl] = useState(null); 
   const [photo, setPhoto] = useState(null);
   const [year, setYear] = useState("");
   const [newyear, setNewyear] = useState("");
-  //const [course, setCourse] = useState(new Set());
   const [newcourese, setNewcourse] = useState([]);
   const [tags, setTags] = useState([]); 
-  const [error, setError] = useState(null);  
-  //error stores the message of succeed or fail, it can be used as for the pop message
+
   
   const get_user_info = async () => {
     try {
@@ -34,12 +31,10 @@ function Main() {
       }
       const data = await response.json();
       if (data.success) {
-        //console.log(data.Fullname);
         setfullname(data.Fullname);
         setNewname(data.Fullname);
         setNewmajor(data.Majors);
         setPic_url(data.Pic);
-        //setPhoto(data.Pic);
         setPicUrl(data.Pic);
         setYear(data.Year);
         setNewyear(data.Year);
@@ -110,7 +105,6 @@ function Main() {
     setNewname(fullname);
     setPhoto(null);
     setPicUrl(pic_url);
-    setError(null);
     setNewyear(year)
   };
 
@@ -218,9 +212,8 @@ function Info() {
   const [newgender, setNewgender] = useState("");
   const [phone, setphone] = useState("");
   const [newphone, setNewphone] = useState("");
-  //const [email, setemail] = useState("");
   const [newemail, setNewemail] = useState("");
-  const [error, setError] = useState(null);
+
 
   const get_user_info = async () => {
     try {
@@ -280,7 +273,6 @@ function Info() {
         );
   
         const data = await response.json();
-        //console.log(data);
   
         if (data.success) {
           console.log("suc");
@@ -364,7 +356,6 @@ function Info() {
               type="text"
               className="form-control"
               value={newemail}
-              //onChange={(e) => setNewemail(e.target.value)}
             />
           </div>
         </div>
@@ -453,7 +444,6 @@ function ChangePassword() {
                        className="form-control" 
                        value = {currentPS}
                        onChange={e => setCurrentPS(e.target.value)}/>
-                    {/*dealwith the password change here*/}
               </div>
                 <div className="form-group">
                   <label className="form-label">New password</label>
@@ -461,7 +451,6 @@ function ChangePassword() {
                          className="form-control"
                          value = {newPS} 
                          onChange={e => setNewPS(e.target.value)}/>
-                    {/*dealwith the password change here, might need to change later to take advantage of react*/}
                     </div>
                 <div className="form-group">
                   <label className="form-label">Confirm new password</label>
@@ -469,7 +458,6 @@ function ChangePassword() {
                           className="form-control" 
                           value = {confirmPS}
                           onChange={e => setconfirmPS(e.target.value)}/>
-                    {/*dealwith the password change here*/}
                 </div>
           </div>
           <div className="text-right mt-3">
@@ -737,32 +725,6 @@ function ProfileSettingPage () {
     }
 
 
-    // function Get_user_data(field){
-    //   //const [isLoading, setIsLoading] = useState(true); 
-    //   // Add loading state
-    //   const [userData, setUserData] = useState(null);
-    //   console.log("getting", field)
-    //   useEffect(() => {
-    //     const unsubscribe = auth.onAuthStateChanged(async (user) => {
-    //       if (user) {
-    //         try {
-    //           const userData = await getdata(field);
-    //           setUserData(userData);
-    //           //setIsLoading(false);
-    //         } catch (error) {
-    //           console.error("Error fetching data:", error);
-    //           //setIsLoading(false);
-    //         }
-    //       } else {
-    //         console.log("No user is currently signed in.");
-    //         //setIsLoading(false);
-    //       }
-    //     });
-    
-    //     return unsubscribe;
-    //   }, []);
-    //   return userData;
-    // }
 
     function formatDate(timestamp) {
       const date = new Date(timestamp.seconds * 1000); // Convert seconds to milliseconds
@@ -771,19 +733,6 @@ function ProfileSettingPage () {
       const day = String(date.getDate()).padStart(2, '0'); // Add leading zero if needed
       return `${year}-${month}-${day}`;
   }
-    function get_time(birth_ugly) {
-      try {
-        if (birth_ugly !== null) {
-          console.log(birth_ugly);
-          const birthDate = new Date(birth_ugly * 1000);
-          const formattedBirthDate = birthDate.toISOString().split('T')[0];
-          //console.log(formattedDate);
-          return formattedBirthDate;
-      }} catch (error) {
-        console.error("Error retrieving data:", error);
-        return null;
-      }
-    }
 
     const validatePassword = (password, confirmPassword) => {
 // comment out below to enable password restriction

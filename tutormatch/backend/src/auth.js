@@ -1,11 +1,6 @@
-import {
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  signOut,
-} from "firebase/auth";
-import { auth, db } from "./firebaseConfig.js";
-import { setDoc, doc } from 'firebase/firestore';
-import { Timestamp } from "firebase/firestore";
+import { signOut } from "firebase/auth";
+import { auth } from "./firebaseConfig.js";
+
 
 
 export const signOutUser = async () => {

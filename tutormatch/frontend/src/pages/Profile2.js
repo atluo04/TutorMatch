@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react';
-import { useParams, useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Card } from "../components/Card.js";
-import { useUser } from '../userContext.js';
 import PopUp from '../components/Popup.js';
 
 export default function OthersProfile() {

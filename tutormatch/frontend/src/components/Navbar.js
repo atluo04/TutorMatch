@@ -9,9 +9,7 @@ function Navbar({ setResults, setLook_for }) {
   const { uid, setUid } = useUser();
   const [clicked, setClicked] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const [searchResults, setSearchResults] = useState([]);
   const [search_for, setSearch_for] = useState("posts");
-  const [hits, setHits] = useState([]);
   const [courses, setCourses] = useState([]);
   const navigate = useNavigate();
 
@@ -28,11 +26,6 @@ function Navbar({ setResults, setLook_for }) {
 
       const data = await response.json();
       if (data.success) {
-        // if(data.hits.length === 0)
-        //   console.log(data.hits);
-        // else
-        // console.log("yes")
-        setHits(data.hits);
         setResults(data.hits);
         setLook_for(search_for);
       } else {
@@ -91,9 +84,6 @@ function Navbar({ setResults, setLook_for }) {
     }
   };
 
-  // we may need a filter to search because how algolia is implemented in firebase
-  // the filter should only contain post or user
-  // so need a design this
 
   return (
     <nav className="NavbarItems">
@@ -165,7 +155,6 @@ function Navbar({ setResults, setLook_for }) {
           );
         })}
       </ul>
-      {/* <SearchResult results={hits} collection={search_for} /> */}
     </nav>
   );
 }

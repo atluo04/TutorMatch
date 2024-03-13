@@ -6,7 +6,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faThumbsUp } from '@fortawesome/free-solid-svg-icons';
 
 
-import "../html/Profile.css"
 
 function Card({userId, onClose}) {
     const [name, setName] = useState('Name');
@@ -20,45 +19,11 @@ function Card({userId, onClose}) {
     const [phone, setPhone] = useState("");
     const [year, setYear] = useState("");
     const [tags, setTags] = useState("");
-    const [create_date, setCreate_date] = useState("");
     const [Gender, setGender] = useState("");
-    const [birth, setBirth] = useState("");
     const { uid, setUid } = useUser();
     const [error, setError] = useState(null);
     let navigate = useNavigate();
 
-
-    // async function setUserInfo(userId) {
-    //     try {
-    //         const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/get-user-info`, {
-    //             method: 'POST',
-    //             headers: {
-    //             'Content-Type': 'application/json'
-    //             },
-    //             body: JSON.stringify({ user: userId })
-    //             },
-    //         );
-    //         if (!response.ok) {
-    //             throw new Error('Network response was not ok');
-    //         }
-    //         const data = await response.json();
-    //         if (data.success) {
-    //             const targetInfo = data.value;
-    //             setMajor(targetInfo.majors);
-    //             console.log(targetInfo.majors);
-    //             setName(targetInfo.name);
-    //             console.log(targetInfo.name, "name")
-    //             setAbout(targetInfo.bio);
-    //             setImage(targetInfo.image)}
-    //         else {
-    //         setError("Error fetching userInfo.");
-    //         }
-    //     }
-    // catch(error) {
-    //     console.log("Error fetching userInfo.")
-
-    // }
-    //   }
 
       async function setUserInfo(userId) {
         try {
@@ -84,10 +49,9 @@ function Card({userId, onClose}) {
                 setPhone(data.value.Phone || 'Unknown');
                 setYear(data.value.Year || 'Unknown');
                 setTags(data.value.Tags || []);
-                setCreate_date(data.value.create_date || '');
                 setGender(data.value.Gender || 'Unknown');
                 setCourse(data.value.Courses || []);
-                setBirth(data.value.Birthday || '');}
+              }
             else {
             setError("Error fetching userInfo.");
             }
@@ -222,7 +186,7 @@ function Card({userId, onClose}) {
 
       async function handleNewChat(user, target) {
         try {
-        if (user!=target && user && target) {
+        if (user !== target && user && target) {
           const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/create-new-chat`, {
             method: 'POST',
             headers: {
@@ -248,7 +212,6 @@ function Card({userId, onClose}) {
       }
 
       useEffect(() => {
-        console.log(uid)
         if(userId) {
             setUserInfo(userId);
             getComments(userId)}

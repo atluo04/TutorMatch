@@ -29,18 +29,11 @@ export const data = {
 export const getdata = async (uid, field) =>{
     const docRef = doc(db, "users", uid);
     const docSnap = await getDoc(docRef);
-    //console.log("getting ", field);
     if (docSnap.exists()) {
-        //console.log(docSnap.data()[field]);
-        //const user_data = docSnap.data()[field]
-        //console.log("getting ", field);
-        
         await check_field_exist(docRef, field);
-        //console.log(docSnap.data()[field])
         return docSnap.data()[field];     // not sure if this works
     } else {
         await setDoc(docRef, data);
-        //console.log("No such Info");
         return "Null";
     }
 };
@@ -89,11 +82,10 @@ export const check_field_exist = async (docRef, field, new_data = null) =>{
   const user_data = docSnap.data()[field];
   // check if data exist
   if (user_data === null || user_data === undefined) {
-    //console.log("user=", user_data)
+
     //check if need to use input value
     if (new_data == null) {
       // no input, use default
-      //console.log("createing", field)
       await updateDoc(docRef, {
         [field]: data[field],
       });
@@ -105,23 +97,7 @@ export const check_field_exist = async (docRef, field, new_data = null) =>{
       return false;
     }
   }
-  //console.log("user has =", user_data)
   return true;
 }
 
-// export const upload_profile_pic = async (uid, file) =>{
-//   const fileref = ref(storage, 'profile_pic/' + uid + '.png');
-//   console.log("--", file.size)
-//   try {
-//     await uploadBytes(fileref, file);
-//     const photoURL = await getDownloadURL(fileref);
-//     console.log(photoURL);
-//     await update_profile(uid, "profile_pic", photoURL)
-//     console.log("Profile picture uploaded successfully");
-//   } catch (error) {
-//     console.error("Error uploading profile picture:", error);
-//     throw error; // Rethrow the error to handle it in the calling function
-//   }
-  
-// }
 

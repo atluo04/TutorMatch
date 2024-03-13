@@ -74,7 +74,7 @@ const Post_home = ({post, look_for, onAvatarClick}) => {
             let userInfo = {};
             const commentsWithInfo = await Promise.all(
               data.value.map(async(comment) => {
-                console.log(comment.from, 'ad')
+                //console.log(comment.from, 'ad')
                 if (!userInfo[comment.from]) {
                   const userResponse = await fetch(`${process.env.REACT_APP_SERVER_URL}/get-user-info`, {
                     method: "POST",
@@ -107,11 +107,13 @@ const Post_home = ({post, look_for, onAvatarClick}) => {
       }
 
       useEffect(() => {
-        console.log(post.userId)
+        //console.log(post.userId)
         if(post.userId && post.objectID) {
             setUserInfo(post.userId);}
             getComments(post.objectID)
       }, [post.userId, post.objectID]);
+      
+
 
     return (
         <>

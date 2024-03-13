@@ -5,22 +5,18 @@ import { createAlgoliaClient } from "./algoliaConfig.js";
 import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
-  onAuthStateChanged,
   EmailAuthProvider,
   reauthenticateWithCredential,
   updatePassword,
 } from "firebase/auth";
 import {
-  QueryStartAtConstraint,
   collection,
-  deleteDoc,
   doc,
   getDoc,
   getDocs,
   orderBy,
   query,
   setDoc,
-  updateDoc,
   where,
 } from "firebase/firestore";
 import { getdata, update_profile, data } from "./user.js";
@@ -31,7 +27,6 @@ import {
   increaseLike,
 } from "./comment.js";
 import {
-  uploadBytes,
   ref,
   getDownloadURL,
   uploadBytesResumable,
