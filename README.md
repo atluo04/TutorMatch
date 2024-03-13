@@ -11,6 +11,8 @@ TutorMatch offers a range of features to facilitate academic communication and s
 
 - **Search Functionality**: Users can quickly search for relevant information based on subject interests, user profiles, and post content. This enhances the efficiency of accessing academic resources.
 
+- **Personal Profile**: This section allows others to view essential information about a person, including the courses they are currently enrolled in and tags indicating areas in which the person can offer support.
+
 
 ### Components
 Our app adopts a client-server architcture:
@@ -23,10 +25,15 @@ Our app adopts a client-server architcture:
 
     - **Express**: 
         - Host the backend server, enabling routing control and the construction of RESTful APIs. It uses HTTP methods, such as GET and POST, to facilitate communication with the frontend.
+    - **Algolia**:
+        - Enhances our search feature by providing advanced search algorithms for optimized results.
 
 - **Frontend**:
     - **React**: 
         - Utilize React's components and hooks to meet the interaction and real-time update needs in different parts of the application.
+     
+    - **CSS**:
+        - It is used for designing the styles for the whole project, covering aspects like colors, fonts, margins.
 
 
 ### Setup/Installation
