@@ -1,9 +1,33 @@
 # TutorMatch
 ### Introduction
-//Fill this in
+ **TutorMarch** is an academic exchange platform designed specifically for UCLA students, with the aim of providing a more centralized and flexible academic support for students on campus. 
+
+### Features
+TutorMatch offers a range of features to facilitate academic communication and support:
+
+- **One-on-One Chat**: A platform for direct communication between students and teaching assistants (TAs), as well as among students themselves. This feature enables private conversations, facilitating direct communication and assistance. 
+
+- **Courses Forum**: Dedicated spaces for each class where students can seek help or contribute answers. These forums promote interaction within the academic community.
+
+- **Search Functionality**: Users can quickly search for relevant information based on subject interests, user profiles, and post content. This enhances the efficiency of accessing academic resources.
+
 
 ### Components
-/Fill this in
+Our app adopts a client-server architcture:
+- **Backend**:
+    - **Firebase**: 
+        - Offers backend support for the project, including but not limited to:
+            - Authentication: Facilitates user authentication processes.
+            - Cloud Firestore: Storing and synchronizing global application data (Data base).
+            - Firebase storage: Storing the files and pictures securely.
+
+    - **Express**: 
+        - Host the backend server, enabling routing control and the construction of RESTful APIs. It uses HTTP methods, such as GET and POST, to facilitate communication with the frontend.
+
+- **Frontend**:
+    - **React**: 
+        - Utilize React's components and hooks to meet the interaction and real-time update needs in different parts of the application.
+
 
 ### Setup/Installation
 ##### Requirements:
@@ -40,3 +64,5 @@ npm start
 - https://expressjs.com/
 - https://reactrouter.com/en/main
 - https://nodejs.org/docs/latest/api/
+- https://www.youtube.com/watch?v=CgMD6VykQXQ
+- https://www.algolia.com/doc/
