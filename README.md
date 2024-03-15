@@ -69,11 +69,26 @@ After cloning the repository, change your working directory to the repo.
 ```
 cd \PATH\TO\CLONED\REPO\TutorMatch
 ```
-From there, just run the start.py python file, and the project should be started up.
+From there, just run the start.py python file, and the project should be started up. To stop the process, enter in Control-C (or any other keyboard interrupt key).
 ```
 python start.py
 ```
 If the Python file does not work, open up another terminal window and change your working directory to the backend and frontend folders, respectively, under /TutorMatch/tutormatch. From there, run npm install and npm start in both terminals, and the project should start.
+In the backend folder, also create a .env file with the following contents:
+```
+FIREBASE_API_KEY="[FILL IN FIREBASE API KEY]"
+FIREBASE_AUTH_DOMAIN="tutormatch-789d9.firebaseapp.com"
+FIREBASE_PROJECT_ID="tutormatch-789d9"
+FIREBASE_STORAGE_BUCKET="tutormatch-789d9.appspot.com"
+FIREBASE_MESSAGING_SENDER_ID="956855862545"
+FIREBASE_APP_ID="1:956855862545:web:e5f1b79a82ce1c45c138b0"
+FIREBASE_MEASUREMENT_ID="G-V25ZNBDNCD"
+
+ALGOLIA_APP_ID="R7E5FEZGEQ"
+ALGOLIA_POST_API_KEY="[FILL IN ALGOLIA POST API KEY]"
+ALGOLIA_USER_API_KEY="[FILL IN ALGOLIA USER API KEY]"
+
+```
 ```
 cd \PATH\TO\CLONED\REPO\TutorMatch\tutormatch\backend
 npm install
@@ -84,6 +99,7 @@ cd \PATH\TO\CLONED\REPO\TutorMatch\tutormatch\frontend
 npm install
 npm start
 ```
+
 
 ### References
 - https://firebase.google.com/docs
