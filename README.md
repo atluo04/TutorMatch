@@ -1,5 +1,5 @@
 ### Introduction
- **TutorMarch** is an academic exchange platform designed specifically for UCLA students, with the aim of providing a more centralized and flexible academic support for students on campus. 
+ **TutorMatch** is an academic exchange platform designed specifically for UCLA students, with the aim of providing a more centralized and flexible academic support for students on campus. 
 
 ### Features
 TutorMatch offers a range of features to facilitate academic communication and support:
